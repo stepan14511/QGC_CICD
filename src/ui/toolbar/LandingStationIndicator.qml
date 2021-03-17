@@ -28,6 +28,47 @@ Item {
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
 
+    function getCoverStatusString() {
+        var coverStatusValue = _activeVehicle.landingStation.coverStatus.value
+        var coverStatusString = "unknown"
+        if(coverStatusValue == 1) {
+            coverStatusString = "open"
+        }else if(coverStatusValue == 2) {
+            coverStatusString = "closed"
+        }else if(coverStatusValue == 3) {
+            coverStatusString = "opening"
+        }else if(coverStatusValue == 4) {
+            coverStatusString = "closing"
+        }
+        return coverStatusString
+    }
+
+    function getDroneStatusString() {
+        var droneStatusValue = _activeVehicle.landingStation.droneStatus.value
+        var droneStatusString = "unknown"
+        if(droneStatusValue == 1) {
+            droneStatusString = "inside"
+        }else if(droneStatusValue == 2) {
+            droneStatusString = "outside"
+        }
+        return droneStatusString
+    }
+
+    function getChargingStatusString() {
+        var chargingStatusValue = _activeVehicle.landingStation.chargingStatus.value
+        var chargingStatusString = "unknown"
+        if(chargingStatusValue == 1) {
+            chargingStatusString = "calibrating"
+        }else if(chargingStatusValue == 2) {
+            chargingStatusString = "waiting"
+        }else if(chargingStatusValue == 3) {
+            chargingStatusString = "charging"
+        }else if(chargingStatusValue == 4) {
+            chargingStatusString = "finished"
+        }
+        return chargingStatusString
+    }
+
     Component {
         id: landingStationInfo
 
@@ -63,11 +104,11 @@ Item {
                     QGCLabel { text: qsTr("Mode:") }
                     QGCLabel { text: _activeVehicle ? qsTr("manual") : qsTr("auto") }
                     QGCLabel { text: qsTr("Cover status:") }
-                    QGCLabel { text: _activeVehicle ? qsTr("unknown") : qsTr("N/A", "No data to display") }
+                    QGCLabel { text: _activeVehicle ? getCoverStatusString() : qsTr("N/A", "No data to display") }
                     QGCLabel { text: qsTr("Drone status:") }
-                    QGCLabel { text: _activeVehicle ? qsTr("unknown") : qsTr("N/A", "No data to display") }
+                    QGCLabel { text: _activeVehicle ? getDroneStatusString() : qsTr("N/A", "No data to display") }
                     QGCLabel { text: qsTr("Charging:") }
-                    QGCLabel { text: _activeVehicle ? qsTr("unknown") : qsTr("--.--", "No data to display") }
+                    QGCLabel { text: _activeVehicle ? getChargingStatusString() : qsTr("--.--", "No data to display") }
                 }
 
                 GridLayout {
