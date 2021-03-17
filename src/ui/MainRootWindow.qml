@@ -100,6 +100,12 @@ ApplicationWindow {
     signal vtolTransitionToFwdFlightRequest
     signal vtolTransitionToMRFlightRequest
     signal showPreFlightChecklistIfNeeded
+    signal autoLandingStationCoverRequest
+    signal openLandingStationCoverRequest
+    signal closeLandingStationCoverRequest
+    signal autoLandingStationChargingRequest
+    signal startLandingStationChargingRequest
+    signal stopLandingStationChargingRequest
 
     //-------------------------------------------------------------------------
     //-- Global Scope Functions

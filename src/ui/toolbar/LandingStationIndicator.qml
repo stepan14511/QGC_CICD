@@ -122,13 +122,11 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("auto")
-
                         property bool btnPressed: false
-
                         onPressAndHold: btnPressed = true
-
                         onClicked: {
                             btnPressed = false
+                            mainWindow.autoLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -136,13 +134,11 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("open")
-
                         property bool btnPressed: false
-
                         onPressAndHold: btnPressed = true
-
                         onClicked: {
                             btnPressed = false
+                            mainWindow.openLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -150,13 +146,11 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("close")
-
                         property bool btnPressed: false
-
                         onPressAndHold: btnPressed = true
-
                         onClicked: {
                             btnPressed = false
+                            mainWindow.closeLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -171,30 +165,20 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: 3
 
-                    property bool autoBtnPressed: true
-                    property bool startBtnPressed: false
-                    property bool stopBtnPressed: false
-
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("auto")
-
                         onClicked: {
-                            autoBtnPressed = true
-                            startBtnPressed = false
-                            stopBtnPressed = false
-                            // mainWindow.hideIndicatorPopup()
+                            mainWindow.autoLandingStationChargingRequest()
+                            mainWindow.hideIndicatorPopup()
                         }
                     }
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("charge")
-
                         onClicked: {
-                            autoBtnPressed = false
-                            startBtnPressed = true
-                            stopBtnPressed = false
+                            mainWindow.startLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -202,11 +186,8 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("stop")
-
                         onClicked: {
-                            autoBtnPressed = false
-                            startBtnPressed = false
-                            stopBtnPressed = true
+                            mainWindow.stopLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }

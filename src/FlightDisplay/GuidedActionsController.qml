@@ -53,6 +53,12 @@ Item {
     readonly property string gotoTitle:                     qsTr("Go To Location")
     readonly property string vtolTransitionTitle:           qsTr("VTOL Transition")
     readonly property string roiTitle:                      qsTr("ROI")
+    readonly property string autoLandingStationCoverTitle:  qsTr("Auto mode of Landing Station Cover")
+    readonly property string openLandingStationCoverTitle:  qsTr("Open Landing Station Cover")
+    readonly property string closeLandingStationCoverTitle: qsTr("Close Landing Station Cover")
+    readonly property string autoLandingStationChargingTitle: qsTr("Auto Landing Station Charging")
+    readonly property string startLandingStationChargingTitle: qsTr("Start Landing Station Charging")
+    readonly property string stopLandingStationChargingTitle: qsTr("Stop Landing Station Charging")
     readonly property string actionListTitle:               qsTr("Action")
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
@@ -75,6 +81,12 @@ Item {
     readonly property string vtolTransitionFwdMessage:          qsTr("Transition VTOL to fixed wing flight.")
     readonly property string vtolTransitionMRMessage:           qsTr("Transition VTOL to multi-rotor flight.")
     readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
+    readonly property string autoLandingStationCoverMessage:    qsTr("Setup Landing Station Cover in auto mode.")
+    readonly property string openLandingStationCoverMessage:    qsTr("Open Landing Station Cover in manual mode.")
+    readonly property string closeLandingStationCoverMessage:   qsTr("Close Landing Station Cover in manual mode.")
+    readonly property string autoLandingStationChargingMessage: qsTr("Setup Landing Station Charging in auto mode.")
+    readonly property string startLandingStationChargingMessage: qsTr("Start Landing Station Charging in manual mode.")
+    readonly property string stopLandingStationChargingMessage: qsTr("Stop Landing Station Charging in manual mode.")
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -100,6 +112,12 @@ Item {
     readonly property int actionROI:                        22
     readonly property int actionActionList:                 23
     readonly property int actionForceArm:                   24
+    readonly property int actionAutoLandingStationCover:    30
+    readonly property int actionOpenLandingStationCover:    31
+    readonly property int actionCloseLandingStationCover:   32
+    readonly property int actionAutoLandingStationCharging: 33
+    readonly property int actionStartLandingStationCharging: 34
+    readonly property int actionStopLandingStationCharging: 35
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -278,6 +296,12 @@ Item {
         onDisarmVehicleRequest:             disarmVehicleRequest()
         onVtolTransitionToFwdFlightRequest: vtolTransitionToFwdFlightRequest()
         onVtolTransitionToMRFlightRequest:  vtolTransitionToMRFlightRequest()
+        onAutoLandingStationCoverRequest:   autoLandingStationCoverRequest()
+        onOpenLandingStationCoverRequest:   openLandingStationCoverRequest()
+        onCloseLandingStationCoverRequest:  closeLandingStationCoverRequest()
+        onAutoLandingStationChargingRequest: autoLandingStationChargingRequest()
+        onStartLandingStationChargingRequest: startLandingStationChargingRequest()
+        onStopLandingStationChargingRequest: stopLandingStationChargingRequest()
     }
 
     function armVehicleRequest() {
@@ -303,6 +327,30 @@ Item {
 
     function vtolTransitionToMRFlightRequest() {
         confirmAction(actionVtolTransitionToMRFlight)
+    }
+
+    function autoLandingStationCoverRequest() {
+        confirmAction(actionAutoLandingStationCover)
+    }
+
+    function openLandingStationCoverRequest() {
+        confirmAction(actionOpenLandingStationCover)
+    }
+
+    function closeLandingStationCoverRequest() {
+        confirmAction(actionCloseLandingStationCover)
+    }
+
+    function autoLandingStationChargingRequest() {
+        confirmAction(actionAutoLandingStationCharging)
+    }
+
+    function startLandingStationChargingRequest() {
+        confirmAction(actionStartLandingStationCharging)
+    }
+
+    function stopLandingStationChargingRequest() {
+        confirmAction(actionStopLandingStationCharging)
     }
 
     function closeAll() {
@@ -452,6 +500,37 @@ Item {
         case actionActionList:
             actionList.show()
             return
+        case actionAutoLandingStationCover:
+            confirmDialog.title = autoLandingStationCoverTitle
+            confirmDialog.message = autoLandingStationCoverMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionOpenLandingStationCover:
+            confirmDialog.title = openLandingStationCoverTitle
+            confirmDialog.message = openLandingStationCoverMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionCloseLandingStationCover:
+            confirmDialog.title = closeLandingStationCoverTitle
+            confirmDialog.message = closeLandingStationCoverMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+
+        case actionAutoLandingStationCharging:
+            confirmDialog.title = autoLandingStationChargingTitle
+            confirmDialog.message = autoLandingStationChargingMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionStartLandingStationCharging:
+            confirmDialog.title = startLandingStationChargingTitle
+            confirmDialog.message = startLandingStationChargingMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionStopLandingStationCharging:
+            confirmDialog.title = stopLandingStationChargingTitle
+            confirmDialog.message = stopLandingStationChargingMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -531,6 +610,24 @@ Item {
             break
         case actionROI:
             _activeVehicle.guidedModeROI(actionData)
+            break
+        case actionAutoLandingStationCover:
+            _activeVehicle.landingStationChangeCoverMode(0);
+            break
+        case actionOpenLandingStationCover:
+            _activeVehicle.landingStationChangeCoverMode(1);
+            break
+        case actionCloseLandingStationCover:
+            _activeVehicle.landingStationChangeCoverMode(2);
+            break
+        case actionAutoLandingStationCharging:
+            _activeVehicle.landingStationChangeChargingMode(0);
+            break
+        case actionStartLandingStationCharging:
+            _activeVehicle.landingStationChangeChargingMode(1);
+            break
+        case actionStopLandingStationCharging:
+            _activeVehicle.landingStationChangeChargingMode(2);
             break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
