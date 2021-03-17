@@ -158,6 +158,14 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     virtual void guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle);
 
+    /// Command landing station to change cover mode
+    ///     @param coverMode 0 - auto, 1 - open, 2 - close
+    virtual void landingStationSetCoverMode(Vehicle* vehicle, uint8_t coverMode);
+
+    /// Command landing station to change his mode
+    ///     @param chargingMode 0 - auto, 1 - start, 2 - stop, 3 - calibrate
+    virtual void landingStationSetChargingMode(Vehicle* vehicle, uint8_t chargingMode);
+
     /// Default tx mode to apply to joystick axes
     /// TX modes are as outlined here: http://www.rc-airplane-world.com/rc-transmitter-modes.html
     virtual int defaultJoystickTXMode(void);
@@ -324,6 +332,9 @@ public:
 
     /// Sends the appropriate mavlink message for follow me support
     virtual void sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities);
+
+    virtual void sendLandingStationCoverCmd(Vehicle* vehicle, uint8_t cmd);
+    virtual void sendLandingStationChargingCmd(Vehicle* vehicle, uint8_t cmd);
 
     // FIXME: Hack workaround for non pluginize FollowMe support
     static const QString px4FollowMeFlightMode;

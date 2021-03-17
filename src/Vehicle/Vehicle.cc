@@ -3879,12 +3879,11 @@ void Vehicle::triggerSimpleCamera()
 
 void Vehicle::landingStationChangeCoverMode(int cmd)
 {
-    qgcApp()->showAppMessage(QObject::tr("Sending of landing station cover cmd is not supported yet."));
-    // _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
+    _firmwarePlugin->landingStationSetCoverMode(this, cmd);
 }
 
 void Vehicle::landingStationChangeChargingMode(int cmd)
 {
     qgcApp()->showAppMessage(QObject::tr("Sending of landing station charging is not supported yet.."));
-    // _firmwarePlugin->guidedModeChangeAltitude(this, altitudeChange, pauseVehicle);
+    _firmwarePlugin->landingStationSetChargingMode(this, cmd);
 }
