@@ -1071,14 +1071,14 @@ void FirmwarePlugin::sendLandingStationCoverCmd(Vehicle* vehicle, uint8_t cmd)
     WeakLinkInterfacePtr weakLink = vehicle->vehicleLinkManager()->primaryLink();
     if (!weakLink.expired()) {
         MAVLinkProtocol*        mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
-        mavlink_land_station_cover_cmd_t msg_cmd   = {};
+        mavlink_landing_station_cover_cmd_t msg_cmd   = {};
         SharedLinkInterfacePtr  sharedLink      = weakLink.lock();
 
-        msg_cmd.time_boot_ms = qgcApp()->msecsSinceBoot();
+        msg_cmd.timestamp = qgcApp()->msecsSinceBoot();
         msg_cmd.cmd = cmd;
 
         mavlink_message_t message;
-        mavlink_msg_land_station_cover_cmd_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
+        mavlink_msg_landing_station_cover_cmd_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
                                                        static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
                                                        sharedLink->mavlinkChannel(),
                                                        &message,

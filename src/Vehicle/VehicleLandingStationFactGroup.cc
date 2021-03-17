@@ -37,12 +37,13 @@ VehicleLandingStationFactGroup::VehicleLandingStationFactGroup(QObject* parent)
 
 void VehicleLandingStationFactGroup::handleMessage(Vehicle* /* vehicle */, mavlink_message_t& message)
 {
-    if (message.msgid != MAVLINK_MSG_ID_LAND_STATION_COVER_STATUS) {
+    if (message.msgid != MAVLINK_MSG_ID_LANDING_STATION_STATUS) {
         return;
     }
 
-    mavlink_land_station_cover_status_t content;
-    mavlink_msg_land_station_cover_status_decode(&message, &content);
+    mavlink_landing_station_status_t content;
+    mavlink_msg_landing_station_status_decode(&message, &content);
 
-    coverStatus()->setRawValue                  (content.status);
+    coverStatus()->setRawValue                  (content.cover_status);
+    chargingStatus()->setRawValue               (content.charging_status);
 }
