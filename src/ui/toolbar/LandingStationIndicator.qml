@@ -27,46 +27,69 @@ Item {
     property bool showIndicator: true
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
+    property var _vehicles: QGroundControl.multiVehicleManager.vehicles
 
     function getCoverStatusString() {
-        var coverStatusValue = _activeVehicle.landingStation.coverStatus.value
         var coverStatusString = "unknown"
-        if(coverStatusValue == 1) {
-            coverStatusString = "open"
-        }else if(coverStatusValue == 2) {
-            coverStatusString = "closed"
-        }else if(coverStatusValue == 3) {
-            coverStatusString = "opening"
-        }else if(coverStatusValue == 4) {
-            coverStatusString = "closing"
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if(coverStatusValue == 1) {
+                coverStatusString = "open"
+            }else if(coverStatusValue == 2) {
+                coverStatusString = "closed"
+            }else if(coverStatusValue == 3) {
+                coverStatusString = "opening"
+            }else if(coverStatusValue == 4) {
+                coverStatusString = "closing"
+            }
         }
         return coverStatusString
     }
 
     function getDroneStatusString() {
-        var droneStatusValue = _activeVehicle.landingStation.droneStatus.value
         var droneStatusString = "unknown"
-        if(droneStatusValue == 1) {
-            droneStatusString = "inside"
-        }else if(droneStatusValue == 2) {
-            droneStatusString = "outside"
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var droneStatusValue = _vehicles.get(vehicle_idx).landingStation.droneStatus.value
+            if(droneStatusValue == 1) {
+                droneStatusString = "inside"
+            }else if(droneStatusValue == 2) {
+                droneStatusString = "outside"
+            }
         }
         return droneStatusString
     }
 
     function getChargingStatusString() {
-        var chargingStatusValue = _activeVehicle.landingStation.chargingStatus.value
         var chargingStatusString = "unknown"
-        if(chargingStatusValue == 1) {
-            chargingStatusString = "calibrating"
-        }else if(chargingStatusValue == 2) {
-            chargingStatusString = "waiting"
-        }else if(chargingStatusValue == 3) {
-            chargingStatusString = "charging"
-        }else if(chargingStatusValue == 4) {
-            chargingStatusString = "finished"
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var chargingStatusValue = _vehicles.get(vehicle_idx).landingStation.chargingStatus.value
+            if(chargingStatusValue == 1) {
+                chargingStatusString = "calibrating"
+            }else if(chargingStatusValue == 2) {
+                chargingStatusString = "waiting"
+            }else if(chargingStatusValue == 3) {
+                chargingStatusString = "charging"
+            }else if(chargingStatusValue == 4) {
+                chargingStatusString = "finished"
+            }
         }
         return chargingStatusString
+    }
+
+    function isActive() {
+        var status = false
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var chargingStatusValue = _vehicles.get(vehicle_idx).landingStation.chargingStatus.value
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if(chargingStatusValue != 0 || coverStatusValue != 0) {
+                status = true
+            }
+        }
+        return status
     }
 
     Component {
@@ -88,7 +111,7 @@ Item {
 
                 QGCLabel {
                     id:             landingStationLabel
-                    text:           (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? qsTr("Landing station status") : qsTr("GPS Data Unavailable")
+                    text:           (_activeVehicle) ? qsTr("Landing station status") : qsTr("Landing station unavalible")
                     font.family:    ScreenTools.demiboldFontFamily
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -159,7 +182,7 @@ Item {
                 
                 GridLayout {
                     id:                 landingStationChargingControlGrid
-                    visible:            (_activeVehicle)
+                    visible:            true
                     anchors.margins:    ScreenTools.defaultFontPixelHeight
                     columnSpacing:      ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -205,8 +228,8 @@ Item {
         source:             "/qmlimages/LandingStation.svg"
         fillMode:           Image.PreserveAspectFit
         sourceSize.height:  height
-        opacity:            (_activeVehicle && _activeVehicle.gps.count.value >= 0) ? 1 : 0.5
-        color:              qgcPal.colorBlue
+        opacity:            1
+        color:              (isActive()) ? qgcPal.colorBlue : qgcPal.colorGrey
     }
 
     Column {

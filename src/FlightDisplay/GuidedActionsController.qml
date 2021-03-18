@@ -612,22 +612,40 @@ Item {
             _activeVehicle.guidedModeROI(actionData)
             break
         case actionAutoLandingStationCover:
-            _activeVehicle.landingStationChangeCoverMode(0);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCoverMode(0)
+            }
             break
         case actionOpenLandingStationCover:
-            _activeVehicle.landingStationChangeCoverMode(1);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCoverMode(1)
+            }
             break
         case actionCloseLandingStationCover:
-            _activeVehicle.landingStationChangeCoverMode(2);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCoverMode(2)
+            }
             break
         case actionAutoLandingStationCharging:
-            _activeVehicle.landingStationChangeChargingMode(0);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeChargingMode(0)
+            }
             break
         case actionStartLandingStationCharging:
-            _activeVehicle.landingStationChangeChargingMode(1);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeChargingMode(1)
+            }
             break
         case actionStopLandingStationCharging:
-            _activeVehicle.landingStationChangeChargingMode(2);
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeChargingMode(2)
+            }
             break
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
