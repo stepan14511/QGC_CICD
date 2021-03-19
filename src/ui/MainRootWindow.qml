@@ -104,8 +104,8 @@ ApplicationWindow {
     signal openLandingStationCoverRequest
     signal closeLandingStationCoverRequest
     signal autoLandingStationChargingRequest
-    signal startLandingStationChargingRequest
-    signal stopLandingStationChargingRequest
+    signal calibrateLandingStationChargingRequest
+    signal disableLandingStationChargingRequest
 
     //-------------------------------------------------------------------------
     //-- Global Scope Functions

@@ -67,13 +67,19 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var chargingStatusValue = _vehicles.get(vehicle_idx).landingStation.chargingStatus.value
             if(chargingStatusValue == 1) {
-                chargingStatusString = "calibrating"
-            }else if(chargingStatusValue == 2) {
                 chargingStatusString = "waiting"
+            }else if(chargingStatusValue == 2) {
+                chargingStatusString = "calibrating"
             }else if(chargingStatusValue == 3) {
                 chargingStatusString = "charging"
             }else if(chargingStatusValue == 4) {
                 chargingStatusString = "finished"
+            }else if(chargingStatusValue == 5) {
+                chargingStatusString = "paused"
+            }else if(chargingStatusValue == 6) {
+                chargingStatusString = "saving mode"
+            }else if(chargingStatusValue == 7) {
+                chargingStatusString = "disabled"
             }
         }
         return chargingStatusString
@@ -145,34 +151,23 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("auto")
-                        property bool btnPressed: false
-                        onPressAndHold: btnPressed = true
                         onClicked: {
-                            btnPressed = false
                             mainWindow.autoLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
-
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("open")
-                        property bool btnPressed: false
-                        onPressAndHold: btnPressed = true
+                        text:               qsTr("force open")
                         onClicked: {
-                            btnPressed = false
                             mainWindow.openLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
-
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("close")
-                        property bool btnPressed: false
-                        onPressAndHold: btnPressed = true
+                        text:               qsTr("force close")
                         onClicked: {
-                            btnPressed = false
                             mainWindow.closeLandingStationCoverRequest()
                             mainWindow.hideIndicatorPopup()
                         }
@@ -196,21 +191,19 @@ Item {
                             mainWindow.hideIndicatorPopup()
                         }
                     }
-
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("charge")
+                        text:               qsTr("calibrate")
                         onClicked: {
-                            mainWindow.startLandingStationChargingRequest()
+                            mainWindow.calibrateLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }
-
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("stop")
+                        text:               qsTr("disable")
                         onClicked: {
-                            mainWindow.stopLandingStationChargingRequest()
+                            mainWindow.disableLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()
                         }
                     }

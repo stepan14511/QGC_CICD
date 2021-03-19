@@ -3884,6 +3884,5 @@ void Vehicle::landingStationChangeCoverMode(int cmd)
 
 void Vehicle::landingStationChangeChargingMode(int cmd)
 {
-    qgcApp()->showAppMessage(QObject::tr("Sending of landing station charging is not supported yet.."));
     _firmwarePlugin->landingStationSetChargingMode(this, cmd);
 }

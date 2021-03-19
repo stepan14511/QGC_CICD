@@ -159,11 +159,11 @@ public:
     virtual void guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle);
 
     /// Command landing station to change cover mode
-    ///     @param coverMode 0 - auto, 1 - open, 2 - close
+    ///     @param coverMode 0 - auto, 1 - force open, 2 - force close
     virtual void landingStationSetCoverMode(Vehicle* vehicle, uint8_t coverMode);
 
     /// Command landing station to change his mode
-    ///     @param chargingMode 0 - auto, 1 - start, 2 - stop, 3 - calibrate
+    ///     @param chargingMode 0 - auto, 1 - calibrate, 2 - disable
     virtual void landingStationSetChargingMode(Vehicle* vehicle, uint8_t chargingMode);
 
     /// Default tx mode to apply to joystick axes

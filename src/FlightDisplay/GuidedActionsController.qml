@@ -57,8 +57,8 @@ Item {
     readonly property string openLandingStationCoverTitle:  qsTr("Open Landing Station Cover")
     readonly property string closeLandingStationCoverTitle: qsTr("Close Landing Station Cover")
     readonly property string autoLandingStationChargingTitle: qsTr("Auto Landing Station Charging")
-    readonly property string startLandingStationChargingTitle: qsTr("Start Landing Station Charging")
-    readonly property string stopLandingStationChargingTitle: qsTr("Stop Landing Station Charging")
+    readonly property string calibrateLandingStationChargingTitle: qsTr("Calibrate Landing Station Charging")
+    readonly property string disableLandingStationChargingTitle: qsTr("Disable Landing Station Charging")
     readonly property string actionListTitle:               qsTr("Action")
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
@@ -85,8 +85,8 @@ Item {
     readonly property string openLandingStationCoverMessage:    qsTr("Open Landing Station Cover in manual mode.")
     readonly property string closeLandingStationCoverMessage:   qsTr("Close Landing Station Cover in manual mode.")
     readonly property string autoLandingStationChargingMessage: qsTr("Setup Landing Station Charging in auto mode.")
-    readonly property string startLandingStationChargingMessage: qsTr("Start Landing Station Charging in manual mode.")
-    readonly property string stopLandingStationChargingMessage: qsTr("Stop Landing Station Charging in manual mode.")
+    readonly property string calibrateLandingStationChargingMessage: qsTr("Calibrate Landing Station Charging in manual mode.")
+    readonly property string disableLandingStationChargingMessage: qsTr("Disable Landing Station Charging in manual mode.")
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -116,8 +116,8 @@ Item {
     readonly property int actionOpenLandingStationCover:    31
     readonly property int actionCloseLandingStationCover:   32
     readonly property int actionAutoLandingStationCharging: 33
-    readonly property int actionStartLandingStationCharging: 34
-    readonly property int actionStopLandingStationCharging: 35
+    readonly property int actionCalibrateLandingStationCharging: 34
+    readonly property int actionDisableLandingStationCharging: 35
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -300,8 +300,8 @@ Item {
         onOpenLandingStationCoverRequest:   openLandingStationCoverRequest()
         onCloseLandingStationCoverRequest:  closeLandingStationCoverRequest()
         onAutoLandingStationChargingRequest: autoLandingStationChargingRequest()
-        onStartLandingStationChargingRequest: startLandingStationChargingRequest()
-        onStopLandingStationChargingRequest: stopLandingStationChargingRequest()
+        onCalibrateLandingStationChargingRequest: calibrateLandingStationChargingRequest()
+        onDisableLandingStationChargingRequest: disableLandingStationChargingRequest()
     }
 
     function armVehicleRequest() {
@@ -345,12 +345,12 @@ Item {
         confirmAction(actionAutoLandingStationCharging)
     }
 
-    function startLandingStationChargingRequest() {
-        confirmAction(actionStartLandingStationCharging)
+    function calibrateLandingStationChargingRequest() {
+        confirmAction(actionCalibrateLandingStationCharging)
     }
 
-    function stopLandingStationChargingRequest() {
-        confirmAction(actionStopLandingStationCharging)
+    function disableLandingStationChargingRequest() {
+        confirmAction(actionDisableLandingStationCharging)
     }
 
     function closeAll() {
@@ -521,14 +521,14 @@ Item {
             confirmDialog.message = autoLandingStationChargingMessage
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
-        case actionStartLandingStationCharging:
-            confirmDialog.title = startLandingStationChargingTitle
-            confirmDialog.message = startLandingStationChargingMessage
+        case actionCalibrateLandingStationCharging:
+            confirmDialog.title = calibrateLandingStationChargingTitle
+            confirmDialog.message = calibrateLandingStationChargingMessage
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
-        case actionStopLandingStationCharging:
-            confirmDialog.title = stopLandingStationChargingTitle
-            confirmDialog.message = stopLandingStationChargingMessage
+        case actionDisableLandingStationCharging:
+            confirmDialog.title = disableLandingStationChargingTitle
+            confirmDialog.message = disableLandingStationChargingMessage
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
         default:
@@ -635,13 +635,13 @@ Item {
                 rgVehicle.get(i).landingStationChangeChargingMode(0)
             }
             break
-        case actionStartLandingStationCharging:
+        case actionCalibrateLandingStationCharging:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
             for (i = 0; i < rgVehicle.count; i++) {
                 rgVehicle.get(i).landingStationChangeChargingMode(1)
             }
             break
-        case actionStopLandingStationCharging:
+        case actionDisableLandingStationCharging:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
             for (i = 0; i < rgVehicle.count; i++) {
                 rgVehicle.get(i).landingStationChangeChargingMode(2)
