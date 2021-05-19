@@ -25,6 +25,13 @@
     "default":          0
 },
 {
+    "name":             "connectionStatus",
+    "shortDesc":        "Connection status",
+    "longDesc":         "Connection with landing station status: not avaliable, avaliable",
+    "type":             "uint8",
+    "default":          0
+},
+{
     "name":             "chargingStatus",
     "shortDesc":        "Charging status",
     "longDesc":         "Charging status: unknown, activated or disactivated",

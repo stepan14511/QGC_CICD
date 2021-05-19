@@ -116,9 +116,8 @@ Item {
         var status = false
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
-            var chargingStatusValue = _vehicles.get(vehicle_idx).landingStation.chargingStatus.value
-            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if(chargingStatusValue != 0 || coverStatusValue != 0) {
+            var connectionStatusValue = _vehicles.get(vehicle_idx).landingStation.connectionStatus.value
+            if(connectionStatusValue != 0) {
                 status = true
             }
         }
