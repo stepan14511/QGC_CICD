@@ -85,6 +85,33 @@ Item {
         return chargingStatusString
     }
 
+    function setCoverCmd(cmd) {
+        mainWindow.autoLandingStationCoverRequest()
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            _vehicles.get(vehicle_idx).landingStation.coverCmd.value = cmd
+        }
+        if(cmd == 0){
+            mainWindow.autoLandingStationCoverRequest()
+        }else if(cmd == 1){
+            mainWindow.openLandingStationCoverRequest()
+        }else if(cmd == 2){
+            mainWindow.closeLandingStationCoverRequest()
+        }
+    }
+
+    function getCoverCmd() {
+        var vehicle_idx;
+        var cmd = 0
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            if(_vehicles.get(vehicle_idx).landingStation.coverCmd.value != 0){
+                cmd = _vehicles.get(vehicle_idx).landingStation.coverCmd.value
+            }
+        }
+        return cmd
+    }
+
+
     function isActive() {
         var status = false
         var vehicle_idx;
@@ -117,7 +144,7 @@ Item {
 
                 QGCLabel {
                     id:             landingStationLabel
-                    text:           (_activeVehicle) ? qsTr("Landing station status") : qsTr("Landing station unavalible")
+                    text:           (_activeVehicle) ? qsTr("Landing station user panel") : qsTr("Landing station unavalible")
                     font.family:    ScreenTools.demiboldFontFamily
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
@@ -141,6 +168,40 @@ Item {
                 }
 
                 GridLayout {
+                    id:                 landingStationStartStopGrid
+                    visible:            true
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight
+                    columnSpacing:      ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    columns: 3
+
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        text:               qsTr("start")
+                        enabled:            false
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        text:               qsTr("soft stop")
+                        enabled:            false
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        text:               qsTr("hard stop")
+                        enabled:            false
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                }
+
+                GridLayout {
                     id:                 landingStationCoverControlGrid
                     visible:            (_activeVehicle)
                     anchors.margins:    ScreenTools.defaultFontPixelHeight
@@ -152,7 +213,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("auto")
                         onClicked: {
-                            mainWindow.autoLandingStationCoverRequest()
+                            setCoverCmd(0)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -160,7 +221,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("force open")
                         onClicked: {
-                            mainWindow.openLandingStationCoverRequest()
+                            setCoverCmd(1)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -168,13 +229,12 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("force close")
                         onClicked: {
-                            mainWindow.closeLandingStationCoverRequest()
+                            setCoverCmd(2)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
                 }
 
-                
                 GridLayout {
                     id:                 landingStationChargingControlGrid
                     visible:            true
@@ -185,15 +245,8 @@ Item {
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("auto")
-                        onClicked: {
-                            mainWindow.autoLandingStationChargingRequest()
-                            mainWindow.hideIndicatorPopup()
-                        }
-                    }
-                    QGCButton {
-                        Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("calibrate")
+                        enabled:            false
                         onClicked: {
                             mainWindow.calibrateLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()
@@ -201,7 +254,15 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               qsTr("disable")
+                        text:               qsTr("start charging")
+                        onClicked: {
+                            mainWindow.autoLandingStationChargingRequest()
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        text:               qsTr("stop charging")
                         onClicked: {
                             mainWindow.disableLandingStationChargingRequest()
                             mainWindow.hideIndicatorPopup()

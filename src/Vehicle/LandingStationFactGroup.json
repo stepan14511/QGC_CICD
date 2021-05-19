@@ -5,37 +5,43 @@
 [
 {
     "name":             "mode",
-    "shortDesc":        "Landing station mode: auto or manual",
+    "shortDesc":        "Mode",
+    "longDesc":         "Landing station mode: disconnected, auto or manual",
     "type":             "uint8",
     "default":          0
 },
 {
     "name":             "coverStatus",
-    "shortDesc":        "Cover status: unkown, open or closed",
+    "shortDesc":        "Cover status",
+    "longDesc":         "Cover status: unknown, open or closed",
     "type":             "uint8",
     "default":          0
 },
 {
     "name":             "droneStatus",
-    "shortDesc":        "Drone status: unkown, inside or outside",
+    "shortDesc":        "Drone status",
+    "longDesc":         "Drone status: unknown, inside or outside",
     "type":             "uint8",
     "default":          0
 },
 {
     "name":             "chargingStatus",
-    "shortDesc":        "Charging status: unkown, activated or disactivated",
+    "shortDesc":        "Charging status",
+    "longDesc":         "Charging status: unknown, activated or disactivated",
     "type":             "uint8",
     "default":          0
 },
 {
     "name":             "coverCmd",
-    "shortDesc":        "Cover command: auto, open or close",
+    "shortDesc":        "Cover command",
+    "longDesc":         "Cover command: auto, open or close",
     "type":             "uint8",
     "default":          0
 },
 {
     "name":             "chargingCmd",
-    "shortDesc":        "Charging command: auto, start or stop",
+    "shortDesc":        "Charging command",
+    "longDesc":         "Charging command: auto, start or stop",
     "type":             "uint8",
     "default":          0
 }
