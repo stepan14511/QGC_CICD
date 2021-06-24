@@ -40,12 +40,14 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
             if(coverStatusValue == 1) {
-                coverStatusString = "open"
+                coverStatusString = "waiting"
             }else if(coverStatusValue == 2) {
-                coverStatusString = "closed"
+                coverStatusString = "open"
             }else if(coverStatusValue == 3) {
-                coverStatusString = "opening"
+                coverStatusString = "closed"
             }else if(coverStatusValue == 4) {
+                coverStatusString = "opening"
+            }else if(coverStatusValue == 5) {
                 coverStatusString = "closing"
             }else if(coverStatusValue == 0) {
                 coverStatusString = "unknown"
@@ -60,12 +62,14 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             if(elevatorStatusValue == 1) {
-                elevatorStatusString = "lifted"
+                elevatorStatusString = "waiting"
             }else if(elevatorStatusValue == 2) {
-                elevatorStatusString = "down"
+                elevatorStatusString = "lifted"
             }else if(elevatorStatusValue == 3) {
-                elevatorStatusString = "is lifting"
+                elevatorStatusString = "down"
             }else if(elevatorStatusValue == 4) {
+                elevatorStatusString = "is lifting"
+            }else if(elevatorStatusValue == 5) {
                 elevatorStatusString = "is going down"
             }else if(elevatorStatusValue == 0) {
                 elevatorStatusString = "unknown"
@@ -80,12 +84,14 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var centeringMechanismStatusValue = _vehicles.get(vehicle_idx).landingStation.centeringMechanismStatus.value
             if(centeringMechanismStatusValue == 1) {
-                centeringMechanismStatusString = "forward"
+                centeringMechanismStatusString = "waiting"
             }else if(centeringMechanismStatusValue == 2) {
-                centeringMechanismStatusString = "backward"
+                centeringMechanismStatusString = "forward"
             }else if(centeringMechanismStatusValue == 3) {
-                centeringMechanismStatusString = "is going forward"
+                centeringMechanismStatusString = "backward"
             }else if(centeringMechanismStatusValue == 4) {
+                centeringMechanismStatusString = "is going forward"
+            }else if(centeringMechanismStatusValue == 5) {
                 centeringMechanismStatusString = "is going backward"
             }else if(centeringMechanismStatusValue == 0) {
                 centeringMechanismStatusString = "unknown"
