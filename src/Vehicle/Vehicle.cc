@@ -3882,6 +3882,11 @@ void Vehicle::landingStationChangeCoverMode(int cmd)
     _firmwarePlugin->landingStationSetCoverMode(this, cmd);
 }
 
+void Vehicle::landingStationChangeElevatorMode(int cmd)
+{
+    _firmwarePlugin->landingStationSetElevatorMode(this, cmd);
+}
+
 void Vehicle::landingStationChangeChargingMode(int cmd)
 {
     _firmwarePlugin->landingStationSetChargingMode(this, cmd);

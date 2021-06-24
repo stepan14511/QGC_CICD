@@ -402,6 +402,10 @@ public:
     ///     @param int mode: auto, open, close
     Q_INVOKABLE void landingStationChangeCoverMode(int cmd);
 
+    /// Command landing station to change elevator mode
+    ///     @param int mode: auto, open, close
+    Q_INVOKABLE void landingStationChangeElevatorMode(int cmd);
+
     /// Command landing station to setup charging
     ///     @param int mode: auto, force charging, stop, calibrate, etc
     Q_INVOKABLE void landingStationChangeChargingMode(int cmd);

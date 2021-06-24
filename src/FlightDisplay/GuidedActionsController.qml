@@ -56,6 +56,9 @@ Item {
     readonly property string autoLandingStationCoverTitle:  qsTr("Auto mode of Landing Station Cover")
     readonly property string openLandingStationCoverTitle:  qsTr("Open Landing Station Cover")
     readonly property string closeLandingStationCoverTitle: qsTr("Close Landing Station Cover")
+    readonly property string holdLandingStationElevatorTitle: qsTr("Hold Landing Station Elevator")
+    readonly property string liftLandingStationElevatorTitle: qsTr("Lift Landing Station Elevator")
+    readonly property string downLandingStationElevatorTitle: qsTr("Down Landing Station Elevator")
     readonly property string autoLandingStationChargingTitle: qsTr("Auto Landing Station Charging")
     readonly property string calibrateLandingStationChargingTitle: qsTr("Calibrate Landing Station Charging")
     readonly property string disableLandingStationChargingTitle: qsTr("Disable Landing Station Charging")
@@ -84,6 +87,9 @@ Item {
     readonly property string autoLandingStationCoverMessage:    qsTr("Setup Landing Station Cover in auto mode.")
     readonly property string openLandingStationCoverMessage:    qsTr("Open Landing Station Cover in manual mode.")
     readonly property string closeLandingStationCoverMessage:   qsTr("Close Landing Station Cover in manual mode.")
+    readonly property string holdLandingStationElevatorMessage: qsTr("Hold Landing Station Elevator in manual mode.")
+    readonly property string liftLandingStationElevatorMessage: qsTr("Lift Landing Station Elevator in manual mode.")
+    readonly property string downLandingStationElevatorMessage: qsTr("Down Landing Station Elevator in manual mode.")
     readonly property string autoLandingStationChargingMessage: qsTr("Setup Landing Station Charging in auto mode.")
     readonly property string calibrateLandingStationChargingMessage: qsTr("Calibrate Landing Station Charging in manual mode.")
     readonly property string disableLandingStationChargingMessage: qsTr("Disable Landing Station Charging in manual mode.")
@@ -118,6 +124,9 @@ Item {
     readonly property int actionAutoLandingStationCharging: 33
     readonly property int actionCalibrateLandingStationCharging: 34
     readonly property int actionDisableLandingStationCharging: 35
+    readonly property int actionHoldLandingStationElevator: 36
+    readonly property int actionLiftLandingStationElevator: 37
+    readonly property int actionDownLandingStationElevator: 38
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -299,6 +308,9 @@ Item {
         onAutoLandingStationCoverRequest:   autoLandingStationCoverRequest()
         onOpenLandingStationCoverRequest:   openLandingStationCoverRequest()
         onCloseLandingStationCoverRequest:  closeLandingStationCoverRequest()
+        onHoldLandingStationElevatorRequest:  holdLandingStationElevatorRequest()
+        onLiftLandingStationElevatorRequest:  liftLandingStationElevatorRequest()
+        onDownLandingStationElevatorRequest:  downLandingStationElevatorRequest()
         onAutoLandingStationChargingRequest: autoLandingStationChargingRequest()
         onCalibrateLandingStationChargingRequest: calibrateLandingStationChargingRequest()
         onDisableLandingStationChargingRequest: disableLandingStationChargingRequest()
@@ -339,6 +351,18 @@ Item {
 
     function closeLandingStationCoverRequest() {
         confirmAction(actionCloseLandingStationCover)
+    }
+
+    function holdLandingStationElevatorRequest() {
+        confirmAction(actionHoldLandingStationElevator)
+    }
+
+    function liftLandingStationElevatorRequest() {
+        confirmAction(actionLiftLandingStationElevator)
+    }
+
+    function downLandingStationElevatorRequest() {
+        confirmAction(actionDownLandingStationElevator)
     }
 
     function autoLandingStationChargingRequest() {
@@ -500,6 +524,7 @@ Item {
         case actionActionList:
             actionList.show()
             return
+
         case actionAutoLandingStationCover:
             confirmDialog.title = autoLandingStationCoverTitle
             confirmDialog.message = autoLandingStationCoverMessage
@@ -513,6 +538,22 @@ Item {
         case actionCloseLandingStationCover:
             confirmDialog.title = closeLandingStationCoverTitle
             confirmDialog.message = closeLandingStationCoverMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+
+        case actionHoldLandingStationElevator:
+            confirmDialog.title = holdLandingStationElevatorTitle
+            confirmDialog.message = holdLandingStationElevatorMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionLiftLandingStationElevator:
+            confirmDialog.title = liftLandingStationElevatorTitle
+            confirmDialog.message = liftLandingStationElevatorMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionDownLandingStationElevator:
+            confirmDialog.title = downLandingStationElevatorTitle
+            confirmDialog.message = downLandingStationElevatorMessage
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
 
@@ -611,6 +652,7 @@ Item {
         case actionROI:
             _activeVehicle.guidedModeROI(actionData)
             break
+
         case actionAutoLandingStationCover:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
             for (i = 0; i < rgVehicle.count; i++) {
@@ -629,6 +671,26 @@ Item {
                 rgVehicle.get(i).landingStationChangeCoverMode(2)
             }
             break
+
+        case actionHoldLandingStationElevator:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeElevatorMode(0)
+            }
+            break
+        case actionLiftLandingStationElevator:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeElevatorMode(1)
+            }
+            break
+        case actionDownLandingStationElevator:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeElevatorMode(2)
+            }
+            break
+
         case actionAutoLandingStationCharging:
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
             for (i = 0; i < rgVehicle.count; i++) {

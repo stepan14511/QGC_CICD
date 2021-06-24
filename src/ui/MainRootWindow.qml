@@ -100,9 +100,15 @@ ApplicationWindow {
     signal vtolTransitionToFwdFlightRequest
     signal vtolTransitionToMRFlightRequest
     signal showPreFlightChecklistIfNeeded
+
     signal autoLandingStationCoverRequest
     signal openLandingStationCoverRequest
     signal closeLandingStationCoverRequest
+
+    signal holdLandingStationElevatorRequest
+    signal liftLandingStationElevatorRequest
+    signal downLandingStationElevatorRequest
+
     signal autoLandingStationChargingRequest
     signal calibrateLandingStationChargingRequest
     signal disableLandingStationChargingRequest

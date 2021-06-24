@@ -140,6 +140,26 @@ Item {
         }
     }
 
+    function setElevatorCmd(cmd) {
+        if(cmd == 0){
+            mainWindow.holdLandingStationElevatorRequest()
+        }else if(cmd == 1){
+            mainWindow.liftLandingStationElevatorRequest()
+        }else if(cmd == 2){
+            mainWindow.downLandingStationElevatorRequest()
+        }
+    }
+
+    function setCenteringMechanismCmd(cmd) {
+        if(cmd == 0){
+            // mainWindow.holdLandingStationCenteringMechanismRequest()
+        }else if(cmd == 1){
+            // mainWindow.forwardLandingStationCenteringMechanismRequest()
+        }else if(cmd == 2){
+            // mainWindow.backwardLandingStationCenteringMechanismRequest()
+        }
+    }
+
     function getCoverCmd() {
         var vehicle_idx;
         var cmd = 0
@@ -334,8 +354,8 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("hold elevator")
-                        enabled:            false
                         onClicked: {
+                            setElevatorCmd(0)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -343,6 +363,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("lift elevator")
                         onClicked: {
+                            setElevatorCmd(1)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -350,6 +371,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("down elevator")
                         onClicked: {
+                            setElevatorCmd(2)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -367,6 +389,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("grab drone")
                         onClicked: {
+                            setCenteringMechanismCmd(0)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -374,6 +397,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("leave drone")
                         onClicked: {
+                            setCenteringMechanismCmd(1)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
