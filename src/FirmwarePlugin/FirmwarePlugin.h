@@ -163,8 +163,12 @@ public:
     virtual void landingStationSetCoverMode(Vehicle* vehicle, uint8_t coverMode);
 
     /// Command landing station to change elevator mode
-    ///     @param coverMode 0 - hold, 1 - lift, 2 - down
+    ///     @param elevatorMode 0 - hold, 1 - lift, 2 - down
     virtual void landingStationSetElevatorMode(Vehicle* vehicle, uint8_t elevatorMode);
+
+    /// Command landing station to change centering mechanism mode
+    ///     @param centeringMechanism 0 - hold, 1 - forward, 2 - backward
+    virtual void landingStationSetCenteringMechanismMode(Vehicle* vehicle, uint8_t centeringMechanismMode);
 
     /// Command landing station to change his mode
     ///     @param chargingMode 0 - auto, 1 - calibrate, 2 - disable
@@ -339,6 +343,7 @@ public:
 
     virtual void sendLandingStationCoverCmd(Vehicle* vehicle, uint8_t cmd);
     virtual void sendLandingStationElevatorCmd(Vehicle* vehicle, uint8_t cmd);
+    virtual void sendLandingStationCenteringMechanismCmd(Vehicle* vehicle, uint8_t cmd);
     virtual void sendLandingStationChargingCmd(Vehicle* vehicle, uint8_t cmd);
 
     // FIXME: Hack workaround for non pluginize FollowMe support

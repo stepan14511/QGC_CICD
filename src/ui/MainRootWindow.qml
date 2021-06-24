@@ -109,6 +109,10 @@ ApplicationWindow {
     signal liftLandingStationElevatorRequest
     signal downLandingStationElevatorRequest
 
+    signal holdLandingStationCenteringMechanismRequest
+    signal forwardLandingStationCenteringMechanismRequest
+    signal backwardLandingStationCenteringMechanismRequest
+
     signal autoLandingStationChargingRequest
     signal calibrateLandingStationChargingRequest
     signal disableLandingStationChargingRequest

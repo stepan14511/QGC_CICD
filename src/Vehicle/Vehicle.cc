@@ -3887,6 +3887,11 @@ void Vehicle::landingStationChangeElevatorMode(int cmd)
     _firmwarePlugin->landingStationSetElevatorMode(this, cmd);
 }
 
+void Vehicle::landingStationChangeCenteringMechanismMode(int cmd)
+{
+    _firmwarePlugin->landingStationSetCenteringMechanismMode(this, cmd);
+}
+
 void Vehicle::landingStationChangeChargingMode(int cmd)
 {
     _firmwarePlugin->landingStationSetChargingMode(this, cmd);

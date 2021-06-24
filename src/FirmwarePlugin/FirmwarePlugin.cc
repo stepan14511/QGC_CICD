@@ -276,6 +276,11 @@ void FirmwarePlugin::landingStationSetElevatorMode(Vehicle* vehicle, uint8_t ele
     sendLandingStationElevatorCmd(vehicle, elevatorMode);
 }
 
+void FirmwarePlugin::landingStationSetCenteringMechanismMode(Vehicle* vehicle, uint8_t centeringMechanismMode)
+{
+    sendLandingStationCenteringMechanismCmd(vehicle, centeringMechanismMode);
+}
+
 void FirmwarePlugin::landingStationSetChargingMode(Vehicle* vehicle, uint8_t chargingMode)
 {
     sendLandingStationChargingCmd(vehicle, chargingMode);
@@ -1105,6 +1110,27 @@ void FirmwarePlugin::sendLandingStationElevatorCmd(Vehicle* vehicle, uint8_t cmd
 
         mavlink_message_t message;
         mavlink_msg_landing_station_elevator_cmd_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
+                                                             static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
+                                                             sharedLink->mavlinkChannel(),
+                                                             &message,
+                                                             &msg_cmd);
+        vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
+    }
+}
+
+void FirmwarePlugin::sendLandingStationCenteringMechanismCmd(Vehicle* vehicle, uint8_t cmd)
+{
+    WeakLinkInterfacePtr weakLink = vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        MAVLinkProtocol*        mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
+        mavlink_landing_station_centering_mechanism_cmd_t msg_cmd   = {};
+        SharedLinkInterfacePtr  sharedLink      = weakLink.lock();
+
+        msg_cmd.timestamp = qgcApp()->msecsSinceBoot();
+        msg_cmd.cmd = cmd;
+
+        mavlink_message_t message;
+        mavlink_msg_landing_station_centering_mechanism_cmd_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
                                                              static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
                                                              sharedLink->mavlinkChannel(),
                                                              &message,

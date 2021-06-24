@@ -152,11 +152,11 @@ Item {
 
     function setCenteringMechanismCmd(cmd) {
         if(cmd == 0){
-            // mainWindow.holdLandingStationCenteringMechanismRequest()
+            mainWindow.holdLandingStationCenteringMechanismRequest()
         }else if(cmd == 1){
-            // mainWindow.forwardLandingStationCenteringMechanismRequest()
+            mainWindow.forwardLandingStationCenteringMechanismRequest()
         }else if(cmd == 2){
-            // mainWindow.backwardLandingStationCenteringMechanismRequest()
+            mainWindow.backwardLandingStationCenteringMechanismRequest()
         }
     }
 
@@ -389,7 +389,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("grab drone")
                         onClicked: {
-                            setCenteringMechanismCmd(0)
+                            setCenteringMechanismCmd(1)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -397,7 +397,7 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("leave drone")
                         onClicked: {
-                            setCenteringMechanismCmd(1)
+                            setCenteringMechanismCmd(2)
                             mainWindow.hideIndicatorPopup()
                         }
                     }

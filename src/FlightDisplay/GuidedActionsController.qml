@@ -53,15 +53,23 @@ Item {
     readonly property string gotoTitle:                     qsTr("Go To Location")
     readonly property string vtolTransitionTitle:           qsTr("VTOL Transition")
     readonly property string roiTitle:                      qsTr("ROI")
+
     readonly property string autoLandingStationCoverTitle:  qsTr("Auto mode of Landing Station Cover")
     readonly property string openLandingStationCoverTitle:  qsTr("Open Landing Station Cover")
     readonly property string closeLandingStationCoverTitle: qsTr("Close Landing Station Cover")
+
     readonly property string holdLandingStationElevatorTitle: qsTr("Hold Landing Station Elevator")
     readonly property string liftLandingStationElevatorTitle: qsTr("Lift Landing Station Elevator")
     readonly property string downLandingStationElevatorTitle: qsTr("Down Landing Station Elevator")
+
+    readonly property string holdLandingStationCenteringMechanismTitle: qsTr("Hold Landing Station Centering Mechanism")
+    readonly property string forwardLandingStationCenteringMechanismTitle: qsTr("Forward Landing Station Centering Mechanism")
+    readonly property string backwardLandingStationCenteringMechanismTitle: qsTr("Forward Landing Station Centering Mechanism")
+
     readonly property string autoLandingStationChargingTitle: qsTr("Auto Landing Station Charging")
     readonly property string calibrateLandingStationChargingTitle: qsTr("Calibrate Landing Station Charging")
     readonly property string disableLandingStationChargingTitle: qsTr("Disable Landing Station Charging")
+
     readonly property string actionListTitle:               qsTr("Action")
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
@@ -84,12 +92,19 @@ Item {
     readonly property string vtolTransitionFwdMessage:          qsTr("Transition VTOL to fixed wing flight.")
     readonly property string vtolTransitionMRMessage:           qsTr("Transition VTOL to multi-rotor flight.")
     readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
+
     readonly property string autoLandingStationCoverMessage:    qsTr("Setup Landing Station Cover in auto mode.")
     readonly property string openLandingStationCoverMessage:    qsTr("Open Landing Station Cover in manual mode.")
     readonly property string closeLandingStationCoverMessage:   qsTr("Close Landing Station Cover in manual mode.")
+
     readonly property string holdLandingStationElevatorMessage: qsTr("Hold Landing Station Elevator in manual mode.")
     readonly property string liftLandingStationElevatorMessage: qsTr("Lift Landing Station Elevator in manual mode.")
     readonly property string downLandingStationElevatorMessage: qsTr("Down Landing Station Elevator in manual mode.")
+
+    readonly property string holdLandingStationCenteringMechanismMessage: qsTr("Hold Landing Station Centering Mechanism in manual mode.")
+    readonly property string forwardLandingStationCenteringMechanismMessage: qsTr("Forward Landing Station Centering Mechanism in manual mode.")
+    readonly property string backwardLandingStationCenteringMechanismMessage: qsTr("Backward Landing Station Centering Mechanism in manual mode.")
+
     readonly property string autoLandingStationChargingMessage: qsTr("Setup Landing Station Charging in auto mode.")
     readonly property string calibrateLandingStationChargingMessage: qsTr("Calibrate Landing Station Charging in manual mode.")
     readonly property string disableLandingStationChargingMessage: qsTr("Disable Landing Station Charging in manual mode.")
@@ -118,15 +133,22 @@ Item {
     readonly property int actionROI:                        22
     readonly property int actionActionList:                 23
     readonly property int actionForceArm:                   24
+
     readonly property int actionAutoLandingStationCover:    30
     readonly property int actionOpenLandingStationCover:    31
     readonly property int actionCloseLandingStationCover:   32
+
     readonly property int actionAutoLandingStationCharging: 33
     readonly property int actionCalibrateLandingStationCharging: 34
     readonly property int actionDisableLandingStationCharging: 35
+
     readonly property int actionHoldLandingStationElevator: 36
     readonly property int actionLiftLandingStationElevator: 37
     readonly property int actionDownLandingStationElevator: 38
+
+    readonly property int actionHoldLandingStationCenteringMechanism: 39
+    readonly property int actionForwardLandingStationCenteringMechanism: 40
+    readonly property int actionBackwardLandingStationCenteringMechanism: 41
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -305,12 +327,19 @@ Item {
         onDisarmVehicleRequest:             disarmVehicleRequest()
         onVtolTransitionToFwdFlightRequest: vtolTransitionToFwdFlightRequest()
         onVtolTransitionToMRFlightRequest:  vtolTransitionToMRFlightRequest()
+
         onAutoLandingStationCoverRequest:   autoLandingStationCoverRequest()
         onOpenLandingStationCoverRequest:   openLandingStationCoverRequest()
         onCloseLandingStationCoverRequest:  closeLandingStationCoverRequest()
+
         onHoldLandingStationElevatorRequest:  holdLandingStationElevatorRequest()
         onLiftLandingStationElevatorRequest:  liftLandingStationElevatorRequest()
         onDownLandingStationElevatorRequest:  downLandingStationElevatorRequest()
+
+        onHoldLandingStationCenteringMechanismRequest:  holdLandingStationCenteringMechanismRequest()
+        onForwardLandingStationCenteringMechanismRequest:  forwardLandingStationCenteringMechanismRequest()
+        onBackwardLandingStationCenteringMechanismRequest:  backwardLandingStationCenteringMechanismRequest()
+
         onAutoLandingStationChargingRequest: autoLandingStationChargingRequest()
         onCalibrateLandingStationChargingRequest: calibrateLandingStationChargingRequest()
         onDisableLandingStationChargingRequest: disableLandingStationChargingRequest()
@@ -344,11 +373,9 @@ Item {
     function autoLandingStationCoverRequest() {
         confirmAction(actionAutoLandingStationCover)
     }
-
     function openLandingStationCoverRequest() {
         confirmAction(actionOpenLandingStationCover)
     }
-
     function closeLandingStationCoverRequest() {
         confirmAction(actionCloseLandingStationCover)
     }
@@ -356,23 +383,29 @@ Item {
     function holdLandingStationElevatorRequest() {
         confirmAction(actionHoldLandingStationElevator)
     }
-
     function liftLandingStationElevatorRequest() {
         confirmAction(actionLiftLandingStationElevator)
     }
-
     function downLandingStationElevatorRequest() {
         confirmAction(actionDownLandingStationElevator)
+    }
+
+    function holdLandingStationCenteringMechanismRequest() {
+        confirmAction(actionHoldLandingStationCenteringMechanism)
+    }
+    function forwardLandingStationCenteringMechanismRequest() {
+        confirmAction(actionForwardLandingStationCenteringMechanism)
+    }
+    function backwardLandingStationCenteringMechanismRequest() {
+        confirmAction(actionBackwardLandingStationCenteringMechanism)
     }
 
     function autoLandingStationChargingRequest() {
         confirmAction(actionAutoLandingStationCharging)
     }
-
     function calibrateLandingStationChargingRequest() {
         confirmAction(actionCalibrateLandingStationCharging)
     }
-
     function disableLandingStationChargingRequest() {
         confirmAction(actionDisableLandingStationCharging)
     }
@@ -557,6 +590,22 @@ Item {
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
 
+        case actionHoldLandingStationCenteringMechanism:
+            confirmDialog.title = holdLandingStationCenteringMechanismTitle
+            confirmDialog.message = holdLandingStationCenteringMechanismMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionForwardLandingStationCenteringMechanism:
+            confirmDialog.title = forwardLandingStationCenteringMechanismTitle
+            confirmDialog.message = forwardLandingStationCenteringMechanismMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionBackwardLandingStationCenteringMechanism:
+            confirmDialog.title = backwardLandingStationCenteringMechanismTitle
+            confirmDialog.message = backwardLandingStationCenteringMechanismMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+
         case actionAutoLandingStationCharging:
             confirmDialog.title = autoLandingStationChargingTitle
             confirmDialog.message = autoLandingStationChargingMessage
@@ -688,6 +737,25 @@ Item {
             rgVehicle = QGroundControl.multiVehicleManager.vehicles
             for (i = 0; i < rgVehicle.count; i++) {
                 rgVehicle.get(i).landingStationChangeElevatorMode(2)
+            }
+            break
+
+        case actionHoldLandingStationCenteringMechanism:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCenteringMechanismMode(0)
+            }
+            break
+        case actionForwardLandingStationCenteringMechanism:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCenteringMechanismMode(1)
+            }
+            break
+        case actionBackwardLandingStationCenteringMechanism:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeCenteringMechanismMode(2)
             }
             break
 
