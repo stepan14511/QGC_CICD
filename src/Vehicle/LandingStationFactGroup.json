@@ -11,9 +11,30 @@
     "default":          0
 },
 {
+    "name":             "landingStationStatus",
+    "shortDesc":        "Landing Station status",
+    "longDesc":         "Landing Station status: unknown, open, closed, opening or closing",
+    "type":             "uint8",
+    "default":          0
+},
+{
     "name":             "coverStatus",
     "shortDesc":        "Cover status",
-    "longDesc":         "Cover status: unknown, open or closed",
+    "longDesc":         "Cover status: unknown, open, closed, opening or closing",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "elevatorStatus",
+    "shortDesc":        "Elevator status",
+    "longDesc":         "Elevator status: unknown, lift, down, is lifting or is going down",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "centeringMechanismStatus",
+    "shortDesc":        "Centering Mechanism status",
+    "longDesc":         "Centering Mechanism status: unknown, forward, backward, is going forward or is going backward",
     "type":             "uint8",
     "default":          0
 },
