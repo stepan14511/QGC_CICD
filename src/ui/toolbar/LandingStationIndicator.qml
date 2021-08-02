@@ -100,6 +100,27 @@ Item {
         return centeringMechanismStatusString
     }
 
+    function getGlobalStatusString() {
+        var globalStatusString = ""
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if(elevatorStatusValue == 3 && coverStatusValue == 3) {
+                globalStatusString = "Closed"
+            }else if(elevatorStatusValue == 2 && coverStatusValue == 2) {
+                globalStatusString = "Open"
+            }else if(elevatorStatusValue == 3 && coverStatusValue == 2) {
+                globalStatusString = "Waiting"
+            }else if(elevatorStatusValue >= 2 && coverStatusValue >= 2) {
+                globalStatusString = "In process"
+            }else{
+                globalStatusString = "Unknown"
+            }
+        }
+        return globalStatusString
+    }
+
     function getDroneStatusString() {
         var droneStatusString = "-"
         return droneStatusString
@@ -484,6 +505,12 @@ Item {
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
         anchors.left:           landingStationIcon.right
 
+        QGCLabel {
+            id:             kekLabel
+            text:           getGlobalStatusString()
+            font.family:    ScreenTools.demiboldFontFamily
+            anchors.horizontalCenter: parent.horizontalCenter
+        }
     }
 
     MouseArea {
