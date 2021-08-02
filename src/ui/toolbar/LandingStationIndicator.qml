@@ -131,6 +131,56 @@ Item {
         return chargingStatusString
     }
 
+    function getCoverOpenEnableStatus() {
+        var isCoverOpenEnabled = false
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if(coverStatusValue == 3 || coverStatusValue == 1) {
+                isCoverOpenEnabled = true
+            }
+        }
+        return isCoverOpenEnabled
+    }
+    function getCoverCloseEnableStatus() {
+        var isCoverCloseEnabled = false
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if((elevatorStatusValue == 3 || elevatorStatusValue == 1) &&
+               (coverStatusValue == 2 || coverStatusValue == 1)) {
+                isCoverCloseEnabled = true
+            }
+        }
+        return isCoverCloseEnabled
+    }
+    function getElevatorLiftEnableStatus() {
+        var isElevatorLiftEnabled = false
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            if((coverStatusValue == 2 || coverStatusValue == 1) &&
+               (elevatorStatusValue == 3 || elevatorStatusValue == 1)) {
+                isElevatorLiftEnabled = true
+            }
+        }
+        return isElevatorLiftEnabled
+
+    }
+    function getElevatorDownEnableStatus() {
+        var isElevatorDownEnabled = false
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            if(elevatorStatusValue == 2 || elevatorStatusValue == 1) {
+                isElevatorDownEnabled = true
+            }
+        }
+        return isElevatorDownEnabled
+    }
+
     function setCoverCmd(cmd) {
         mainWindow.autoLandingStationCoverRequest()
         var vehicle_idx;
@@ -333,6 +383,7 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("open gate")
+                        enabled:            getCoverOpenEnableStatus()
                         onClicked: {
                             setCoverCmd(1)
                             mainWindow.hideIndicatorPopup()
@@ -341,6 +392,7 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("close gate")
+                        enabled:            getCoverCloseEnableStatus()
                         onClicked: {
                             setCoverCmd(2)
                             mainWindow.hideIndicatorPopup()
@@ -368,6 +420,7 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("lift elevator")
+                        enabled:            getElevatorLiftEnableStatus()
                         onClicked: {
                             setElevatorCmd(1)
                             mainWindow.hideIndicatorPopup()
@@ -376,6 +429,7 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         text:               qsTr("down elevator")
+                        enabled:            getElevatorDownEnableStatus()
                         onClicked: {
                             setElevatorCmd(2)
                             mainWindow.hideIndicatorPopup()
