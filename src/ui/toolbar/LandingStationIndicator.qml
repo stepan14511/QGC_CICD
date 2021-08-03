@@ -25,6 +25,7 @@ Item {
     anchors.bottom: parent.bottom
 
     property bool showIndicator: true
+    property bool isUnsafeActuatorControlModeActivated: false
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property var _vehicles: QGroundControl.multiVehicleManager.vehicles
@@ -153,53 +154,61 @@ Item {
     }
 
     function getCoverOpenEnableStatus() {
-        var isCoverOpenEnabled = false
+        if(isUnsafeActuatorControlModeActivated == true) {
+            return true
+        }
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
             if(coverStatusValue == 3 || coverStatusValue == 1) {
-                isCoverOpenEnabled = true
+                return true
             }
         }
-        return isCoverOpenEnabled
+        return false
     }
     function getCoverCloseEnableStatus() {
-        var isCoverCloseEnabled = false
+        if(isUnsafeActuatorControlModeActivated == true) {
+            return true
+        }
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
             if((elevatorStatusValue == 3 || elevatorStatusValue == 1) &&
                (coverStatusValue == 2 || coverStatusValue == 1)) {
-                isCoverCloseEnabled = true
+                return true
             }
         }
-        return isCoverCloseEnabled
+        return false
     }
     function getElevatorLiftEnableStatus() {
-        var isElevatorLiftEnabled = false
+        if(isUnsafeActuatorControlModeActivated == true) {
+            return true
+        }
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
             if((coverStatusValue == 2 || coverStatusValue == 1) &&
                (elevatorStatusValue == 3 || elevatorStatusValue == 1)) {
-                isElevatorLiftEnabled = true
+                return true
             }
         }
-        return isElevatorLiftEnabled
+        return false
 
     }
     function getElevatorDownEnableStatus() {
-        var isElevatorDownEnabled = false
+        if(isUnsafeActuatorControlModeActivated == true) {
+            return true
+        }
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             if(elevatorStatusValue == 2 || elevatorStatusValue == 1) {
-                isElevatorDownEnabled = true
+                return true
             }
         }
-        return isElevatorDownEnabled
+        return false
     }
 
     function setCoverCmd(cmd) {
@@ -293,8 +302,16 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: 2
 
-                    QGCLabel { text: qsTr("Mode:") }
-                    QGCLabel { text: _activeVehicle ? qsTr("manual") : qsTr("auto") }
+                    QGCLabel { text: qsTr("Actuators checks:") }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        text:               isUnsafeActuatorControlModeActivated ? qsTr("disabled") : qsTr("enabled")
+                        heightFactor:       0.1
+                        showBorder:         true
+                        onClicked: {
+                            isUnsafeActuatorControlModeActivated = !isUnsafeActuatorControlModeActivated
+                        }
+                    }
                     QGCLabel { text: qsTr("Landing station status:") }
                     QGCLabel { text: _activeVehicle ? getLandingStationStatusString() : qsTr("N/A", "No data to display") }
                     QGCLabel { text: qsTr("1. Cover:") }
