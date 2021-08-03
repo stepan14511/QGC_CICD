@@ -105,9 +105,12 @@ Item {
         var globalStatusString = ""
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var connectionStatusValue = _vehicles.get(vehicle_idx).landingStation.connectionStatus.value
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if(elevatorStatusValue == 3 && coverStatusValue == 3) {
+            if(connectionStatusValue == 0) {
+                globalStatusString = ""
+            }else if(elevatorStatusValue == 3 && coverStatusValue == 3) {
                 globalStatusString = "Closed"
             }else if(elevatorStatusValue == 2 && coverStatusValue == 2) {
                 globalStatusString = "Open"
