@@ -25,7 +25,10 @@ Item {
     anchors.bottom: parent.bottom
 
     property bool showIndicator: true
-    property bool isUnsafeActuatorControlModeActivated: false
+    property int actuator_mode_auto: 0
+    property int actuator_mode_manual: 1
+    property int actuator_mode_force_manual: 2
+    property int actuatorsMode: 0
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property var _vehicles: QGroundControl.multiVehicleManager.vehicles
@@ -157,7 +160,7 @@ Item {
     }
 
     function getCoverOpenEnableStatus() {
-        if(isUnsafeActuatorControlModeActivated == true) {
+        if(actuatorsMode == actuator_mode_force_manual) {
             return true
         }
         var vehicle_idx;
@@ -170,7 +173,7 @@ Item {
         return false
     }
     function getCoverCloseEnableStatus() {
-        if(isUnsafeActuatorControlModeActivated == true) {
+        if(actuatorsMode == actuator_mode_force_manual) {
             return true
         }
         var vehicle_idx;
@@ -185,7 +188,7 @@ Item {
         return false
     }
     function getElevatorLiftEnableStatus() {
-        if(isUnsafeActuatorControlModeActivated == true) {
+        if(actuatorsMode == actuator_mode_force_manual) {
             return true
         }
         var vehicle_idx;
@@ -201,7 +204,7 @@ Item {
 
     }
     function getElevatorDownEnableStatus() {
-        if(isUnsafeActuatorControlModeActivated == true) {
+        if(actuatorsMode == actuator_mode_force_manual) {
             return true
         }
         var vehicle_idx;
@@ -305,14 +308,14 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: 2
 
-                    QGCLabel { text: qsTr("Actuators checks:") }
+                    QGCLabel { text: qsTr("Actuators mode:") }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
-                        text:               isUnsafeActuatorControlModeActivated ? qsTr("disabled") : qsTr("enabled")
+                        text:               actuatorsMode == actuator_mode_auto ? qsTr("auto") : (actuatorsMode == actuator_mode_manual ? qsTr("manual") : qsTr("force manual"))
                         heightFactor:       0.1
                         showBorder:         true
                         onClicked: {
-                            isUnsafeActuatorControlModeActivated = !isUnsafeActuatorControlModeActivated
+                            actuatorsMode = (actuatorsMode < actuator_mode_force_manual) ? actuatorsMode + 1 : 0
                         }
                     }
                     QGCLabel { text: qsTr("Landing station status:") }
@@ -339,6 +342,7 @@ Item {
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            false
                         text:               qsTr("start")
                         enabled:            false
                         onClicked: {
@@ -347,6 +351,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            false
                         text:               qsTr("soft stop")
                         enabled:            false
                         onClicked: {
@@ -355,6 +360,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            false
                         text:               qsTr("hard stop")
                         enabled:            false
                         onClicked: {
@@ -363,6 +369,12 @@ Item {
                     }
                 }
 
+                QGCLabel {
+                    id:             landingStationChargingControlFeaturesLabel
+                    text:           qsTr("Charging control features:")
+                    font.family:    ScreenTools.demiboldFontFamily
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
                 GridLayout {
                     id:                 landingStationChargingControlGrid
                     visible:            true
@@ -399,12 +411,11 @@ Item {
                 }
 
                 QGCLabel {
-                    id:             landingStationMaintainerLabel
-                    text:           qsTr("Actuator control features:")
+                    id:             landingStationActuatorsControlFeaturesLabel
+                    text:           qsTr("Actuators control features:")
                     font.family:    ScreenTools.demiboldFontFamily
                     anchors.horizontalCenter: parent.horizontalCenter
                 }
-
                 GridLayout {
                     id:                 landingStationCoverControlGrid
                     visible:            (_activeVehicle)
@@ -415,6 +426,7 @@ Item {
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("hold gate")
                         onClicked: {
                             setCoverCmd(0)
@@ -423,6 +435,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("open gate")
                         enabled:            getCoverOpenEnableStatus()
                         onClicked: {
@@ -432,6 +445,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("close gate")
                         enabled:            getCoverCloseEnableStatus()
                         onClicked: {
@@ -452,6 +466,7 @@ Item {
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("hold elevator")
                         onClicked: {
                             setElevatorCmd(0)
@@ -460,6 +475,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("lift elevator")
                         enabled:            getElevatorLiftEnableStatus()
                         onClicked: {
@@ -469,6 +485,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode != actuator_mode_auto
                         text:               qsTr("down elevator")
                         enabled:            getElevatorDownEnableStatus()
                         onClicked: {
@@ -477,7 +494,43 @@ Item {
                         }
                     }
                 }
-                
+
+                GridLayout {
+                    id:                 landingStationControlGrid
+                    visible:            true
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight
+                    columnSpacing:      ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    columns: 3
+
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode == actuator_mode_auto
+                        text:               qsTr("stop")
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode == actuator_mode_auto
+                        text:               qsTr("open")
+                        enabled:            getElevatorLiftEnableStatus()
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                    QGCButton {
+                        Layout.alignment:   Qt.AlignHCenter
+                        visible:            actuatorsMode == actuator_mode_auto
+                        text:               qsTr("down")
+                        enabled:            getElevatorDownEnableStatus()
+                        onClicked: {
+                            mainWindow.hideIndicatorPopup()
+                        }
+                    }
+                }
+
                 GridLayout {
                     id:                 landingStationCenteringMechanismControlGrid
                     visible:            true
@@ -488,6 +541,7 @@ Item {
 
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            false
                         text:               qsTr("grab drone")
                         onClicked: {
                             setCenteringMechanismCmd(1)
@@ -496,6 +550,7 @@ Item {
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
+                        visible:            false
                         text:               qsTr("leave drone")
                         onClicked: {
                             setCenteringMechanismCmd(2)
