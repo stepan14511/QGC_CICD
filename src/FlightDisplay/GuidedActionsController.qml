@@ -54,6 +54,10 @@ Item {
     readonly property string vtolTransitionTitle:           qsTr("VTOL Transition")
     readonly property string roiTitle:                      qsTr("ROI")
 
+    readonly property string holdLandingStationTitle:       qsTr("Hold Landing Station")
+    readonly property string openLandingStationTitle:       qsTr("Automatically open Landing Station")
+    readonly property string closeLandingStationTitle:      qsTr("Automatically close Landing Station")
+
     readonly property string autoLandingStationCoverTitle:  qsTr("Auto mode of Landing Station Cover")
     readonly property string openLandingStationCoverTitle:  qsTr("Open Landing Station Cover")
     readonly property string closeLandingStationCoverTitle: qsTr("Close Landing Station Cover")
@@ -92,6 +96,10 @@ Item {
     readonly property string vtolTransitionFwdMessage:          qsTr("Transition VTOL to fixed wing flight.")
     readonly property string vtolTransitionMRMessage:           qsTr("Transition VTOL to multi-rotor flight.")
     readonly property string roiMessage:                        qsTr("Make the specified location a Region Of Interest.")
+
+    readonly property string holdLandingStationMessage:         qsTr("Hold Landing Station.")
+    readonly property string openLandingStationMessage:         qsTr("Automatically open Landing Station.")
+    readonly property string closeLandingStationMessage:        qsTr("Automatically close Landing Station.")
 
     readonly property string autoLandingStationCoverMessage:    qsTr("Setup Landing Station Cover in auto mode.")
     readonly property string openLandingStationCoverMessage:    qsTr("Open Landing Station Cover in manual mode.")
@@ -133,6 +141,10 @@ Item {
     readonly property int actionROI:                        22
     readonly property int actionActionList:                 23
     readonly property int actionForceArm:                   24
+
+    readonly property int actionHoldLandingStation:         27
+    readonly property int actionOpenLandingStation:         28
+    readonly property int actionCloseLandingStation:        29
 
     readonly property int actionAutoLandingStationCover:    30
     readonly property int actionOpenLandingStationCover:    31
@@ -328,6 +340,10 @@ Item {
         onVtolTransitionToFwdFlightRequest: vtolTransitionToFwdFlightRequest()
         onVtolTransitionToMRFlightRequest:  vtolTransitionToMRFlightRequest()
 
+        onHoldLandingStationRequest:        holdLandingStationRequest()
+        onOpenLandingStationRequest:        openLandingStationRequest()
+        onCloseLandingStationRequest:       closeLandingStationRequest()
+
         onAutoLandingStationCoverRequest:   autoLandingStationCoverRequest()
         onOpenLandingStationCoverRequest:   openLandingStationCoverRequest()
         onCloseLandingStationCoverRequest:  closeLandingStationCoverRequest()
@@ -368,6 +384,16 @@ Item {
 
     function vtolTransitionToMRFlightRequest() {
         confirmAction(actionVtolTransitionToMRFlight)
+    }
+
+    function holdLandingStationRequest() {
+        confirmAction(actionHoldLandingStation)
+    }
+    function openLandingStationRequest() {
+        confirmAction(actionOpenLandingStation)
+    }
+    function closeLandingStationRequest() {
+        confirmAction(actionCloseLandingStation)
     }
 
     function autoLandingStationCoverRequest() {
@@ -558,6 +584,22 @@ Item {
             actionList.show()
             return
 
+        case actionHoldLandingStation:
+            confirmDialog.title = holdLandingStationTitle
+            confirmDialog.message = holdLandingStationMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionOpenLandingStation:
+            confirmDialog.title = openLandingStationTitle
+            confirmDialog.message = openLandingStationMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionCloseLandingStation:
+            confirmDialog.title = closeLandingStationTitle
+            confirmDialog.message = closeLandingStationMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+
         case actionAutoLandingStationCover:
             confirmDialog.title = autoLandingStationCoverTitle
             confirmDialog.message = autoLandingStationCoverMessage
@@ -700,6 +742,25 @@ Item {
             break
         case actionROI:
             _activeVehicle.guidedModeROI(actionData)
+            break
+
+        case actionHoldLandingStation:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeMode(0)
+            }
+            break
+        case actionOpenLandingStation:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeMode(1)
+            }
+            break
+        case actionCloseLandingStation:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).landingStationChangeMode(2)
+            }
             break
 
         case actionAutoLandingStationCover:

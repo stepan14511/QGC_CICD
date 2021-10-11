@@ -3877,6 +3877,11 @@ void Vehicle::triggerSimpleCamera()
                    1.0);                        // trigger camera
 }
 
+void Vehicle::landingStationChangeMode(int cmd)
+{
+    _firmwarePlugin->landingStationSetMode(this, cmd);
+}
+
 void Vehicle::landingStationChangeCoverMode(int cmd)
 {
     _firmwarePlugin->landingStationSetCoverMode(this, cmd);

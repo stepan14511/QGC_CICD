@@ -158,6 +158,10 @@ public:
     ///     @param pauseVehicle true: pause vehicle prior to altitude change
     virtual void guidedModeChangeAltitude(Vehicle* vehicle, double altitudeChange, bool pauseVehicle);
 
+    /// Command landing station to change mode
+    ///     @param landingStationMode 0 - hold, 1 - force open, 2 - force close
+    virtual void landingStationSetMode(Vehicle* vehicle, uint8_t landingStationMode);
+
     /// Command landing station to change cover mode
     ///     @param coverMode 0 - auto, 1 - force open, 2 - force close
     virtual void landingStationSetCoverMode(Vehicle* vehicle, uint8_t coverMode);
@@ -341,6 +345,7 @@ public:
     /// Sends the appropriate mavlink message for follow me support
     virtual void sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionReport& motionReport, uint8_t estimatationCapabilities);
 
+    virtual void sendLandingStationCmd(Vehicle* vehicle, uint8_t cmd);
     virtual void sendLandingStationCoverCmd(Vehicle* vehicle, uint8_t cmd);
     virtual void sendLandingStationElevatorCmd(Vehicle* vehicle, uint8_t cmd);
     virtual void sendLandingStationCenteringMechanismCmd(Vehicle* vehicle, uint8_t cmd);

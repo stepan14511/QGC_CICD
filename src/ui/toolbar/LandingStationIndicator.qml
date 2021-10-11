@@ -30,30 +30,38 @@ Item {
     property int actuator_mode_force_manual: 2
     property int actuatorsMode: 0
 
+    property int landing_station_stage_open: 1
+    property int landing_station_stage_close: 2
+
+    property int gate_stage_unknown: 0
+    property int gate_stage_waiting: 1
+    property int gate_stage_open: 2
+    property int gate_stage_close: 3
+
+    property int elevator_stage_unknown: 0
+    property int elevator_stage_waiting: 1
+    property int elevator_stage_up: 2
+    property int elevator_stage_down: 3
+
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property var _vehicles: QGroundControl.multiVehicleManager.vehicles
-
-    function getLandingStationStatusString() {
-        var coverStatusString = "-"
-        return coverStatusString
-    }
 
     function getCoverStatusString() {
         var coverStatusString = "-"
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if(coverStatusValue == 1) {
+            if(coverStatusValue == gate_stage_waiting) {
                 coverStatusString = "waiting"
-            }else if(coverStatusValue == 2) {
+            }else if(coverStatusValue == gate_stage_open) {
                 coverStatusString = "open"
-            }else if(coverStatusValue == 3) {
+            }else if(coverStatusValue == gate_stage_close) {
                 coverStatusString = "closed"
             }else if(coverStatusValue == 4) {
                 coverStatusString = "opening"
             }else if(coverStatusValue == 5) {
                 coverStatusString = "closing"
-            }else if(coverStatusValue == 0) {
+            }else if(coverStatusValue == gate_stage_unknown) {
                 coverStatusString = "unknown"
             }
         }
@@ -65,43 +73,21 @@ Item {
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
-            if(elevatorStatusValue == 1) {
+            if(elevatorStatusValue == elevator_stage_waiting) {
                 elevatorStatusString = "waiting"
-            }else if(elevatorStatusValue == 2) {
+            }else if(elevatorStatusValue == elevator_stage_up) {
                 elevatorStatusString = "lifted"
-            }else if(elevatorStatusValue == 3) {
+            }else if(elevatorStatusValue == elevator_stage_down) {
                 elevatorStatusString = "down"
             }else if(elevatorStatusValue == 4) {
                 elevatorStatusString = "is lifting"
             }else if(elevatorStatusValue == 5) {
                 elevatorStatusString = "is going down"
-            }else if(elevatorStatusValue == 0) {
+            }else if(elevatorStatusValue == elevator_stage_unknown) {
                 elevatorStatusString = "unknown"
             }
         }
         return elevatorStatusString
-    }
-
-    function getCenteringMechanismStatusString() {
-        var centeringMechanismStatusString = "-"
-        var vehicle_idx;
-        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
-            var centeringMechanismStatusValue = _vehicles.get(vehicle_idx).landingStation.centeringMechanismStatus.value
-            if(centeringMechanismStatusValue == 1) {
-                centeringMechanismStatusString = "waiting"
-            }else if(centeringMechanismStatusValue == 2) {
-                centeringMechanismStatusString = "forward"
-            }else if(centeringMechanismStatusValue == 3) {
-                centeringMechanismStatusString = "backward"
-            }else if(centeringMechanismStatusValue == 4) {
-                centeringMechanismStatusString = "is going forward"
-            }else if(centeringMechanismStatusValue == 5) {
-                centeringMechanismStatusString = "is going backward"
-            }else if(centeringMechanismStatusValue == 0) {
-                centeringMechanismStatusString = "unknown"
-            }
-        }
-        return centeringMechanismStatusString
     }
 
     function getGlobalStatusString() {
@@ -113,12 +99,12 @@ Item {
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
             if(connectionStatusValue == 0) {
                 globalStatusString = ""
-            }else if(elevatorStatusValue == 3 && coverStatusValue == 3) {
+            }else if(elevatorStatusValue == elevator_stage_down && coverStatusValue == gate_stage_close) {
                 globalStatusString = "Closed"
-            }else if(elevatorStatusValue == 2 && coverStatusValue == 2) {
+            }else if(elevatorStatusValue == elevator_stage_up && coverStatusValue == gate_stage_open) {
                 globalStatusString = "Open"
-            }else if(elevatorStatusValue == 3 && coverStatusValue == 2) {
-                globalStatusString = "Waiting"
+            }else if(elevatorStatusValue == elevator_stage_down && coverStatusValue == gate_stage_open) {
+                globalStatusString = "intermediate"
             }else if(elevatorStatusValue >= 2 && coverStatusValue >= 2) {
                 globalStatusString = "In process"
             }else{
@@ -159,6 +145,30 @@ Item {
         return chargingStatusString
     }
 
+    function getLandingStationOpenEnableStatus() {
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            if(coverStatusValue == gate_stage_close &&
+               elevatorStatusValue == elevator_stage_down) {
+                return true
+            }
+        }
+        return false
+    }
+    function getLandingStationCloseEnableStatus() {
+        var vehicle_idx;
+        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+            var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
+            var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
+            if(coverStatusValue == gate_stage_open &&
+               elevatorStatusValue == elevator_stage_up) {
+                return true
+            }
+        }
+        return false
+    }
     function getCoverOpenEnableStatus() {
         if(actuatorsMode == actuator_mode_force_manual) {
             return true
@@ -166,7 +176,7 @@ Item {
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if(coverStatusValue == 3 || coverStatusValue == 1) {
+            if(coverStatusValue == gate_stage_close || coverStatusValue == gate_stage_waiting) {
                 return true
             }
         }
@@ -180,8 +190,8 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if((elevatorStatusValue == 3 || elevatorStatusValue == 1) &&
-               (coverStatusValue == 2 || coverStatusValue == 1)) {
+            if((elevatorStatusValue == elevator_stage_down || elevatorStatusValue == elevator_stage_waiting) &&
+               (coverStatusValue == gate_stage_open || coverStatusValue == gate_stage_waiting)) {
                 return true
             }
         }
@@ -195,13 +205,12 @@ Item {
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
             var coverStatusValue = _vehicles.get(vehicle_idx).landingStation.coverStatus.value
-            if((coverStatusValue == 2 || coverStatusValue == 1) &&
-               (elevatorStatusValue == 3 || elevatorStatusValue == 1)) {
+            if((coverStatusValue == gate_stage_open || coverStatusValue == gate_stage_waiting) &&
+               (elevatorStatusValue == elevator_stage_down || elevatorStatusValue == elevator_stage_waiting)) {
                 return true
             }
         }
         return false
-
     }
     function getElevatorDownEnableStatus() {
         if(actuatorsMode == actuator_mode_force_manual) {
@@ -210,15 +219,24 @@ Item {
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             var elevatorStatusValue = _vehicles.get(vehicle_idx).landingStation.elevatorStatus.value
-            if(elevatorStatusValue == 2 || elevatorStatusValue == 1) {
+            if(elevatorStatusValue == elevator_stage_up || elevatorStatusValue == elevator_stage_waiting) {
                 return true
             }
         }
         return false
     }
 
+    function setLandingStationCmd(cmd) {
+        if(cmd == 0){
+            mainWindow.holdLandingStationRequest()
+        }else if(cmd == 1){
+            mainWindow.openLandingStationRequest()
+        }else if(cmd == 2){
+            mainWindow.closeLandingStationRequest()
+        }
+    }
+
     function setCoverCmd(cmd) {
-        mainWindow.autoLandingStationCoverRequest()
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
             _vehicles.get(vehicle_idx).landingStation.coverCmd.value = cmd
@@ -318,18 +336,14 @@ Item {
                             actuatorsMode = (actuatorsMode < actuator_mode_force_manual) ? actuatorsMode + 1 : 0
                         }
                     }
-                    QGCLabel { text: qsTr("Landing station status:") }
-                    QGCLabel { text: _activeVehicle ? getLandingStationStatusString() : qsTr("N/A", "No data to display") }
                     QGCLabel { text: qsTr("1. Cover:") }
                     QGCLabel { text: _activeVehicle ? getCoverStatusString() : qsTr("N/A", "No data to display") }
                     QGCLabel { text: qsTr("2. Elevator:") }
                     QGCLabel { text: _activeVehicle ? getElevatorStatusString() : qsTr("N/A", "No data to display") }
-                    QGCLabel { text: qsTr("3. Centering mechanism:") }
-                    QGCLabel { text: _activeVehicle ? getCenteringMechanismStatusString() : qsTr("N/A", "No data to display") }
+                    QGCLabel { text: qsTr("3. Charging:") }
+                    QGCLabel { text: _activeVehicle ? getChargingStatusString() : qsTr("--.--", "No data to display") }
                     QGCLabel { text: qsTr("4. Drone:") }
                     QGCLabel { text: _activeVehicle ? getDroneStatusString() : qsTr("N/A", "No data to display") }
-                    QGCLabel { text: qsTr("5. Charging:") }
-                    QGCLabel { text: _activeVehicle ? getChargingStatusString() : qsTr("--.--", "No data to display") }
                 }
 
                 GridLayout {
@@ -508,6 +522,7 @@ Item {
                         visible:            actuatorsMode == actuator_mode_auto
                         text:               qsTr("stop")
                         onClicked: {
+                            setLandingStationCmd(0)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
@@ -515,17 +530,19 @@ Item {
                         Layout.alignment:   Qt.AlignHCenter
                         visible:            actuatorsMode == actuator_mode_auto
                         text:               qsTr("open")
-                        enabled:            getElevatorLiftEnableStatus()
+                        enabled:            getLandingStationOpenEnableStatus()
                         onClicked: {
+                            setLandingStationCmd(1)
                             mainWindow.hideIndicatorPopup()
                         }
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         visible:            actuatorsMode == actuator_mode_auto
-                        text:               qsTr("down")
-                        enabled:            getElevatorDownEnableStatus()
+                        text:               qsTr("close")
+                        enabled:            getLandingStationCloseEnableStatus()
                         onClicked: {
+                            setLandingStationCmd(2)
                             mainWindow.hideIndicatorPopup()
                         }
                     }

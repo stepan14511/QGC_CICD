@@ -266,6 +266,11 @@ void FirmwarePlugin::guidedModeChangeAltitude(Vehicle*, double, bool pauseVehicl
     qgcApp()->showAppMessage(guided_mode_not_supported_by_vehicle);
 }
 
+void FirmwarePlugin::landingStationSetMode(Vehicle* vehicle, uint8_t landingStationMode)
+{
+    sendLandingStationCmd(vehicle, landingStationMode);
+}
+
 void FirmwarePlugin::landingStationSetCoverMode(Vehicle* vehicle, uint8_t coverMode)
 {
     sendLandingStationCoverCmd(vehicle, coverMode);
@@ -1072,6 +1077,27 @@ void FirmwarePlugin::sendGCSMotionReport(Vehicle* vehicle, FollowMe::GCSMotionRe
                                               sharedLink->mavlinkChannel(),
                                               &message,
                                               &follow_target);
+        vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
+    }
+}
+
+void FirmwarePlugin::sendLandingStationCmd(Vehicle* vehicle, uint8_t cmd)
+{
+    WeakLinkInterfacePtr weakLink = vehicle->vehicleLinkManager()->primaryLink();
+    if (!weakLink.expired()) {
+        MAVLinkProtocol*        mavlinkProtocol = qgcApp()->toolbox()->mavlinkProtocol();
+        mavlink_landing_station_cmd_t msg_cmd   = {};
+        SharedLinkInterfacePtr  sharedLink      = weakLink.lock();
+
+        msg_cmd.timestamp = qgcApp()->msecsSinceBoot();
+        msg_cmd.cmd = cmd;
+
+        mavlink_message_t message;
+        mavlink_msg_landing_station_cmd_encode_chan(static_cast<uint8_t>(mavlinkProtocol->getSystemId()),
+                                                    static_cast<uint8_t>(mavlinkProtocol->getComponentId()),
+                                                    sharedLink->mavlinkChannel(),
+                                                    &message,
+                                                    &msg_cmd);
         vehicle->sendMessageOnLinkThreadSafe(sharedLink.get(), message);
     }
 }

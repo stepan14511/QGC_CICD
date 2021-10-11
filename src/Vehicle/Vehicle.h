@@ -399,6 +399,10 @@ public:
     Q_INVOKABLE void triggerSimpleCamera(void);
 
     /// Command landing station to change cover mode
+    ///     @param int mode: hold, open, close
+    Q_INVOKABLE void landingStationChangeMode(int cmd);
+
+    /// Command landing station to change cover mode
     ///     @param int mode: auto, open, close
     Q_INVOKABLE void landingStationChangeCoverMode(int cmd);
 
