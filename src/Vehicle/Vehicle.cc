@@ -3901,3 +3901,12 @@ void Vehicle::landingStationChangeChargingMode(int cmd)
 {
     _firmwarePlugin->landingStationSetChargingMode(this, cmd);
 }
+
+void Vehicle::gripperChangeState(int cmd)
+{
+    sendMavCommand(defaultComponentId(),
+                    MAV_CMD_DO_GRIPPER,
+                    true,                           // show error if fails
+                    static_cast<float>(1),          // param1 - instance number
+                    static_cast<float>(cmd));       // param2 - gripper actions
+}

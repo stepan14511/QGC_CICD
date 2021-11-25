@@ -418,6 +418,9 @@ public:
     ///     @param int mode: auto, force charging, stop, calibrate, etc
     Q_INVOKABLE void landingStationChangeChargingMode(int cmd);
 
+    /// Command the vehicle to change gripper state
+    ///     @param int mode: 0-do nothing, 1-release, 2-grab
+    Q_INVOKABLE void gripperChangeState(int cmd);
 
 #if !defined(NO_ARDUPILOT_DIALECT)
     Q_INVOKABLE void flashBootloader();

@@ -121,6 +121,9 @@ ApplicationWindow {
     signal calibrateLandingStationChargingRequest
     signal disableLandingStationChargingRequest
 
+    signal releaseGripperRequest
+    signal grabGripperRequest
+
     //-------------------------------------------------------------------------
     //-- Global Scope Functions
 

@@ -74,6 +74,9 @@ Item {
     readonly property string calibrateLandingStationChargingTitle: qsTr("Calibrate Landing Station Charging")
     readonly property string disableLandingStationChargingTitle: qsTr("Disable Landing Station Charging")
 
+    readonly property string releaseGripperTitle:               qsTr("Release Gripper")
+    readonly property string grabGripperTitle:                  qsTr("Grab Gripper")
+
     readonly property string actionListTitle:               qsTr("Action")
 
     readonly property string armMessage:                        qsTr("Arm the vehicle.")
@@ -116,6 +119,10 @@ Item {
     readonly property string autoLandingStationChargingMessage: qsTr("Setup Landing Station Charging in auto mode.")
     readonly property string calibrateLandingStationChargingMessage: qsTr("Calibrate Landing Station Charging in manual mode.")
     readonly property string disableLandingStationChargingMessage: qsTr("Disable Landing Station Charging in manual mode.")
+
+    readonly property string releaseGripperMessage:             qsTr("Release gripper in manual mode.")
+    readonly property string grabGripperMessage:                qsTr("Grab gripper in manual mode.")
+
 
     readonly property int actionRTL:                        1
     readonly property int actionLand:                       2
@@ -161,6 +168,10 @@ Item {
     readonly property int actionHoldLandingStationCenteringMechanism: 39
     readonly property int actionForwardLandingStationCenteringMechanism: 40
     readonly property int actionBackwardLandingStationCenteringMechanism: 41
+
+    readonly property int actionReleaseGripper:             42
+    readonly property int actionGrabGripper:                43
+
 
     property var    _activeVehicle:             QGroundControl.multiVehicleManager.activeVehicle
     property bool   _useChecklist:              QGroundControl.settingsManager.appSettings.useChecklist.rawValue && QGroundControl.corePlugin.options.preFlightChecklistUrl.toString().length
@@ -359,6 +370,9 @@ Item {
         onAutoLandingStationChargingRequest: autoLandingStationChargingRequest()
         onCalibrateLandingStationChargingRequest: calibrateLandingStationChargingRequest()
         onDisableLandingStationChargingRequest: disableLandingStationChargingRequest()
+
+        onReleaseGripperRequest:            releaseGripperRequest()
+        onGrabGripperRequest:               grabGripperRequest()
     }
 
     function armVehicleRequest() {
@@ -434,6 +448,13 @@ Item {
     }
     function disableLandingStationChargingRequest() {
         confirmAction(actionDisableLandingStationCharging)
+    }
+
+    function releaseGripperRequest() {
+        confirmAction(actionReleaseGripper)
+    }
+    function grabGripperRequest() {
+        confirmAction(actionGrabGripper)
     }
 
     function closeAll() {
@@ -663,6 +684,18 @@ Item {
             confirmDialog.message = disableLandingStationChargingMessage
             confirmDialog.hideTrigger = Qt.binding(function() { return true})
             break;
+
+        case actionReleaseGripper:
+            confirmDialog.title = releaseGripperTitle
+            confirmDialog.message = releaseGripperMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+        case actionGrabGripper:
+            confirmDialog.title = grabGripperTitle
+            confirmDialog.message = grabGripperMessage
+            confirmDialog.hideTrigger = Qt.binding(function() { return true})
+            break;
+
         default:
             console.warn("Unknown actionCode", actionCode)
             return
@@ -838,6 +871,20 @@ Item {
                 rgVehicle.get(i).landingStationChangeChargingMode(2)
             }
             break
+
+        case actionReleaseGripper:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).gripperChangeState(0)
+            }
+            break
+        case actionGrabGripper:
+            rgVehicle = QGroundControl.multiVehicleManager.vehicles
+            for (i = 0; i < rgVehicle.count; i++) {
+                rgVehicle.get(i).gripperChangeState(1)
+            }
+            break
+
         default:
             console.warn(qsTr("Internal error: unknown actionCode"), actionCode)
             break
