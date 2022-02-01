@@ -1,0 +1,20 @@
+{
+    "version":  1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "health",
+    "shortDesc":        "Health Of The EFI",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "rpmFirst",
+    "shortDesc":        "Rotation Per Minute",
+    "type":             "float",
+    "decimalPlaces":    2,
+    "default":          null
+}
+]
+}

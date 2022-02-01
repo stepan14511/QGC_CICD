@@ -425,6 +425,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 
 HEADERS += \
     src/QmlControls/QmlUnitsConversion.h \
+    src/Vehicle/VehicleEfiStatusFactGroup.h \
     src/Vehicle/VehicleEscStatusFactGroup.h \
     src/Vehicle/VehicleLandingStationFactGroup.h \
     src/api/QGCCorePlugin.h \
@@ -439,6 +440,7 @@ contains (DEFINES, QGC_ENABLE_PAIRING) {
 }
 
 SOURCES += \
+    src/Vehicle/VehicleEfiStatusFactGroup.cc \
     src/Vehicle/VehicleEscStatusFactGroup.cc \
     src/Vehicle/VehicleLandingStationFactGroup.cc \
     src/api/QGCCorePlugin.cc \

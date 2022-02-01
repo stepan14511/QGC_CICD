@@ -33,6 +33,7 @@
 #include "VehicleSetpointFactGroup.h"
 #include "VehicleTemperatureFactGroup.h"
 #include "VehicleVibrationFactGroup.h"
+#include "VehicleEfiStatusFactGroup.h"
 #include "VehicleEscStatusFactGroup.h"
 #include "VehicleEstimatorStatusFactGroup.h"
 #include "VehicleLinkManager.h"
@@ -286,6 +287,7 @@ public:
     Q_PROPERTY(FactGroup*           temperature     READ temperatureFactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           clock           READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup*           setpoint        READ setpointFactGroup          CONSTANT)
+    Q_PROPERTY(FactGroup*           efiStatus       READ efiStatusFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           escStatus       READ escStatusFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           landingStation  READ landingStationFactGroup    CONSTANT)
     Q_PROPERTY(FactGroup*           estimatorStatus READ estimatorStatusFactGroup   CONSTANT)
@@ -634,6 +636,7 @@ public:
     FactGroup* clockFactGroup               () { return &_clockFactGroup; }
     FactGroup* setpointFactGroup            () { return &_setpointFactGroup; }
     FactGroup* distanceSensorFactGroup      () { return &_distanceSensorFactGroup; }
+    FactGroup* efiStatusFactGroup           () { return &_efiStatusFactGroup; }
     FactGroup* escStatusFactGroup           () { return &_escStatusFactGroup; }
     FactGroup* landingStationFactGroup      () { return &_landingStationFactGroup; }
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
@@ -1240,6 +1243,7 @@ private:
     VehicleClockFactGroup           _clockFactGroup;
     VehicleSetpointFactGroup        _setpointFactGroup;
     VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
+    VehicleEfiStatusFactGroup       _efiStatusFactGroup;
     VehicleEscStatusFactGroup       _escStatusFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
     VehicleLandingStationFactGroup  _landingStationFactGroup;
@@ -1283,6 +1287,7 @@ private:
     static const char* _clockFactGroupName;
     static const char* _setpointFactGroupName;
     static const char* _distanceSensorFactGroupName;
+    static const char* _efiStatusFactGroupName;
     static const char* _escStatusFactGroupName;
     static const char* _landingStationFactGroupName;
     static const char* _estimatorStatusFactGroupName;
