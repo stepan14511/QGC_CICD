@@ -25,17 +25,28 @@ Item {
     anchors.bottom: parent.bottom
 
     property bool showIndicator: true
+    property var _lastCommand: 0
 
     property var _activeVehicle: QGroundControl.multiVehicleManager.activeVehicle
     property var _vehicles: QGroundControl.multiVehicleManager.vehicles
 
     function getGripperStatusString() {
-        var gripperStatusString = "-"
-        var vehicle_idx;
-        for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
-            gripperStatusString = "unknown"
-            break
+        var gripperStatusString = "?"
+
+        if (_lastCommand == 0) {
+            gripperStatusString = "Unknown"
+        } else if (_lastCommand == 1) {
+            gripperStatusString = "Released"
+        } else if (_lastCommand == 2) {
+            gripperStatusString = "Grabbed"
         }
+
+        // var vehicle_idx;
+        // for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
+        //     gripperStatusString = "unknown"
+        //     break
+        // }
+
         return gripperStatusString
     }
 
@@ -62,13 +73,16 @@ Item {
     function setGripperCmd(cmd) {
         var vehicle_idx;
         for (vehicle_idx = 0; vehicle_idx < _vehicles.count; vehicle_idx++) {
-            // _vehicles.get(vehicle_idx).landingStation.coverCmd.value = cmd
+            _vehicles.get(vehicle_idx).gripperChangeState(cmd)
         }
-        if(cmd == 1){
-            mainWindow.releaseGripperRequest()
-        }else if(cmd == 2){
-            mainWindow.grabGripperRequest()
-        }
+
+        // if(cmd == 1){
+        //     mainWindow.releaseGripperRequest()
+        // }else if(cmd == 2){
+        //     mainWindow.grabGripperRequest()
+        // }
+
+        _lastCommand = cmd
     }
 
     Component {
@@ -84,7 +98,7 @@ Item {
             Column {
                 id:                 gripperCol
                 spacing:            ScreenTools.defaultFontPixelHeight * 0.5
-                width:              Math.max(gripperGrid.width, gripperPanelLabel.width, gripperReleaseGrabGrid.width)
+                width:              Math.max(gripperPanelLabel.width, gripperIdGrid.width, gripperGrid.width, gripperReleaseGrabGrid.width)
                 anchors.margins:    ScreenTools.defaultFontPixelHeight
                 anchors.centerIn:   parent
 
@@ -96,6 +110,18 @@ Item {
                 }
 
                 GridLayout {
+                    id:                 gripperIdGrid
+                    visible:            (_activeVehicle)
+                    anchors.margins:    ScreenTools.defaultFontPixelHeight
+                    columnSpacing:      ScreenTools.defaultFontPixelWidth
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    columns: 2
+
+                    QGCLabel { text: qsTr("Hardpoint id:") }
+                    QGCLabel { text: qsTr("1") }
+                }
+
+                GridLayout {
                     id:                 gripperGrid
                     visible:            (_activeVehicle)
                     anchors.margins:    ScreenTools.defaultFontPixelHeight
@@ -103,7 +129,7 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: 2
 
-                    QGCLabel { text: qsTr("Status:") }
+                    QGCLabel { text: qsTr("Status estimation:") }
                     QGCLabel { text: _activeVehicle ? getGripperStatusString() : qsTr("N/A", "No data to display") }
                 }
 
@@ -118,20 +144,20 @@ Item {
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         visible:            true
-                        text:               qsTr("release")
+                        text:               qsTr("Release")
                         enabled:            true
                         onClicked: {
-                            mainWindow.hideIndicatorPopup()
+                            // mainWindow.hideIndicatorPopup()
                             setGripperCmd(1)
                         }
                     }
                     QGCButton {
                         Layout.alignment:   Qt.AlignHCenter
                         visible:            true
-                        text:               qsTr("grab")
+                        text:               qsTr("Grab")
                         enabled:            true
                         onClicked: {
-                            mainWindow.hideIndicatorPopup()
+                            // mainWindow.hideIndicatorPopup()
                             setGripperCmd(2)
                         }
                     }
