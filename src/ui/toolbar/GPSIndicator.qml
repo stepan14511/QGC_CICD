@@ -60,8 +60,14 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     columns: 2
 
-                    QGCLabel { text: qsTr("First instance:") }
-                    QGCLabel { text: qsTr(" ") }
+                    QGCLabel {
+                        visible:        (_activeVehicle.gps2.count.value > 0)
+                        text: qsTr("First instance:")
+                    }
+                    QGCLabel {
+                        visible:        (_activeVehicle.gps2.count.value > 0)
+                        text: qsTr(" ")
+                    }
 
                     QGCLabel { text: qsTr("GPS Count:") }
                     QGCLabel { text: _activeVehicle ? _activeVehicle.gps.count.valueString : qsTr("N/A", "No data to display") }
@@ -77,7 +83,7 @@ Item {
 
                 GridLayout {
                     id:                 gpsSecondGrid
-                    visible:            (_activeVehicle && _activeVehicle.gps.count.value >= 0)
+                    visible:            (_activeVehicle && _activeVehicle.gps2.count.value > 0)
                     anchors.margins:    ScreenTools.defaultFontPixelHeight
                     columnSpacing:      ScreenTools.defaultFontPixelWidth
                     anchors.horizontalCenter: parent.horizontalCenter
@@ -113,24 +119,39 @@ Item {
         color:              qgcPal.buttonText
     }
 
-    Column {
+    GridLayout {
         id:                     gpsValuesColumn
         anchors.verticalCenter: parent.verticalCenter
         anchors.leftMargin:     ScreenTools.defaultFontPixelWidth / 2
         anchors.left:           gpsIcon.right
+        columns: !isNaN(_activeVehicle.gps2.hdop.value) ? 2 : 1
 
         QGCLabel {
-            anchors.horizontalCenter:   hdopValue.horizontalCenter
+            anchors.horizontalCenter:   hdopValueFirst.horizontalCenter
             visible:                    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
             color:                      qgcPal.buttonText
             text:                       _activeVehicle ? _activeVehicle.gps.count.valueString : ""
         }
 
         QGCLabel {
-            id:         hdopValue
+            anchors.horizontalCenter:   hdopValueSecond.horizontalCenter
+            visible:                    _activeVehicle && !isNaN(_activeVehicle.gps2.hdop.value)
+            color:                      qgcPal.buttonText
+            text:                       _activeVehicle ? _activeVehicle.gps2.count.valueString : ""
+        }
+
+        QGCLabel {
+            id:         hdopValueFirst
             visible:    _activeVehicle && !isNaN(_activeVehicle.gps.hdop.value)
             color:      qgcPal.buttonText
             text:       _activeVehicle ? _activeVehicle.gps.hdop.value.toFixed(1) : ""
+        }
+
+        QGCLabel {
+            id:         hdopValueSecond
+            visible:    _activeVehicle && !isNaN(_activeVehicle.gps2.hdop.value)
+            color:      qgcPal.buttonText
+            text:       _activeVehicle ? _activeVehicle.gps2.hdop.value.toFixed(1) : ""
         }
     }
 

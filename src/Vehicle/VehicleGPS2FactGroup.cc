@@ -21,7 +21,7 @@ const char* VehicleGPS2FactGroup::_countFactName =               "count";
 const char* VehicleGPS2FactGroup::_lockFactName =                "lock";
 
 VehicleGPS2FactGroup::VehicleGPS2FactGroup(QObject* parent)
-    : FactGroup(1000, ":/json/Vehicle/GPS2Fact.json", parent)
+    : FactGroup(1000, ":/json/Vehicle/GPSFact.json", parent)
     , _latFact              (0, _latFactName,               FactMetaData::valueTypeDouble)
     , _lonFact              (0, _lonFactName,               FactMetaData::valueTypeDouble)
     , _mgrsFact             (0, _mgrsFactName,              FactMetaData::valueTypeString)
