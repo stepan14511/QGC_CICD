@@ -94,7 +94,8 @@
         <file alias="GeoFenceLight.svg">src/AutoPilotPlugins/PX4/Images/GeoFenceLight.svg</file>
         <file alias="GeoTagIcon">src/AnalyzeView/GeoTagIcon.svg</file>
         <file alias="Gps.svg">src/ui/toolbar/Images/Gps.svg</file>
-        <file alias="Gripper.svg">src/ui/toolbar/Images/Gripper.svg</file>
+        <file alias="GripperGrabbed.svg">src/ui/toolbar/Images/GripperGrabbed.svg</file>
+        <file alias="GripperReleased.svg">src/ui/toolbar/Images/GripperReleased.svg</file>
         <file alias="Hamburger.svg">src/ui/toolbar/Images/Hamburger.svg</file>
         <file alias="Help.svg">src/FlightMap/Images/Help.svg</file>
         <file alias="HelpBlack.svg">src/FlightMap/Images/HelpBlack.svg</file>

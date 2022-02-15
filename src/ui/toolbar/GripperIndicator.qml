@@ -171,7 +171,7 @@ Item {
         width:              height
         anchors.top:        parent.top
         anchors.bottom:     parent.bottom
-        source:             "/qmlimages/Gripper.svg"
+        source:             _lastCommand == 1 ? "/qmlimages/GripperReleased.svg" : "/qmlimages/GripperGrabbed.svg"
         fillMode:           Image.PreserveAspectFit
         sourceSize.height:  height
         opacity:            1
