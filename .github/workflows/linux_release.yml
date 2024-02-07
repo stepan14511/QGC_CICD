@@ -3,17 +3,8 @@ name: Linux Release
 on:
   push:
     branches:
-      - 'master'
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'docs/**'
-  pull_request:
-    branches:
-    - '*'
-    paths-ignore:
-      - 'docs/**'
+      - 'pr-chcnav-aa450'
+      - 'pr-chcnav-aa450-2'
 
 defaults:
   run:
@@ -83,8 +74,7 @@ jobs:
         run:                ${SOURCE_DIR}/deploy/linux/create_linux_appimage.sh ${SOURCE_DIR} ./staging ./package;
 
       - name: Upload Build File
-        uses: ./.github/actions/upload
+        uses: actions/upload-artifact@master
         with:
-          artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/package/${{ env.ARTIFACT }}
