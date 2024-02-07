@@ -5,6 +5,7 @@ add_custom_target(UiToolbarQml
 		FlightModeMenuIndicator.qml
         FlyViewToolBar.qml
 		GPSIndicator.qml
+		ChcnavAA450Indicator.qml
 		GPSRTKIndicator.qml
 		JoystickIndicator.qml
 		LinkIndicator.qml
