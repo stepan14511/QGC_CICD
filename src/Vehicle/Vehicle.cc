@@ -110,6 +110,7 @@ const char* Vehicle::_setpointFactGroupName =           "setpoint";
 const char* Vehicle::_distanceSensorFactGroupName =     "distanceSensor";
 const char* Vehicle::_localPositionFactGroupName =      "localPosition";
 const char* Vehicle::_localPositionSetpointFactGroupName ="localPositionSetpoint";
+const char* Vehicle::_chcnavAA450FactGroupName =        "chcnavAA450";
 const char* Vehicle::_escStatusFactGroupName =          "escStatus";
 const char* Vehicle::_estimatorStatusFactGroupName =    "estimatorStatus";
 const char* Vehicle::_terrainFactGroupName =            "terrain";
@@ -177,6 +178,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _distanceSensorFactGroup      (this)
     , _localPositionFactGroup       (this)
     , _localPositionSetpointFactGroup(this)
+    , _chcnavAA450FactGroup         (this)
     , _escStatusFactGroup           (this)
     , _estimatorStatusFactGroup     (this)
     , _hygrometerFactGroup          (this)
@@ -477,6 +479,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_distanceSensorFactGroup,    _distanceSensorFactGroupName);
     _addFactGroup(&_localPositionFactGroup,     _localPositionFactGroupName);
     _addFactGroup(&_localPositionSetpointFactGroup,_localPositionSetpointFactGroupName);
+    _addFactGroup(&_chcnavAA450FactGroup,       _chcnavAA450FactGroupName);
     _addFactGroup(&_escStatusFactGroup,         _escStatusFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
     _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
@@ -4582,4 +4585,25 @@ void Vehicle::setEstimatorOrigin(const QGeoCoordinate& centerCoord)
         static_cast<float>(qQNaN())
     );
     sendMessageOnLinkThreadSafe(sharedLink.get(), msg);
+}
+
+void Vehicle::lidarSendCommand(int cmd)
+{
+    if (cmd == 0) {
+        qDebug("lidarSendCommand: Test photo");
+    } else if (cmd == 1) {
+        qDebug("lidarSendCommand: Create project");
+    } else if (cmd == 2) {
+        qDebug("lidarSendCommand: Start capturing");
+    } else if (cmd == 3) {
+        qDebug("lidarSendCommand: Stop capturing");
+    } else if (cmd == 4) {
+        qDebug("lidarSendCommand: Close project");
+    } else {
+        qWarning("lidarSendCommand: Unknown command");
+        return;
+    }
+    sendMavCommand(defaultComponentId(), (MAV_CMD)503, true,
+                   static_cast<float>(1),
+                   static_cast<float>(cmd));
 }

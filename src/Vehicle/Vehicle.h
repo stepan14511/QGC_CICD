@@ -37,6 +37,7 @@
 #include "VehicleSetpointFactGroup.h"
 #include "VehicleTemperatureFactGroup.h"
 #include "VehicleVibrationFactGroup.h"
+#include "VehicleChcnavAA450FactGroup.h"
 #include "VehicleEscStatusFactGroup.h"
 #include "VehicleEstimatorStatusFactGroup.h"
 #include "VehicleHygrometerFactGroup.h"
@@ -341,6 +342,7 @@ public:
     Q_PROPERTY(FactGroup*           temperature     READ temperatureFactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           clock           READ clockFactGroup             CONSTANT)
     Q_PROPERTY(FactGroup*           setpoint        READ setpointFactGroup          CONSTANT)
+    Q_PROPERTY(FactGroup*           chcnavAA450     READ chcnavAA450FactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           escStatus       READ escStatusFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           estimatorStatus READ estimatorStatusFactGroup   CONSTANT)
     Q_PROPERTY(FactGroup*           terrain         READ terrainFactGroup           CONSTANT)
@@ -578,6 +580,9 @@ public:
     void setGripperAction(GRIPPER_ACTIONS gripperAction);
     Q_INVOKABLE void sendGripperAction(GRIPPER_OPTIONS gripperOption);
 
+    // Lidar AA450 related
+    Q_INVOKABLE void lidarSendCommand(int lidarCommand);
+
     bool fixedWing() const;
     bool multiRotor() const;
     bool vtol() const;
@@ -746,6 +751,7 @@ public:
     FactGroup* distanceSensorFactGroup      () { return &_distanceSensorFactGroup; }
     FactGroup* localPositionFactGroup       () { return &_localPositionFactGroup; }
     FactGroup* localPositionSetpointFactGroup() { return &_localPositionSetpointFactGroup; }
+    FactGroup* chcnavAA450FactGroup         () { return &_chcnavAA450FactGroup; }
     FactGroup* escStatusFactGroup           () { return &_escStatusFactGroup; }
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
@@ -1461,6 +1467,7 @@ private:
     VehicleDistanceSensorFactGroup  _distanceSensorFactGroup;
     VehicleLocalPositionFactGroup   _localPositionFactGroup;
     VehicleLocalPositionSetpointFactGroup _localPositionSetpointFactGroup;
+    VehicleChcnavAA450FactGroup     _chcnavAA450FactGroup;
     VehicleEscStatusFactGroup       _escStatusFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
@@ -1522,6 +1529,7 @@ private:
     static const char* _distanceSensorFactGroupName;
     static const char* _localPositionFactGroupName;
     static const char* _localPositionSetpointFactGroupName;
+    static const char* _chcnavAA450FactGroupName;
     static const char* _escStatusFactGroupName;
     static const char* _estimatorStatusFactGroupName;
     static const char* _hygrometerFactGroupName;

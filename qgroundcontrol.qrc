@@ -5,6 +5,7 @@
     <qresource prefix="/toolbar">
         <file alias="ArmedIndicator.qml">src/ui/toolbar/ArmedIndicator.qml</file>
         <file alias="GPSIndicator.qml">src/ui/toolbar/GPSIndicator.qml</file>
+        <file alias="ChcnavAA450Indicator.qml">src/ui/toolbar/ChcnavAA450Indicator.qml</file>
         <file alias="GPSRTKIndicator.qml">src/ui/toolbar/GPSRTKIndicator.qml</file>
         <file alias="JoystickIndicator.qml">src/ui/toolbar/JoystickIndicator.qml</file>
         <file alias="LinkIndicator.qml">src/ui/toolbar/LinkIndicator.qml</file>
@@ -106,6 +107,7 @@
         <file alias="QGroundControl/Controls/FlightModeMenu.qml">src/QmlControls/FlightModeMenu.qml</file>
         <file alias="QGroundControl/Controls/FWLandingPatternMapVisual.qml">src/PlanView/FWLandingPatternMapVisual.qml</file>
         <file alias="QGroundControl/Controls/GPSIndicatorPage.qml">src/ui/toolbar/GPSIndicatorPage.qml</file>
+        <file alias="QGroundControl/Controls/ChcnavAA450Page.qml">src/ui/toolbar/ChcnavAA450Page.qml</file>
         <file alias="QGroundControl/Controls/GeoFenceEditor.qml">src/PlanView/GeoFenceEditor.qml</file>
         <file alias="QGroundControl/Controls/GeoFenceMapVisuals.qml">src/PlanView/GeoFenceMapVisuals.qml</file>
         <file alias="QGroundControl/Controls/HorizontalFactValueGrid.qml">src/QmlControls/HorizontalFactValueGrid.qml</file>
@@ -357,6 +359,7 @@
         <file alias="Vehicle/BatteryFact.json">src/Vehicle/BatteryFact.json</file>
         <file alias="Vehicle/ClockFact.json">src/Vehicle/ClockFact.json</file>
         <file alias="Vehicle/DistanceSensorFact.json">src/Vehicle/DistanceSensorFact.json</file>
+        <file alias="Vehicle/ChcnavAA450FactGroup.json">src/Vehicle/ChcnavAA450FactGroup.json</file>
         <file alias="Vehicle/EscStatusFactGroup.json">src/Vehicle/EscStatusFactGroup.json</file>
         <file alias="Vehicle/EstimatorStatusFactGroup.json">src/Vehicle/EstimatorStatusFactGroup.json</file>
         <file alias="Vehicle/GPSFact.json">src/Vehicle/GPSFact.json</file>

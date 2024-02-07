@@ -75,6 +75,8 @@ add_library(Vehicle
 	VehicleDistanceSensorFactGroup.h
 	VehicleEFIFactGroup.cc
 	VehicleEFIFactGroup.h
+	VehicleChcnavAA450FactGroup.cc
+	VehicleChcnavAA450FactGroup.h
 	VehicleEscStatusFactGroup.cc
 	VehicleEscStatusFactGroup.h
 	VehicleEstimatorStatusFactGroup.cc
