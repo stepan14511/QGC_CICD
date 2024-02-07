@@ -2,23 +2,21 @@ find_package(Qt6 REQUIRED COMPONENTS Core Qml)
 
 add_custom_target(UiToolbarQml
 	SOURCES
-		ArmedIndicator.qml
-		BatteryIndicator.qml
-		FlightModeMenuIndicator.qml
-		GPSIndicator.qml
-		GPSIndicatorPage.qml
-		GPSRTKIndicator.qml
-		JoystickIndicator.qml
-		LinkIndicator.qml
-		MainStatusIndicator.qml
-		MessageIndicator.qml
-		ModeIndicator.qml
-		MultiVehicleSelector.qml
-		RCRSSIIndicator.qml
-		RemoteIDIndicator.qml
-		RemoteIDIndicatorPage.qml
-		SignalStrength.qml
-		TelemetryRSSIIndicator.qml
-        FlyViewToolBar.qml
-        PlanViewToolBar.qml
+		BluetoothSettings.qml
+		GeneralSettings.qml
+		HelpSettings.qml
+		LinkSettings.qml
+		LogReplaySettings.qml
+		PX4LogTransferSettings.qml
+		SerialSettings.qml
+		TcpSettings.qml
+		UdpSettings.qml
+		ADSBServerSettings.qml
+		FlyViewSettings.qml
+		MapSettings.qml
+		OfflineMapInfo.qml
+		PlanViewSettings.qml
+		TelemetrySettings.qml
+		VideoSettings.qml
+		ChcnavAA450Indicator.qml
 )

@@ -65,6 +65,8 @@ qt_add_library(Vehicle STATIC
 	VehicleDistanceSensorFactGroup.h
 	VehicleEFIFactGroup.cc
 	VehicleEFIFactGroup.h
+	VehicleChcnavAA450FactGroup.cc
+	VehicleChcnavAA450FactGroup.h
 	VehicleEscStatusFactGroup.cc
 	VehicleEscStatusFactGroup.h
 	VehicleEstimatorStatusFactGroup.cc

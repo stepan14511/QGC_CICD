@@ -1,0 +1,13 @@
+{
+    "version":  1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "status",
+    "shortDesc":        "Status Of CHCNAV AA450",
+    "type":             "uint16",
+    "default":          0
+}
+]
+}
