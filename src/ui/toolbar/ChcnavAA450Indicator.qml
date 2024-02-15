@@ -30,17 +30,17 @@ Item {
         var lidarStatusString = "-"
         var status_code = _activeVehicle.chcnavAA450.status.value
 
-        if(status_code == 1)         { lidarStatusString = "WAITING" }
+        if(status_code == 1)         { lidarStatusString = "WAIT" }
         else if(status_code == 0)    { lidarStatusString = "INITED" }
-        else if(status_code == 257)  { lidarStatusString = "WAITING" }
-        else if(status_code == 5121) { lidarStatusString = "WAITING" }
+        else if(status_code == 257)  { lidarStatusString = "WAIT" }
+        else if(status_code == 5121) { lidarStatusString = "WAIT" }
         else if(status_code == 5120) { lidarStatusString = "OPEN" }
-        else if(status_code == 513)  { lidarStatusString = "WAITING" }
+        else if(status_code == 513)  { lidarStatusString = "WAIT" }
         else if(status_code == 512)  { lidarStatusString = "CAPTURING" }
-        else if(status_code == 769)  { lidarStatusString = "WAITING" }
-        else if(status_code == 5377) { lidarStatusString = "WAITING" }
+        else if(status_code == 769)  { lidarStatusString = "WAIT" }
+        else if(status_code == 5377) { lidarStatusString = "WAIT" }
         else if(status_code == 5376) { lidarStatusString = "STOPPED" }
-        else if(status_code == 1025) { lidarStatusString = "WAITING" }
+        else if(status_code == 1025) { lidarStatusString = "WAIT" }
         else if(status_code == 5632) { lidarStatusString = "CLOSED" }
         else                         { lidarStatusString = "OFF"}
 
