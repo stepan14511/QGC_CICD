@@ -39,19 +39,40 @@ ToolIndicatorPage {
         var lidarStatusString = "-"
         var status_code = _activeVehicle.chcnavAA450.status.value
 
-        if(status_code == 1)                        { lidarStatusString = "WAITING_FOR_INIT" }
+        if(status_code == 1)                        { lidarStatusString = "WAIT_FOR_INIT" }
         else if(status_code == statusInit)          { lidarStatusString = "INITED" }
-        else if(status_code == 257)                 { lidarStatusString = "WAITING_FOR_OPENING 1/2" }
-        else if(status_code == 5121)                { lidarStatusString = "WAITING_FOR_OPENING 2/2" }
+        else if(status_code == 257)                 { lidarStatusString = "WAIT_FOR_OPENING 1/2" }
+        else if(status_code == 5121)                { lidarStatusString = "WAIT_FOR_OPENING 2/2" }
         else if(status_code == statusOpen)          { lidarStatusString = "OPEN" }
-        else if(status_code == 513)                 { lidarStatusString = "WAITING_FOR_CAPTURING" }
+        else if(status_code == 513)                 { lidarStatusString = "WAIT_FOR_CAPTURING" }
         else if(status_code == statusCapturing)     { lidarStatusString = "CAPTURING" }
-        else if(status_code == 769)                 { lidarStatusString = "WAITING_FOR_STOPPING 1/2" }
-        else if(status_code == 5377)                { lidarStatusString = "WAITING_FOR_STOPPING 2/2" }
+        else if(status_code == 769)                 { lidarStatusString = "WAIT_FOR_STOPPING 1/2" }
+        else if(status_code == 5377)                { lidarStatusString = "WAIT_FOR_STOPPING 2/2" }
         else if(status_code == statusStopped)       { lidarStatusString = "STOPPED" }
-        else if(status_code == 1025)                { lidarStatusString = "WAITING_FOR_CLOSING" }
+        else if(status_code == 1025)                { lidarStatusString = "WAIT_FOR_CLOSING" }
         else if(status_code == statusClosed)        { lidarStatusString = "CLOSED" }
         else                                        { lidarStatusString = "Unknown"}
+
+        return lidarStatusString
+    }
+
+    function getStatusHint() {
+        var lidarStatusString = "-"
+        var status_code = _activeVehicle.chcnavAA450.status.value
+
+        if(status_code == 1)                        { lidarStatusString = "It takes ~40 seconds..." }
+        else if(status_code == statusInit)          { lidarStatusString = "The lidar has been initialized." }
+        else if(status_code == 257)                 { lidarStatusString = "It takes ~3 minutes..." }
+        else if(status_code == 5121)                { lidarStatusString = "It takes ~3 minutes..." }
+        else if(status_code == statusOpen)          { lidarStatusString = "The project has been opened." }
+        else if(status_code == 513)                 { lidarStatusString = "It takes a few seconds..." }
+        else if(status_code == statusCapturing)     { lidarStatusString = "The lidar is capturing." }
+        else if(status_code == 769)                 { lidarStatusString = "It takes ~3 minutes..." }
+        else if(status_code == 5377)                { lidarStatusString = "It takes ~3 minutes..." }
+        else if(status_code == statusStopped)       { lidarStatusString = "The capturing has been stopped." }
+        else if(status_code == 1025)                { lidarStatusString = "It takes a few seconds..." }
+        else if(status_code == statusClosed)        { lidarStatusString = "The project has been closed." }
+        else                                        { lidarStatusString = "Device is offline"}
 
         return lidarStatusString
     }
@@ -69,33 +90,8 @@ ToolIndicatorPage {
                 }
 
                 LabelledLabel {
-                    label:      qsTr("POS")
-                    visible:    false
-                    labelText:  "-"
-                }
-
-                LabelledLabel {
-                    label:      qsTr("Laser")
-                    visible:    false
-                    labelText:  "-"
-                }
-
-                LabelledLabel {
-                    label:      qsTr("Camera")
-                    visible:    false
-                    labelText:  "-"
-                }
-
-                LabelledLabel {
-                    label:      qsTr("Storage")
-                    visible:    false
-                    labelText:  "-"
-                }
-
-                LabelledLabel {
-                    label:      qsTr("Status")
-                    visible:    false
-                    labelText:  "-"
+                    label:      qsTr("Hint")
+                    labelText:  getStatusHint()
                 }
 
                 GridLayout {
@@ -126,6 +122,66 @@ ToolIndicatorPage {
                         onClicked: { _activeVehicle.lidarSendCommand(cmdCloseProject) }
                         enabled:            _activeVehicle.chcnavAA450.status.value == statusStopped || _activeVehicle.chcnavAA450.status.value == statusOpen
                     }
+                }
+
+                GridLayout {
+                    columnSpacing:      ScreenTools.defaultFontPixelWidth
+                    columns:            4
+                    visible:            _activeVehicle.chcnavAA450.year.value != 0
+                    QGCLabel {
+                        text: qsTr("Date:")
+                    }
+                    QGCLabel {
+                        text: _activeVehicle.chcnavAA450.year.value
+                    }
+                    QGCLabel {
+                        text: _activeVehicle.chcnavAA450.month.value
+                    }
+                    QGCLabel {
+                        text: _activeVehicle.chcnavAA450.day.value
+                    }
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Working time:")
+                    visible:    _activeVehicle.chcnavAA450.workingTime.value != 0
+                    labelText:  _activeVehicle.chcnavAA450.workingTime.value
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Capturing time:")
+                    visible:    _activeVehicle.chcnavAA450.workingTime.value != 0
+                    labelText:  _activeVehicle.chcnavAA450.capturingTime.value
+                }
+
+                LabelledLabel {
+                    label:      qsTr("POS")
+                    visible:    false
+                    labelText:  "-"
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Laser")
+                    visible:    false
+                    labelText:  "-"
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Camera")
+                    visible:    false
+                    labelText:  "-"
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Storage")
+                    visible:    false
+                    labelText:  "-"
+                }
+
+                LabelledLabel {
+                    label:      qsTr("Status")
+                    visible:    false
+                    labelText:  "-"
                 }
             }
         }
@@ -159,9 +215,11 @@ ToolIndicatorPage {
 
                 QGCLabel {
                     text: qsTr("PhotoMode")
+                    enabled:                false
                 }
                 QGCComboBox {
                     id:         photoMode
+                    enabled:                false
                     textRole:   "text"
                     model: ListModel {
                         id: windItems
@@ -185,6 +243,7 @@ ToolIndicatorPage {
             LabelledLabel {
                 label:      qsTr("Software version")
                 labelText:  qsTr("1.0.8")
+                enabled:    false
             }
         }
     }
