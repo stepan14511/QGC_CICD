@@ -1,6 +1,7 @@
 <RCC>
 	<qresource prefix="/toolbar">
 		<file alias="ArmedIndicator.qml">../src/UI/toolbar/ArmedIndicator.qml</file>
+		<file alias="ChcnavAA450Indicator.qml">../src/UI/toolbar/ChcnavAA450Indicator.qml</file>
 		<file alias="GPSIndicator.qml">../src/UI/toolbar/GPSIndicator.qml</file>
 		<file alias="GPSRTKIndicator.qml">../src/UI/toolbar/GPSRTKIndicator.qml</file>
 		<file alias="JoystickIndicator.qml">../src/UI/toolbar/JoystickIndicator.qml</file>
@@ -392,6 +393,7 @@
 		<file alias="USBBoardInfo.json">../src/Comms/USBBoardInfo.json</file>
 		<file alias="Vehicle/BatteryFact.json">../src/Vehicle/FactGroups/BatteryFact.json</file>
 		<file alias="Vehicle/ClockFact.json">../src/Vehicle/FactGroups/ClockFact.json</file>
+		<file alias="Vehicle/ChcnavAA450FactGroup.json">../src/Vehicle/FactGroups/ChcnavAA450FactGroup.json</file>
 		<file alias="Vehicle/DistanceSensorFact.json">../src/Vehicle/FactGroups/DistanceSensorFact.json</file>
 		<file alias="Vehicle/EscStatusFactGroup.json">../src/Vehicle/FactGroups/EscStatusFactGroup.json</file>
 		<file alias="Vehicle/EstimatorStatusFactGroup.json">../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json</file>

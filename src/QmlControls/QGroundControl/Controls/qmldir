@@ -27,6 +27,7 @@ FlightModeMenu                          1.0 FlightModeMenu.qml
 GeoFenceEditor                          1.0 GeoFenceEditor.qml
 GeoFenceMapVisuals                      1.0 GeoFenceMapVisuals.qml
 GPSIndicatorPage                        1.0 GPSIndicatorPage.qml
+ChcnavAA450Page                         1.0 ChcnavAA450Page.qml
 HackFileDialog                          1.0 HackFileDialog.qml
 HeightIndicator                         1.0 HeightIndicator.qml
 HorizontalFactValueGrid                 1.0 HorizontalFactValueGrid.qml
@@ -108,6 +109,7 @@ QCRoundButton                           1.0 QGCRoundButton.qml
 SectionHeader                           1.0 SectionHeader.qml
 SetupPage                               1.0 SetupPage.qml
 SignalStrength                          1.0 SignalStrength.qml
+ChcnavAA450Indicator                    1.0 ChcnavAA450Indicator.qml
 SimpleItemMapVisuals                    1.0 SimpleItemMapVisuals.qml
 SliderSwitch                            1.0 SliderSwitch.qml
 SubMenuButton                           1.0 SubMenuButton.qml
