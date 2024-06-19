@@ -1,0 +1,61 @@
+{
+    "version":  1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "status",
+    "shortDesc":        "Status Of CHCNAV AA450",
+    "type":             "uint16",
+    "default":          0
+},
+{
+    "name":             "year",
+    "shortDesc":        "Year",
+    "type":             "uint16",
+    "default":          0
+},
+{
+    "name":             "month",
+    "shortDesc":        "Month",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "day",
+    "shortDesc":        "Day",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "mem1",
+    "shortDesc":        "Mem1",
+    "type":             "uint32",
+    "default":          0
+},
+{
+    "name":             "mem2",
+    "shortDesc":        "Mem2",
+    "type":             "uint32",
+    "default":          0
+},
+{
+    "name":             "workingTime",
+    "shortDesc":        "WorkingTime",
+    "type":             "uint32",
+    "default":          0
+},
+{
+    "name":             "openedTime",
+    "shortDesc":        "OpenedTime",
+    "type":             "uint32",
+    "default":          0
+},
+{
+    "name":             "capturingTime",
+    "shortDesc":        "CapturingTime",
+    "type":             "uint32",
+    "default":          0
+}
+]
+}
