@@ -44,6 +44,7 @@
 #include "VehicleVibrationFactGroup.h"
 #include "VehicleChcnavAA450FactGroup.h"
 #include "VehicleWindFactGroup.h"
+#include "VehicleFuelTankFactGroup.h"
 #include "GimbalController.h"
 
 class Actuators;
@@ -270,6 +271,7 @@ public:
     Q_PROPERTY(FactGroup*           chcnavAA450     READ chcnavAA450FactGroup       CONSTANT)
     Q_PROPERTY(FactGroup*           escStatus       READ escStatusFactGroup         CONSTANT)
     Q_PROPERTY(FactGroup*           estimatorStatus READ estimatorStatusFactGroup   CONSTANT)
+    Q_PROPERTY(FactGroup*           fuelTank        READ fuelTankFactGroup          CONSTANT)
     Q_PROPERTY(FactGroup*           terrain         READ terrainFactGroup           CONSTANT)
     Q_PROPERTY(FactGroup*           distanceSensors READ distanceSensorFactGroup    CONSTANT)
     Q_PROPERTY(FactGroup*           localPosition   READ localPositionFactGroup     CONSTANT)
@@ -611,6 +613,7 @@ public:
     FactGroup* chcnavAA450FactGroup         () { return &_chcnavAA450FactGroup; }
     FactGroup* escStatusFactGroup           () { return &_escStatusFactGroup; }
     FactGroup* estimatorStatusFactGroup     () { return &_estimatorStatusFactGroup; }
+    FactGroup* fuelTankFactGroup            () { return &_fuelTankFactGroup; }
     FactGroup* terrainFactGroup             () { return &_terrainFactGroup; }
     FactGroup* hygrometerFactGroup          () { return &_hygrometerFactGroup; }
     FactGroup* generatorFactGroup           () { return &_generatorFactGroup; }
@@ -1257,6 +1260,7 @@ private:
     const QString _chcnavAA450FactGroupName =        QStringLiteral("chcnavAA450");
     const QString _escStatusFactGroupName =          QStringLiteral("escStatus");
     const QString _estimatorStatusFactGroupName =    QStringLiteral("estimatorStatus");
+    const QString _fuelTankFactGroupName =           QStringLiteral("fuelTank");
     const QString _terrainFactGroupName =            QStringLiteral("terrain");
     const QString _hygrometerFactGroupName =         QStringLiteral("hygrometer");
     const QString _generatorFactGroupName =          QStringLiteral("generator");
@@ -1276,6 +1280,7 @@ private:
     VehicleChcnavAA450FactGroup     _chcnavAA450FactGroup;
     VehicleEscStatusFactGroup       _escStatusFactGroup;
     VehicleEstimatorStatusFactGroup _estimatorStatusFactGroup;
+    VehicleFuelTankFactGroup        _fuelTankFactGroup;
     VehicleHygrometerFactGroup      _hygrometerFactGroup;
     VehicleGeneratorFactGroup       _generatorFactGroup;
     VehicleEFIFactGroup             _efiFactGroup;

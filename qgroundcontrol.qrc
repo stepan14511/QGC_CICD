@@ -2,6 +2,7 @@
     <qresource prefix="/toolbar">
         <file alias="ArmedIndicator.qml">src/UI/toolbar/ArmedIndicator.qml</file>
         <file alias="ChcnavAA450Indicator.qml">src/UI/toolbar/ChcnavAA450Indicator.qml</file>
+        <file alias="FuelTankIndicator.qml">src/UI/toolbar/FuelTankIndicator.qml</file>
         <file alias="GPSIndicator.qml">src/UI/toolbar/GPSIndicator.qml</file>
         <file alias="GPSRTKIndicator.qml">src/UI/toolbar/GPSRTKIndicator.qml</file>
         <file alias="JoystickIndicator.qml">src/UI/toolbar/JoystickIndicator.qml</file>
@@ -98,6 +99,7 @@
         <file alias="QGroundControl/Controls/FactSliderPanel.qml">src/QmlControls/FactSliderPanel.qml</file>
         <file alias="QGroundControl/Controls/FirstRunPrompt.qml">src/FirstRunPromptDialogs/FirstRunPrompt.qml</file>
         <file alias="QGroundControl/Controls/FileButton.qml">src/QmlControls/FileButton.qml</file>
+        <file alias="QGroundControl/Controls/FuelTankPage.qml">src/UI/toolbar/FuelTankPage.qml</file>
         <file alias="QGroundControl/Controls/FlightModeIndicator.qml">src/UI/toolbar/FlightModeIndicator.qml</file>
         <file alias="QGroundControl/Controls/FlightModeDropdown.qml">src/QmlControls/FlightModeDropdown.qml</file>
         <file alias="QGroundControl/Controls/FlightModeMenu.qml">src/QmlControls/FlightModeMenu.qml</file>
@@ -401,6 +403,7 @@
         <file alias="Vehicle/DistanceSensorFact.json">src/Vehicle/FactGroups/DistanceSensorFact.json</file>
         <file alias="Vehicle/EscStatusFactGroup.json">src/Vehicle/FactGroups/EscStatusFactGroup.json</file>
         <file alias="Vehicle/EstimatorStatusFactGroup.json">src/Vehicle/FactGroups/EstimatorStatusFactGroup.json</file>
+        <file alias="Vehicle/FuelTankFactGroup.json">src/Vehicle/FactGroups/FuelTankFactGroup.json</file>
         <file alias="Vehicle/GPSFact.json">src/Vehicle/FactGroups/GPSFact.json</file>
         <file alias="Vehicle/GPSRTKFact.json">src/Vehicle/FactGroups/GPSRTKFact.json</file>
         <file alias="Vehicle/SetpointFact.json">src/Vehicle/FactGroups/SetpointFact.json</file>

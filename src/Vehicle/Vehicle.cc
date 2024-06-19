@@ -109,6 +109,7 @@ Vehicle::Vehicle(LinkInterface*             link,
     , _chcnavAA450FactGroup         (this)
     , _escStatusFactGroup           (this)
     , _estimatorStatusFactGroup     (this)
+    , _fuelTankFactGroup            (this)
     , _hygrometerFactGroup          (this)
     , _generatorFactGroup           (this)
     , _efiFactGroup                 (this)
@@ -344,6 +345,7 @@ void Vehicle::_commonInit()
     _addFactGroup(&_chcnavAA450FactGroup,       _chcnavAA450FactGroupName);
     _addFactGroup(&_escStatusFactGroup,         _escStatusFactGroupName);
     _addFactGroup(&_estimatorStatusFactGroup,   _estimatorStatusFactGroupName);
+    _addFactGroup(&_fuelTankFactGroup,          _fuelTankFactGroupName);
     _addFactGroup(&_hygrometerFactGroup,        _hygrometerFactGroupName);
     _addFactGroup(&_generatorFactGroup,         _generatorFactGroupName);
     _addFactGroup(&_efiFactGroup,               _efiFactGroupName);

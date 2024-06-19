@@ -24,6 +24,8 @@ FileButton                              1.0 FileButton.qml
 FlightModeIndicator                     1.0 FlightModeIndicator.qml
 FlightModeDropdown                      1.0 FlightModeDropdown.qml
 FlightModeMenu                          1.0 FlightModeMenu.qml
+FuelTankPage                            1.0 FuelTankPage.qml
+FuelTankIndicator                       1.0 FuelTankIndicator.qml
 GeoFenceEditor                          1.0 GeoFenceEditor.qml
 GeoFenceMapVisuals                      1.0 GeoFenceMapVisuals.qml
 GPSIndicatorPage                        1.0 GPSIndicatorPage.qml

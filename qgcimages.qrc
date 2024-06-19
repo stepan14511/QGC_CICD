@@ -204,6 +204,7 @@
         <file alias="VehicleUpsideDownRotate.png">src/AutoPilotPlugins/PX4/Images/VehicleUpsideDownRotate.png</file>
         <file alias="VibrationPageIcon">src/AnalyzeView/VibrationPageIcon.png</file>
         <file alias="wifi.svg">src/AutoPilotPlugins/Common/Images/wifi.svg</file>
+        <file alias="FuelTank.svg">src/UI/toolbar/Images/FuelTank.svg</file>
         <file alias="Yield.svg">src/UI/toolbar/Images/Yield.svg</file>
         <file alias="ChcnavAA450.svg">src/UI/toolbar/Images/ChcnavAA450.svg</file>
         <file alias="ZoomMinus.svg">src/FlightMap/Images/ZoomMinus.svg</file>

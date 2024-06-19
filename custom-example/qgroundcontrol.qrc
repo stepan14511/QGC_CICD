@@ -2,6 +2,7 @@
 	<qresource prefix="/toolbar">
 		<file alias="ArmedIndicator.qml">../src/UI/toolbar/ArmedIndicator.qml</file>
 		<file alias="ChcnavAA450Indicator.qml">../src/UI/toolbar/ChcnavAA450Indicator.qml</file>
+		<file alias="FuelTankIndicator.qml">../src/UI/toolbar/FuelTankIndicator.qml</file>
 		<file alias="GPSIndicator.qml">../src/UI/toolbar/GPSIndicator.qml</file>
 		<file alias="GPSRTKIndicator.qml">../src/UI/toolbar/GPSRTKIndicator.qml</file>
 		<file alias="JoystickIndicator.qml">../src/UI/toolbar/JoystickIndicator.qml</file>
@@ -397,6 +398,7 @@
 		<file alias="Vehicle/DistanceSensorFact.json">../src/Vehicle/FactGroups/DistanceSensorFact.json</file>
 		<file alias="Vehicle/EscStatusFactGroup.json">../src/Vehicle/FactGroups/EscStatusFactGroup.json</file>
 		<file alias="Vehicle/EstimatorStatusFactGroup.json">../src/Vehicle/FactGroups/EstimatorStatusFactGroup.json</file>
+		<file alias="Vehicle/FuelTankFactGroup.json">../src/Vehicle/FactGroups/FuelTankFactGroup.json</file>
 		<file alias="Vehicle/GPSFact.json">../src/Vehicle/FactGroups/GPSFact.json</file>
 		<file alias="Vehicle/GPSRTKFact.json">../src/Vehicle/FactGroups/GPSRTKFact.json</file>
 		<file alias="Vehicle/SetpointFact.json">../src/Vehicle/FactGroups/SetpointFact.json</file>
