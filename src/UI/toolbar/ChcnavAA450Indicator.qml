@@ -44,7 +44,7 @@ Item {
         else if(status_code == 5632) { lidarStatusString = "CLOSED" }
         else                         { lidarStatusString = "OFF"}
 
-        return lidarStatusString
+        return ""
     }
 
     Image {

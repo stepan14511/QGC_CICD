@@ -1,0 +1,67 @@
+{
+    "version":  1,
+    "fileType": "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "id",
+    "shortDesc":        "Id",
+    "type":             "uint8",
+    "default":          0
+},
+{
+    "name":             "maximumFuel",
+    "shortDesc":        "Maximum fuel",
+    "type":             "float",
+    "decimalPlaces":    0,
+    "units":            "ml",
+    "default":          null
+},
+{
+    "name":             "consumedFuel",
+    "shortDesc":        "Consumed fuel",
+    "type":             "float",
+    "decimalPlaces":    0,
+    "units":            "ml",
+    "default":          null
+},
+{
+    "name":             "remainingFuel",
+    "shortDesc":        "Remaining fuel",
+    "type":             "float",
+    "decimalPlaces":    0,
+    "units":            "ml"
+},
+{
+    "name":             "percentRemaining",
+    "shortDesc":        "Percent remaining",
+    "type":             "uint8",
+    "units":            "%",
+    "default":          null
+},
+{
+    "name":             "flowRate",
+    "shortDesc":        "Flow rate",
+    "type":             "float",
+    "units":            "ml/s",
+    "decimalPlaces":    1,
+    "default":          null
+},
+{
+    "name":             "temperature",
+    "shortDesc":        "Temperature",
+    "type":             "float",
+    "decimalPlaces":    0,
+    "units":            "deg",
+    "default":          null
+},
+{
+    "name":             "fuelType",
+    "shortDesc":        "Fuel type",
+    "type":             "uint32",
+    "enumStrings":      "Not specified,Generic liquid fuel,Gas tank",
+    "enumValues":       "0,1,2",
+    "default":          0
+}
+]
+}
