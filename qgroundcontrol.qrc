@@ -12,6 +12,7 @@
         <file alias="MultiVehicleSelector.qml">src/UI/toolbar/MultiVehicleSelector.qml</file>
         <file alias="RCRSSIIndicator.qml">src/UI/toolbar/RCRSSIIndicator.qml</file>
         <file alias="RemoteIDIndicator.qml">src/UI/toolbar/RemoteIDIndicator.qml</file>
+        <file alias="SiyiCameraIndicator.qml">src/UI/toolbar/SiyiCameraIndicator.qml</file>
         <file alias="TelemetryRSSIIndicator.qml">src/UI/toolbar/TelemetryRSSIIndicator.qml</file>
         <file alias="VTOLModeIndicator.qml">src/UI/toolbar/VTOLModeIndicator.qml</file>
         <file alias="APMSupportForwardingIndicator.qml">src/UI/toolbar/APMSupportForwardingIndicator.qml</file>
@@ -100,6 +101,7 @@
         <file alias="QGroundControl/Controls/FirstRunPrompt.qml">src/FirstRunPromptDialogs/FirstRunPrompt.qml</file>
         <file alias="QGroundControl/Controls/FileButton.qml">src/QmlControls/FileButton.qml</file>
         <file alias="QGroundControl/Controls/FuelTankPage.qml">src/UI/toolbar/FuelTankPage.qml</file>
+        <file alias="QGroundControl/Controls/SiyiCameraPage.qml">src/UI/toolbar/SiyiCameraPage.qml</file>
         <file alias="QGroundControl/Controls/FlightModeIndicator.qml">src/UI/toolbar/FlightModeIndicator.qml</file>
         <file alias="QGroundControl/Controls/FlightModeDropdown.qml">src/QmlControls/FlightModeDropdown.qml</file>
         <file alias="QGroundControl/Controls/FlightModeMenu.qml">src/QmlControls/FlightModeMenu.qml</file>

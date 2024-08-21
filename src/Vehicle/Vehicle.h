@@ -25,6 +25,7 @@
 #include "QmlObjectListModel.h"
 #include "SysStatusSensorInfo.h"
 #include "VehicleLinkManager.h"
+#include "SiyiCameraInterface.h"
 
 #include "TerrainFactGroup.h"
 #include "VehicleFactGroup.h"
@@ -498,6 +499,11 @@ public:
 
     // Lidar AA450 related
     Q_INVOKABLE void lidarSendCommand(int lidarCommand);
+
+    // Siyi camera zoom implementation
+    SiyiCameraInterface *siyiCameraInterface;
+    Q_INVOKABLE void siyiCameraZoomIn();
+    Q_INVOKABLE void siyiCameraZoomOut();
 
     bool fixedWing() const;
     bool multiRotor() const;
