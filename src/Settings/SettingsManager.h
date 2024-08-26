@@ -19,6 +19,7 @@
 #include "RTKSettings.h"
 #include "FlyViewSettings.h"
 #include "MapsSettings.h"
+#include "PayloadSettings.h"
 #include "PlanViewSettings.h"
 #include "BrandImageSettings.h"
 #include "OfflineMapsSettings.h"
@@ -55,6 +56,7 @@ public:
     Q_PROPERTY(QObject* firmwareUpgradeSettings         READ firmwareUpgradeSettings        CONSTANT)
     Q_PROPERTY(QObject* adsbVehicleManagerSettings      READ adsbVehicleManagerSettings     CONSTANT)
     Q_PROPERTY(QObject* batteryIndicatorSettings        READ batteryIndicatorSettings       CONSTANT)
+    Q_PROPERTY(QObject* payloadSettings                 READ payloadSettings                CONSTANT)
     Q_PROPERTY(QObject* mapsSettings                    READ mapsSettings                   CONSTANT)
     Q_PROPERTY(QObject* viewer3DSettings                READ viewer3DSettings               CONSTANT)
     Q_PROPERTY(QObject* gimbalControllerSettings        READ gimbalControllerSettings       CONSTANT)
@@ -82,6 +84,7 @@ public:
     FirmwareUpgradeSettings*        firmwareUpgradeSettings     (void) { return _firmwareUpgradeSettings; }
     ADSBVehicleManagerSettings*     adsbVehicleManagerSettings  (void) { return _adsbVehicleManagerSettings; }
     BatteryIndicatorSettings*       batteryIndicatorSettings    (void) { return _batteryIndicatorSettings; }
+    PayloadSettings*                payloadSettings             (void) { return _payloadSettings; }
     MapsSettings*                   mapsSettings                (void) { return _mapsSettings; }
     Viewer3DSettings*               viewer3DSettings            (void) { return _viewer3DSettings; }
     GimbalControllerSettings*       gimbalControllerSettings    (void) { return _gimbalControllerSettings; }
@@ -106,6 +109,7 @@ private:
     FirmwareUpgradeSettings*        _firmwareUpgradeSettings;
     ADSBVehicleManagerSettings*     _adsbVehicleManagerSettings;
     BatteryIndicatorSettings*       _batteryIndicatorSettings;
+    PayloadSettings*                _payloadSettings;
     MapsSettings*                   _mapsSettings;
     Viewer3DSettings*               _viewer3DSettings;
     GimbalControllerSettings*       _gimbalControllerSettings;

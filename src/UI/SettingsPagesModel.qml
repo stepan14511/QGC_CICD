@@ -63,6 +63,13 @@ ListModel {
     }
 
     ListElement {
+        name: "Payload"//qsTr("Maps")
+        url: "/qml/PayloadSettings.qml"
+        iconUrl: "qrc:/InstrumentValueIcons/globe.svg"
+        pageVisible: function() { return true }
+    }
+
+    ListElement {
         name: qsTr("Maps")
         url: "/qml/MapSettings.qml"
         iconUrl: "qrc:/InstrumentValueIcons/globe.svg"

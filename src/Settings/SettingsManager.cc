@@ -27,6 +27,7 @@ SettingsManager::SettingsManager(QGCApplication* app, QGCToolbox* toolbox)
     , _firmwareUpgradeSettings      (nullptr)
     , _adsbVehicleManagerSettings   (nullptr)
     , _batteryIndicatorSettings     (nullptr)
+    , _payloadSettings              (nullptr)
     , _mapsSettings                 (nullptr)
     , _viewer3DSettings             (nullptr)
     , _gimbalControllerSettings     (nullptr)
@@ -59,6 +60,7 @@ void SettingsManager::setToolbox(QGCToolbox *toolbox)
     _firmwareUpgradeSettings =      new FirmwareUpgradeSettings     (this);
     _adsbVehicleManagerSettings =   new ADSBVehicleManagerSettings  (this);
     _batteryIndicatorSettings =     new BatteryIndicatorSettings    (this);
+    _payloadSettings =              new PayloadSettings             (this);
     _mapsSettings =                 new MapsSettings                (this);
     _viewer3DSettings =             new Viewer3DSettings            (this);
     _gimbalControllerSettings =     new GimbalControllerSettings    (this);
