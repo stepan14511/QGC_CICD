@@ -5,7 +5,6 @@
 // #include <unistd.h>
 #include <QUdpSocket>
 #include <QString>
-#include <io.h>
 #include <thread>
 #include "message.hpp"
 
