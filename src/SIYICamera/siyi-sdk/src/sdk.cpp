@@ -341,7 +341,7 @@ SIYIUnixCamera::SIYIUnixCamera() {
     // Create a UDP socket_in
     socket_in = new QUdpSocket();
     socket_in->bind(QHostAddress::AnyIPv4, 0, QAbstractSocket::ShareAddress);
-    // qDebug() << "IP: " << camera_ip << " PORT: " << camera_port;
+    
     socket_out = new QUdpSocket();
     socket_out->bind(QHostAddress::AnyIPv4, socket_in->localPort(), QAbstractSocket::ShareAddress);
 
