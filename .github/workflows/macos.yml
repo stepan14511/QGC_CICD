@@ -101,10 +101,7 @@ jobs:
         run: cmake --install . --config ${{ matrix.BuildType }}
 
       - name: Upload Build File
-        uses: ./.github/actions/upload
-        if: matrix.BuildType == 'Release'
+        uses: actions/upload-artifact@master
         with:
-          artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: 'package'
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/${{ env.ARTIFACT }}
