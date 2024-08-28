@@ -18,7 +18,6 @@
 #define ACQUIRE_GIMBAL_ATTITUDE 0x0d
 #define CONTROL_ANGLE 0x0e
 
-#define crc_red(x,y) crc16_T(SIYI_Message::s_table,x,y,0x0000,false,false,0x0000)
 #define gen_tab(x) gen_lookup16(x,0x1021,false)
 
 class SIYI_Message {
@@ -99,3 +98,4 @@ private:
     mutable uint16_t m_send_data_len;
 };
 
+#define crc_red(x,y) crc16_T(SIYI_Message::s_table,x,y,0x0000,false,false,0x0000)
