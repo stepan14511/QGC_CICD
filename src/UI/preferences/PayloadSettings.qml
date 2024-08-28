@@ -23,7 +23,7 @@ SettingsPage {
     property var    _appSettings:               _settingsManager.appSettings
     property var    _payloadSettings:           _settingsManager.payloadSettings
     property bool   _isCamera:                  _payloadSettings.type.rawValue === 0
-    property real   _ipWithPortFieldWidth:      ScreenTools.defaultFontPixelWidth * 18
+    property real   _ipWithPortFieldWidth:      ScreenTools.defaultFontPixelWidth * 25
 
     SettingsGroupLayout {
         Layout.fillWidth: true
