@@ -239,10 +239,13 @@ class SIYIUnixCamera : public SIYI_SDK {
     Q_OBJECT
 
 public:
-    SIYIUnixCamera(const char *ip_address = "192.168.144.25", quint16 port = 37260);
+    SIYIUnixCamera();
     virtual ~SIYIUnixCamera() override;
+    static const char* getIpFromSettings();
+    static int getPortFromSettings();
 
 public slots:
+    void settingsChanged();
     void receive_message();
     void send_message_slot(const uint8_t *message, const int length);
 
@@ -258,6 +261,7 @@ private:
     bool request_gimbal_info();
 
     bool live = false;
+    bool turnedOn = false;
     std::thread gimbal_attitude_thread;
     std::thread gimbal_info_thread;
     QUdpSocket* socket_in;

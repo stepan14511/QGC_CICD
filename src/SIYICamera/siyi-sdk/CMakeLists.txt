@@ -13,7 +13,9 @@ qt_add_library(siyi-sdk STATIC
 target_link_libraries(siyi-sdk
     PUBLIC
         gencrc
+        QGC
     PRIVATE
+        Settings
         Qt6::Network
 )
 

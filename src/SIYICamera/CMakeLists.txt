@@ -10,7 +10,6 @@ qt_add_library(SiyiCameraInterface STATIC
 target_link_libraries(SiyiCameraInterface
     PUBLIC
         siyi-sdk
-    PRIVATE
         Qt6::Network
 )
 

@@ -6,6 +6,10 @@
 #include <thread>
 #include <QDebug>
 #include <QAbstractSocket>
+#include "QGCApplication.h"
+#include "QGCToolbox.h"
+#include "SettingsManager.h"
+#include <QtCore/qstring.h>
 
 
 SIYI_SDK::~SIYI_SDK() {}
@@ -331,18 +335,18 @@ std::tuple<float, float, float> SIYI_SDK::get_gimbal_attitude_speed() const {
 //  CAMERA IMPLEMENTATION  //
 /////////////////////////////
 
-SIYIUnixCamera::SIYIUnixCamera(const char *ip_address, const quint16 port) {
+SIYIUnixCamera::SIYIUnixCamera() {
+    settingsChanged();
+
     // Create a UDP socket_in
     socket_in = new QUdpSocket();
     socket_in->bind(QHostAddress::LocalHost, 0, QAbstractSocket::ShareAddress);
-    qDebug() << socket_in->localPort();
+    // qDebug() << "IP: " << camera_ip << " PORT: " << camera_port;
     socket_out = new QUdpSocket();
     socket_out->bind(QHostAddress::LocalHost, socket_in->localPort(), QAbstractSocket::ShareAddress);
 
-    camera_ip = ip_address;
-    camera_port = port;
-
     connect(this, &SIYIUnixCamera::send_message_signal, this, &SIYIUnixCamera::send_message_slot);
+    connect(qgcApp()->toolbox()->settingsManager()->payloadSettings(), &PayloadSettings::payloadConfiguredChanged, this, &SIYIUnixCamera::settingsChanged);
     live = true;
     gimbal_attitude_thread = std::thread([this] { gimbal_attitude_loop(live); });
     gimbal_info_thread = std::thread([this] { gimbal_info_loop(live); });
@@ -361,6 +365,10 @@ SIYIUnixCamera::~SIYIUnixCamera() {
 }
 
 bool SIYIUnixCamera::send_message(const uint8_t *message, const int length) const {
+    if (!turnedOn) {
+        return false;
+    }
+
     const char *char_message = reinterpret_cast<const char *>(message);
     QByteArray datagram(QByteArray::fromRawData(char_message, length));
     
@@ -411,15 +419,19 @@ void SIYIUnixCamera::receive_message(){
 
 void SIYIUnixCamera::gimbal_attitude_loop(bool &connected) {
     while (connected) {
-        SIYIUnixCamera::request_gimbal_attitude();
+        if (turnedOn) {
+            SIYIUnixCamera::request_gimbal_attitude();
+        }
         std::this_thread::sleep_for(std::chrono::milliseconds(10));  // set frequency to 100 Hz
     }
 }
 
 void SIYIUnixCamera::gimbal_info_loop(bool &connected) {
     while (connected) {
-        SIYIUnixCamera::request_firmware_version();
-        SIYIUnixCamera::request_gimbal_info();
+        if (turnedOn) {
+            SIYIUnixCamera::request_firmware_version();
+            SIYIUnixCamera::request_gimbal_info();
+        }
         std::this_thread::sleep_for(std::chrono::seconds(1));  // set frequency to 1 Hz
     }
 }
@@ -447,6 +459,45 @@ bool SIYIUnixCamera::request_gimbal_info() {
     return true;
 }
 
+void SIYIUnixCamera::settingsChanged()
+{
+    turnedOn = (qgcApp()->toolbox()->settingsManager()->payloadSettings()->type()->enumStringValue() == "Camera");
+    if (!turnedOn) {
+        return;
+    }
+
+    const char *ip_address = SIYIUnixCamera::getIpFromSettings();
+    const quint16 port = SIYIUnixCamera::getPortFromSettings();
+    camera_ip = ip_address;
+    camera_port = port;
+}
+
 void SIYIUnixCamera::send_message_slot(const uint8_t *message, const int length){
     send_message(message, length);
+}
+
+const char* SIYIUnixCamera::getIpFromSettings(){
+    QString ipPort = qgcApp()->toolbox()->settingsManager()->payloadSettings()->cameraIpPort()->rawValue().toString();
+    int dividerIndex = ipPort.indexOf(':');
+    if (dividerIndex == -1){
+        qDebug() << "IP/PORT settings: incorrect value.";
+        return "127.0.0.1";
+    }
+    QString ip = ipPort.left(dividerIndex);
+    QByteArray ba = ip.toLocal8Bit();
+    char* ip_char = new char[dividerIndex];
+    std::memcpy(ip_char, ba.data(), dividerIndex + 1);
+    qDebug() << ip_char;
+    return ip_char;
+}
+
+int SIYIUnixCamera::getPortFromSettings(){
+    QString ipPort = qgcApp()->toolbox()->settingsManager()->payloadSettings()->cameraIpPort()->rawValue().toString();
+    int dividerIndex = ipPort.indexOf(':');
+    if (dividerIndex == -1){
+        qDebug() << "IP/PORT settings: incorrect value.";
+        return 37260;
+    }
+    QString port = ipPort.right(int(ipPort.size()) - dividerIndex - 1);
+    return port.toInt();
 }

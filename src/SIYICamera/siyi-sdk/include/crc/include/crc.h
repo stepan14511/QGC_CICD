@@ -153,7 +153,7 @@ void gen_lookup16(uint16_t *dest, uint16_t poly, bool refin);
  *
  * @return 32 bit CRC.
  */
-uint32_t crc32(
+uint32_t crc32_custom(
             uint8_t *data, uint16_t data_size, uint32_t poly,
             uint32_t init, bool refin, bool refout, uint32_t xor_out);
 
@@ -170,7 +170,7 @@ uint32_t crc32(
  *
  * @return 32 bit CRC.
  */
-uint32_t crc32_T(
+uint32_t crc32_custom_T(
             uint32_t *table, uint8_t * data, size_t data_size,
             uint32_t init, bool refin, bool refout, uint32_t xor_out);
 

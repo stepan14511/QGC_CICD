@@ -15,4 +15,10 @@ public:
     DEFINE_SETTINGFACT(cameraIpPort)
     DEFINE_SETTINGFACT(cameraMaxZoom)
     DEFINE_SETTINGFACT(enableGimbalControl)
+
+signals:
+    void payloadConfiguredChanged    ();
+
+private slots:
+    void _configChanged             (QVariant value);
 };

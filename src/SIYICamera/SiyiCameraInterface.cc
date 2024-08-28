@@ -1,5 +1,5 @@
 #include "SiyiCameraInterface.h"
-#include<QDebug>
+#include <QDebug>
 
 void SiyiCameraInterface::zoomIn(){
     currentZoom++;
@@ -19,7 +19,7 @@ void SiyiCameraInterface::zoomOut(){
     set_absolute_zoom(currentZoom, 0);
 }
 
-SiyiCameraInterface::SiyiCameraInterface(const char *ip_address, int port) : SIYIUnixCamera(ip_address, port){
+SiyiCameraInterface::SiyiCameraInterface() : SIYIUnixCamera(){
     currentZoom = 1;
     set_absolute_zoom(1, 0);
 }
