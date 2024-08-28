@@ -124,9 +124,6 @@ Vehicle::Vehicle(LinkInterface*             link,
     _mavlink = _toolbox->mavlinkProtocol();
     qCDebug(VehicleLog) << "Link started with Mavlink " << (_mavlink->getCurrentVersion() >= 200 ? "V2" : "V1");
 
-    // Init camera interface
-    siyiCameraInterface = new SiyiCameraInterface();
-
     connect(_mavlink, &MAVLinkProtocol::messageReceived,        this, &Vehicle::_mavlinkMessageReceived);
     connect(_mavlink, &MAVLinkProtocol::mavlinkMessageStatus,   this, &Vehicle::_mavlinkMessageStatus);
 
@@ -4090,12 +4087,4 @@ void Vehicle::lidarSendCommand(int cmd)
     sendMavCommand(defaultComponentId(), (MAV_CMD)503, true,
                    static_cast<float>(1),
                    static_cast<float>(cmd));
-}
-
-void Vehicle::siyiCameraZoomIn(){
-    siyiCameraInterface->zoomIn();
-}
-
-void Vehicle::siyiCameraZoomOut(){
-    siyiCameraInterface->zoomOut();
 }

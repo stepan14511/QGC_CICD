@@ -20,6 +20,8 @@
 #include "QGCToolbox.h"
 #include "QmlObjectListModel.h"
 
+#include "SiyiCameraInterface.h"
+
 class FirmwarePluginManager;
 class FollowMe;
 class JoystickManager;
@@ -52,6 +54,11 @@ public:
     // Methods
 
     Q_INVOKABLE Vehicle* getVehicleById(int vehicleId);
+
+    // Siyi camera zoom implementation
+    SiyiCameraInterface* siyiCameraInterface;
+    Q_INVOKABLE void siyiCameraZoomIn();
+    Q_INVOKABLE void siyiCameraZoomOut();
 
     // Property accessors
 
