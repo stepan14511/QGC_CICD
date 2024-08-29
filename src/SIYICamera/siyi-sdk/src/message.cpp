@@ -4,6 +4,8 @@
 
 size_t SIYI_Message::m_instances = 0;
 uint16_t SIYI_Message::s_table[256];
+const uint16_t SIYI_Message::HEADER = 0x6655;
+const int SIYI_Message::MINIMUM_DATA_LENGTH = 10;
 
 SIYI_Message::SIYI_Message() {
     if(m_instances == 0)

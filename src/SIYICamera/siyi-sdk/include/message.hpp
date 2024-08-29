@@ -19,6 +19,7 @@
 #define CONTROL_ANGLE 0x0e
 
 #define gen_tab(x) gen_lookup16(x,0x1021,false)
+#define crc_red(x,y) crc16_T(SIYI_Message::s_table,x,y,0x0000,false,false,0x0000)
 
 class SIYI_Message {
 public:
@@ -86,9 +87,9 @@ private:
     void increment_seq(int val) const;
     static size_t m_instances;
     static uint16_t s_table[256];
-    static const int MINIMUM_DATA_LENGTH = 10;
+    static const int MINIMUM_DATA_LENGTH;
 
-    static const uint16_t HEADER = 0x6655;
+    static const uint16_t HEADER;
     uint8_t m_ctrl = 0x01;
     uint16_t m_data_len;
     mutable uint16_t m_seq = 0;
@@ -97,5 +98,3 @@ private:
 
     mutable uint16_t m_send_data_len;
 };
-
-#define crc_red(x,y) crc16_T(SIYI_Message::s_table,x,y,0x0000,false,false,0x0000)
