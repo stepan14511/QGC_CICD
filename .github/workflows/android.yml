@@ -149,11 +149,6 @@ jobs:
       - name: Create build directory
         run: mkdir ${{ runner.temp }}/shadow_build_dir
 
-      - name: Setup cmake
-        uses: jwlawson/actions-setup-cmake@v2
-      - name: Use cmake
-        run: cmake --version
-
       - name: Configure
         working-directory: ${{ runner.temp }}/shadow_build_dir
         env:
