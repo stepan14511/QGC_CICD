@@ -3,7 +3,7 @@ name: MacOS
 on:
   push:
     branches:
-      - master
+      - not_needed
       - 'Stable*'
     tags:
       - 'v*'
