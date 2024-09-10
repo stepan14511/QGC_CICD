@@ -28,13 +28,19 @@ RowLayout {
     property real   _margins:           ScreenTools.defaultFontPixelWidth
     property real   _spacing:           ScreenTools.defaultFontPixelWidth / 2
     property bool   _healthAndArmingChecksSupported: _activeVehicle ? _activeVehicle.healthAndArmingCheckReport.supported : false
+    property real   _maxWidth: {
+        switch (Qt.platform.os){
+            case "android": return ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 6
+            default: return ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 10
+        }
+    }
 
     QGCMarqueeLabel {
         id:             mainStatusLabel
         text:           mainStatusText()
         font.pointSize: ScreenTools.largeFontPointSize
         implicitWidth:  maxWidth
-        maxWidth:       ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * 10
+        maxWidth:       _maxWidth
 
         property string _commLostText:      qsTr("Communication Lost")
         property string _readyToFlyText:    qsTr("Ready To Fly")

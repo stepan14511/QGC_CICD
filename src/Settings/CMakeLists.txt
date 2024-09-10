@@ -27,6 +27,8 @@ qt_add_library(Settings STATIC
     GimbalControllerSettings.h
     OfflineMapsSettings.cc
     OfflineMapsSettings.h
+    PayloadSettings.cc
+    PayloadSettings.h
     PlanViewSettings.cc
     PlanViewSettings.h
     RemoteIDSettings.cc

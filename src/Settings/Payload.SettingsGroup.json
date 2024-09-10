@@ -1,0 +1,55 @@
+{
+    "version":      1,
+    "fileType":  "FactMetaData",
+    "QGC.MetaData.Facts":
+[
+{
+    "name":             "type",
+    "shortDesc": "Type of a payload",
+    "longDesc":  "Pick the type of a payload, installed on a Vehicle.",
+    "type":             "uint32",
+    "enumStrings":      "Camera,Others",
+    "enumValues":       "0,1",
+    "default":           0
+},
+{
+    "name":             "cameraType",
+    "shortDesc": "Type of a camera",
+    "longDesc":  "Pick the type of a camera, installed on a Vehicle.",
+    "type":             "uint32",
+    "enumStrings":      "SIYI A8,SIYI ZR10,SIYI ZT30",
+    "enumValues":       "0,1,2",
+    "default":           0
+},
+{
+    "name":             "cameraIpPort",
+    "shortDesc": "IP/PORT of a camera",
+    "longDesc":  "IP and PORT of a chosen camera's UDP control. e.g. 192.168.144.25:37260",
+    "type":             "string",
+    "default":          "192.168.144.25:37260"
+},
+{
+    "name":             "cameraMaxZoom",
+    "shortDesc": "Max Zoom camera can zoom in",
+    "longDesc":  "Maximum zoom, camera can use.",
+    "type":             "uint32",
+    "min":              1,
+    "max":              30,
+    "default":          10
+},
+{
+    "name":             "enableGimbalControl",
+    "shortDesc": "Enable/Disable Gimbal Control",
+    "longDesc":  "User can pick if they want to control camera's gimbal using GUI.",
+    "type":             "bool",
+    "default":          false
+},
+{
+    "name":             "isCameraResponding",
+    "shortDesc": "Shows if camera is online or not.",
+    "longDesc":  "READ ONLY indicator if camera is responding to the requests.",
+    "type":             "bool",
+    "default":          false
+}
+]
+}

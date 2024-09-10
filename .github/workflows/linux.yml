@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - pr-siyi-camera
       - 'Stable*'
     tags:
       - 'v*'
@@ -27,7 +28,7 @@ jobs:
 
     strategy:
       matrix:
-        BuildType: [Debug, Release]
+        BuildType: [Release]
 
     defaults:
       run:
@@ -134,7 +135,5 @@ jobs:
         if: matrix.BuildType == 'Release'
         uses: ./.github/actions/upload
         with:
-          artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ''
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/${{ env.ARTIFACT }}
