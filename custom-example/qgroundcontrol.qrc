@@ -3,6 +3,7 @@
 		<file alias="ArmedIndicator.qml">../src/UI/toolbar/ArmedIndicator.qml</file>
 		<file alias="ChcnavAA450Indicator.qml">../src/UI/toolbar/ChcnavAA450Indicator.qml</file>
 		<file alias="FuelTankIndicator.qml">../src/UI/toolbar/FuelTankIndicator.qml</file>
+		<file alias="FuelTankIndicator.qml">../src/UI/toolbar/FuelTankIndicator.qml</file>
 		<file alias="GPSIndicator.qml">../src/UI/toolbar/GPSIndicator.qml</file>
 		<file alias="GPSRTKIndicator.qml">../src/UI/toolbar/GPSRTKIndicator.qml</file>
 		<file alias="JoystickIndicator.qml">../src/UI/toolbar/JoystickIndicator.qml</file>
@@ -12,6 +13,7 @@
 		<file alias="MultiVehicleSelector.qml">../src/UI/toolbar/MultiVehicleSelector.qml</file>
 		<file alias="RCRSSIIndicator.qml">../src/UI/toolbar/RCRSSIIndicator.qml</file>
 		<file alias="RemoteIDIndicator.qml">../src/UI/toolbar/RemoteIDIndicator.qml</file>
+        <file alias="SiyiCameraIndicator.qml">src/UI/toolbar/SiyiCameraIndicator.qml</file>
 		<file alias="TelemetryRSSIIndicator.qml">../src/UI/toolbar/TelemetryRSSIIndicator.qml</file>
 		<file alias="VTOLModeIndicator.qml">../src/UI/toolbar/VTOLModeIndicator.qml</file>
 		<file alias="APMSupportForwardingIndicator.qml">../src/UI/toolbar/APMSupportForwardingIndicator.qml</file>
@@ -60,6 +62,7 @@
 		<file alias="LogDownloadPage.qml">../src/AnalyzeView/LogDownloadPage.qml</file>
 		<file alias="LogReplaySettings.qml">../src/UI/preferences/LogReplaySettings.qml</file>
 		<file alias="MainRootWindow.qml">../src/UI/MainRootWindow.qml</file>
+        <file alias="PayloadSettings.qml">src/UI/preferences/PayloadSettings.qml</file>
 		<file alias="MapSettings.qml">../src/UI/preferences/MapSettings.qml</file>
 		<file alias="MAVLinkConsolePage.qml">../src/AnalyzeView/MAVLinkConsolePage.qml</file>
 		<file alias="MAVLinkInspectorPage.qml">../src/AnalyzeView/MAVLinkInspectorPage.qml</file>
@@ -381,6 +384,7 @@
 		<file alias="MavCmdInfoVTOL.json">../src/MissionManager/MavCmdInfoVTOL.json</file>
 		<file alias="MissionSettings.FactMetaData.json">../src/MissionManager/MissionSettings.FactMetaData.json</file>
 		<file alias="OfflineMaps.SettingsGroup.json">../src/Settings/OfflineMaps.SettingsGroup.json</file>
+        <file alias="Payload.SettingsGroup.json">src/Settings/Payload.SettingsGroup.json</file>
 		<file alias="PlanView.SettingsGroup.json">../src/Settings/PlanView.SettingsGroup.json</file>
 		<file alias="QGCMapCircle.Facts.json">../src/QmlControls/QGCMapCircle.Facts.json</file>
 		<file alias="RallyPoint.FactMetaData.json">../src/MissionManager/RallyPoint.FactMetaData.json</file>

@@ -4,20 +4,7 @@ on:
   push:
     branches:
       - master
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'deploy/**'
-      - 'docs/**'
-  pull_request:
-    paths-ignore:
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/linux.yml'
-      - '.github/workflows/macos.yml'
-      - '.github/workflows/windows.yml'
+      - pr-siyi-camera
 
 jobs:
   build:
@@ -25,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        BuildType: [Debug, Release]
+        BuildType: [Debug]
 
     defaults:
       run:
@@ -36,8 +23,6 @@ jobs:
       QT_VERSION: 6.6.3
       QT_ANDROID_KEYSTORE_PATH: ${{ github.workspace }}/deploy/android/android_release.keystore
       QT_ANDROID_KEYSTORE_ALIAS: QGCAndroidKeyStore
-      QT_ANDROID_KEYSTORE_STORE_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-      QT_ANDROID_KEYSTORE_KEY_PASS: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
       QT_ANDROID_ABIS: ${{ matrix.BuildType == 'Release' && 'armeabi-v7a;arm64-v8a' || 'arm64-v8a' }}
       GST_VERSION: 1.22.12
 
@@ -189,10 +174,7 @@ jobs:
         run: cp ./android-build/*.apk ./${{ env.ARTIFACT }}
 
       - name: Upload Build File
-        uses: ./.github/actions/upload
-        if: matrix.BuildType == 'Release'
+        uses: actions/upload-artifact@master
         with:
-          artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ''
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/${{ env.ARTIFACT }}

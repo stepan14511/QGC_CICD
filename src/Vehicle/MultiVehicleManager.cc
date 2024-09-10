@@ -65,6 +65,9 @@ void MultiVehicleManager::setToolbox(QGCToolbox *toolbox)
     }
 
     _offlineEditingVehicle = new Vehicle(Vehicle::MAV_AUTOPILOT_TRACK, Vehicle::MAV_TYPE_TRACK, _firmwarePluginManager, this);
+
+    // Init camera interface
+    siyiCameraInterface = new SiyiCameraInterface();
 }
 
 void MultiVehicleManager::_vehicleHeartbeatInfo(LinkInterface* link, int vehicleId, int componentId, int vehicleFirmwareType, int vehicleType)
@@ -395,4 +398,12 @@ void MultiVehicleManager::_sendGCSHeartbeat(void)
             link->writeBytesThreadSafe((const char*)buffer, len);
         }
     }
+}
+
+void MultiVehicleManager::siyiCameraZoomIn() {
+    siyiCameraInterface->zoomIn();
+}
+
+void MultiVehicleManager::siyiCameraZoomOut() {
+    siyiCameraInterface->zoomOut();
 }

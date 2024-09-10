@@ -26,6 +26,8 @@ FlightModeDropdown                      1.0 FlightModeDropdown.qml
 FlightModeMenu                          1.0 FlightModeMenu.qml
 FuelTankPage                            1.0 FuelTankPage.qml
 FuelTankIndicator                       1.0 FuelTankIndicator.qml
+SiyiCameraPage                          1.0 SiyiCameraPage.qml
+SiyiCameraIndicator                     1.0 SiyiCameraIndicator.qml
 GeoFenceEditor                          1.0 GeoFenceEditor.qml
 GeoFenceMapVisuals                      1.0 GeoFenceMapVisuals.qml
 GPSIndicatorPage                        1.0 GPSIndicatorPage.qml
