@@ -47,20 +47,20 @@ ToolIndicatorPage {
                     labelText:  getStatusText()
                 }
 
-                GridLayout {
-                    columnSpacing:      ScreenTools.defaultFontPixelWidth
-                    columns:            2
-                    QGCButton {
-                        text: qsTr("Zoom IN")
-                        onClicked: { _multiVehicleManager.siyiCameraZoomIn() }
-                        //enabled: isCameraOnline()
-                    }
-                    QGCButton {
-                        text: qsTr("Zoom OUT")
-                        onClicked: { _multiVehicleManager.siyiCameraZoomOut() }
-                        //enabled: isCameraOnline()
-                    }
-                }
+                // GridLayout {
+                //     columnSpacing:      ScreenTools.defaultFontPixelWidth
+                //     columns:            2
+                //     QGCButton {
+                //         text: qsTr("Zoom IN")
+                //         onClicked: { _multiVehicleManager.siyiCameraZoomIn() }
+                //         //enabled: isCameraOnline()
+                //     }
+                //     QGCButton {
+                //         text: qsTr("Zoom OUT")
+                //         onClicked: { _multiVehicleManager.siyiCameraZoomOut() }
+                //         //enabled: isCameraOnline()
+                //     }
+                // }
             }
         }
     }

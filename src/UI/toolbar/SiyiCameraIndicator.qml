@@ -42,7 +42,7 @@ Item {
     }
 
     QGCColoredImage {
-        source:             "/qmlimages/CameraIcon.svg"
+        source:             "/InstrumentValueIcons/camera.svg"
         fillMode:           Image.PreserveAspectFit
         anchors.fill:       parent
         color:              getColor()

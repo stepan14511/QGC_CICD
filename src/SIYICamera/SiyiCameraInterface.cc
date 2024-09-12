@@ -12,6 +12,7 @@ void SiyiCameraInterface::zoomIn(){
         return;
     }
     set_absolute_zoom(currentZoom, 0);
+    qDebug() << "SIYICameraInterface: Zoom IN. New Value: " << currentZoom;
 }
 
 void SiyiCameraInterface::zoomOut(){
@@ -21,6 +22,7 @@ void SiyiCameraInterface::zoomOut(){
         return;
     }
     set_absolute_zoom(currentZoom, 0);
+    qDebug() << "SIYICameraInterface: Zoom OUT. New Value: " << currentZoom;
 }
 
 SiyiCameraInterface::SiyiCameraInterface() : SIYIUnixCamera(){

@@ -137,7 +137,12 @@ RowLayout {
         Layout.alignment:       Qt.AlignVCenter
         text:                   _vtolInFWDFlight ? qsTr("FW(vtol)") : qsTr("MR(vtol)")
         font.pointSize:         enabled ? ScreenTools.largeFontPointSize : ScreenTools.defaultFontPointSize
-        Layout.preferredWidth:  ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * text.length
+        Layout.preferredWidth:  {
+            switch (Qt.platform.os){
+                case "android": return ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * text.length * 0.5
+                default: return ScreenTools.defaultFontPixelWidth * ScreenTools.largeFontPointRatio * text.length
+            }
+        }
         visible:                _activeVehicle && _activeVehicle.vtol
         enabled:                _activeVehicle && _activeVehicle.vtol && _vehicleInAir
 

@@ -9,6 +9,8 @@
 
 import QtQuick
 import QtQuick.Layouts
+import QtQuick.Controls
+import QtQuick.Dialogs
 
 import QGroundControl
 import QGroundControl.Controls
@@ -61,7 +63,19 @@ ColumnLayout {
         Component {
             id: photoVideoControlComponent
 
-            PhotoVideoControl {
+            RowLayout{
+                height: photoVideoControlItem.height
+                Layout.alignment:   Qt.AlignTop | Qt.AlignRight
+                layoutDirection: Qt.RightToLeft
+
+                PhotoVideoControl {
+                    id: photoVideoControlItem
+                }
+
+                SiyiCameraRightSideWidget{
+                    Layout.fillHeight: true
+                    width: photoVideoControlItem.width * 2
+                }
             }
         }
     }

@@ -13,7 +13,7 @@
 		<file alias="MultiVehicleSelector.qml">../src/UI/toolbar/MultiVehicleSelector.qml</file>
 		<file alias="RCRSSIIndicator.qml">../src/UI/toolbar/RCRSSIIndicator.qml</file>
 		<file alias="RemoteIDIndicator.qml">../src/UI/toolbar/RemoteIDIndicator.qml</file>
-        <file alias="SiyiCameraIndicator.qml">src/UI/toolbar/SiyiCameraIndicator.qml</file>
+        <file alias="SiyiCameraIndicator.qml">../src/UI/toolbar/SiyiCameraIndicator.qml</file>
 		<file alias="TelemetryRSSIIndicator.qml">../src/UI/toolbar/TelemetryRSSIIndicator.qml</file>
 		<file alias="VTOLModeIndicator.qml">../src/UI/toolbar/VTOLModeIndicator.qml</file>
 		<file alias="APMSupportForwardingIndicator.qml">../src/UI/toolbar/APMSupportForwardingIndicator.qml</file>
@@ -288,6 +288,7 @@
 		<file alias="QGroundControl/FlightMap/QGCCompassWidget.qml">../src/FlightMap/Widgets/QGCCompassWidget.qml</file>
 		<file alias="QGroundControl/FlightMap/QGCPitchIndicator.qml">../src/FlightMap/Widgets/QGCPitchIndicator.qml</file>
 		<file alias="QGroundControl/FlightMap/QGCVideoBackground.qml">../src/FlightMap/QGCVideoBackground.qml</file>
+		<file alias="QGroundControl/FlightMap/SiyiCameraRightSideWidget.qml">../src/FlightMap/Widgets/SiyiCameraRightSideWidget.qml</file>
 		<file alias="QGroundControl/FlightMap/qmldir">../src/QmlControls/QGroundControl/FlightMap/qmldir</file>
 		<file alias="QGroundControl/FlightMap/VehicleMapItem.qml">../src/FlightMap/MapItems/VehicleMapItem.qml</file>
 		<file alias="QGroundControl/ScreenTools/qmldir">../src/QmlControls/QGroundControl/ScreenTools/qmldir</file>
