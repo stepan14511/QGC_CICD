@@ -396,3 +396,7 @@ void MultiVehicleManager::siyiCameraZoomIn() {
 void MultiVehicleManager::siyiCameraZoomOut() {
     siyiCameraInterface->zoomOut();
 }
+
+int MultiVehicleManager::siyiCameraZoomSet(int newValue) {
+    return siyiCameraInterface->zoomSet(newValue);
+}
