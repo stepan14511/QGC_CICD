@@ -74,7 +74,7 @@ ColumnLayout{
     QGCSlider {
         Layout.fillHeight:  true
         Layout.fillWidth:   true
-        to:                 30
+        to:                 _payloadSettings.cameraMaxZoom.rawValue
         from:               1
         stepSize:           1
         orientation:        Qt.Vertical
@@ -82,7 +82,7 @@ ColumnLayout{
         live:               true
         displayValue:       true
         //visible:            _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
-        onValueChanged:     {_zoomLvl = value}
+        onValueChanged:     {if (value == _zoomLvl){} else {_zoomLvl = _multiVehicleManager.siyiCameraZoomSet(value)}}
     }
     // Rectangle{
     //     color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)

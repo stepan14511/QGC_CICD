@@ -58,6 +58,7 @@ public:
     // Siyi camera zoom implementation
     Q_INVOKABLE void siyiCameraZoomIn();
     Q_INVOKABLE void siyiCameraZoomOut();
+    Q_INVOKABLE int siyiCameraZoomSet(int newValue);
 
     // Property accessors
 

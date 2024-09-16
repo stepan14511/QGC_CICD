@@ -7,6 +7,7 @@ public:
     SiyiCameraInterface();
     void zoomIn();
     void zoomOut();
+    int zoomSet(int newValue); // return - actual new value (for cases not in legal bounds).
 
 public slots:
     void settingsChanged();
