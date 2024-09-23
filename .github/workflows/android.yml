@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - pr-siyi-camera
+      - pr-siyi-camera-main-ui
 
 jobs:
   build:
