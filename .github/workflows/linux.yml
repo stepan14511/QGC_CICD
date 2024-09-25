@@ -3,23 +3,7 @@ name: Linux
 on:
   push:
     branches:
-      - master
-      - 'Stable*'
-    tags:
-      - 'v*'
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-  pull_request:
-    paths-ignore:
-      - 'android/**'
-      - 'deploy/**'
-      - 'docs/**'
-      - '.github/workflows/docs_deploy.yml'
-      - '.github/workflows/android.yml'
-      - '.github/workflows/macos.yml'
-      - '.github/workflows/windows.yml'
+      - pr-rus-chcnav-master
 
 jobs:
   build:
@@ -27,7 +11,7 @@ jobs:
 
     strategy:
       matrix:
-        BuildType: [Debug, Release]
+        BuildType: [Release]
 
     env:
       ARTIFACT: QGroundControl-x86_64.AppImage
@@ -132,10 +116,7 @@ jobs:
         run: xvfb-run -a ./${{ env.ARTIFACT }} --unittest
 
       - name: Upload Build File
-        uses: ./.github/actions/upload
-        if: matrix.BuildType == 'Release'
+        uses: actions/upload-artifact@master
         with:
-          artifact_name: ${{ env.ARTIFACT }}
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          source: ''
+          name: ${{ env.ARTIFACT }}
+          path: ${{ runner.temp }}/shadow_build_dir/${{ env.ARTIFACT }}
