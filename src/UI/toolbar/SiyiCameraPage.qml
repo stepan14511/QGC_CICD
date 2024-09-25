@@ -28,10 +28,10 @@ ToolIndicatorPage {
     function getStatusText() {
         var isCameraConnected = _payloadSettings.isCameraResponding.rawValue
         if (isCameraConnected){
-            return "Online"
+            return qsTr("Online")
         }
         else{
-            return "Connecting..."
+            return qsTr("Connecting...")
         }
     }
 

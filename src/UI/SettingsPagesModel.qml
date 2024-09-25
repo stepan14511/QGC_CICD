@@ -63,7 +63,7 @@ ListModel {
     }
 
     ListElement {
-        name: "Payload"//qsTr("Maps")
+        name: qsTr("Payload")
         url: "/qml/PayloadSettings.qml"
         iconUrl: "qrc:/gimbal/payload.svg"
         pageVisible: function() { return true }

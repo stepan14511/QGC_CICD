@@ -418,7 +418,7 @@ void SIYIUnixCamera::gimbal_attitude_loop(bool &connected) {
         if (turnedOn) {
             SIYIUnixCamera::request_gimbal_attitude();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));  // set frequency to 100 Hz
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));  // set frequency to 10 Hz
     }
 }
 
