@@ -3,16 +3,19 @@
 #include <QUdpSocket>
 #include <QString>
 
+#include <FactGroup.h>
+#include "Vehicle.h"
+
 #include <thread>
 #include <ctime>
 
 #include "message.h"
 
-class SIYI_SDK : public QObject {
+class SIYI_SDK : public FactGroup {
     Q_OBJECT
 
 public:
-    SIYI_SDK() = default;
+    SIYI_SDK(int updateRateMsecs, const QString& metaDataFile, QObject* parent = nullptr, bool ignoreCamelCase = false);
     virtual ~SIYI_SDK();
     void print_message() const;
 
@@ -243,14 +246,35 @@ public:
     static const char* getIpFromSettings();
     static int getPortFromSettings();
 
+    Q_PROPERTY(Fact* absoluteRoll               READ absoluteRoll               CONSTANT)
+    Q_PROPERTY(Fact* absolutePitch              READ absolutePitch              CONSTANT)
+    Q_PROPERTY(Fact* bodyYaw                    READ bodyYaw                    CONSTANT)
+    Q_PROPERTY(Fact* absoluteYaw                READ absoluteYaw                CONSTANT)
+    Q_PROPERTY(bool  yawLock                    READ yawLock                    NOTIFY yawLockChanged)
+
+    Fact* absoluteRoll()                  { return &_absoluteRollFact;  }
+    Fact* absolutePitch()                 { return &_absolutePitchFact; }
+    Fact* bodyYaw()                       { return &_bodyYawFact;       }
+    Fact* absoluteYaw()                   { return &_absoluteYawFact;   }
+    bool  yawLock() const                 { return _yawLock;            }
+    Vehicle* active_vehicle()             { return _active_vehicle;     }
+
+    void  setAbsoluteRoll(float absoluteRoll)   { _absoluteRollFact.setRawValue(absoluteRoll);                     }
+    void  setAbsolutePitch(float absolutePitch) { _absolutePitchFact.setRawValue(absolutePitch);                   }
+    void  setBodyYaw(float bodyYaw)             { _bodyYawFact.setRawValue(bodyYaw);                               }
+    void  setAbsoluteYaw(float absoluteYaw)     { _absoluteYawFact.setRawValue(absoluteYaw);                       }
+    void  setYawLock(bool yawLock)              { _yawLock = yawLock;       emit yawLockChanged();                 }
+
 public slots:
     void settingsChanged();
     void receive_message();
     void send_message_slot(const uint8_t *message, const int length);
     void checkConnection();
+    void activeVehicleChanged(Vehicle* activeVehicle);
 
 signals:
     void send_message_signal(const uint8_t *message, const int length);
+    void yawLockChanged();
 
 private:
     virtual bool send_message(const uint8_t *message, const int length) const override;
@@ -259,6 +283,7 @@ private:
     void gimbal_info_loop(bool &connected);
     bool request_firmware_version();
     bool request_gimbal_info();
+    void parse_attitude_msg_to_facts();
 
     bool live = false;
     bool turnedOn = false;
@@ -269,4 +294,18 @@ private:
     quint16 camera_port;
     time_t lastSuccResponse = 0;
     time_t preLastSuccResponse = 0;
+    Vehicle* _active_vehicle = nullptr;
+
+    // Q_PROPERTIES
+    Fact _absoluteRollFact;
+    Fact _absolutePitchFact;
+    Fact _bodyYawFact;
+    Fact _absoluteYawFact;
+    bool _yawLock = false;
+
+    // Fact names
+    static const char* _absoluteRollFactName;
+    static const char* _absolutePitchFactName;
+    static const char* _bodyYawFactName;
+    static const char* _absoluteYawFactName;
 };

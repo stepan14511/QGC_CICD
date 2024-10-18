@@ -19,16 +19,13 @@ ColumnLayout{
     visible:    _isCamera
 
     property var    _multiVehicleManager:       QGroundControl.multiVehicleManager
+    property var    _siyiCameraInterface:       _multiVehicleManager.siyiCameraInterface
     property var    _activeVehicle:             _multiVehicleManager.activeVehicle
     property var    _settingsManager:           QGroundControl.settingsManager
     property var    _appSettings:               _settingsManager.appSettings
     property var    _payloadSettings:           _settingsManager.payloadSettings
     property bool   _isCamera:                  _payloadSettings.type.rawValue === 0
     property var    _zoomLvl: 1
-
-    // height: parent.height
-    // width: parent.width
-    // color:      Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
 
     FactPanelController { id: controller }
 
@@ -39,39 +36,26 @@ ColumnLayout{
 
         property bool isClicked: false
 
-        // Text{
-        //     anchors.fill: parent
-        //     text: parent.isClicked ? "+" : "-"
-        //     fontSizeMode: Text.Fit
-        //     minimumPixelSize: 8
-        //     font.pixelSize: 72
-        //     horizontalAlignment: Text.AlignHCenter
-        //     verticalAlignment: Text.AlignVCenter
-        // }
-
         QGCColoredImage {
             source:             "/InstrumentValueIcons/add.svg"
             fillMode:           Image.PreserveAspectFit
             anchors.fill:       parent
             color:              "black"
-            // sourceSize.height:  size
         }
         MouseArea{
             anchors.fill: parent
-            onClicked: { _zoomLvl += 1; _multiVehicleManager.siyiCameraZoomIn() }
+            onClicked: { 
+                _zoomLvl += 1;
+                _siyiCameraInterface.zoomIn();
+                if (_zoomLvl > zoomSlider.to){
+                    _zoomLvl = zoomSlider.to;
+                }
+            }
         }
     }
-    // FactSlider {
-    //     Layout.fillHeight:  true
-    //     Layout.fillWidth:   true
-    //     orientation:        Qt.Vertical
-    //     enabled:            responsivenessCheckBox.checked
-    //     fact:               zoomLvl
-    //     from:               1
-    //     to:                 30
-    //     stepSize:           1
-    // }
+
     QGCSlider {
+        id:                 zoomSlider
         Layout.fillHeight:  true
         Layout.fillWidth:   true
         to:                 _payloadSettings.cameraMaxZoom.rawValue
@@ -81,14 +65,9 @@ ColumnLayout{
         value:              _zoomLvl
         live:               true
         displayValue:       true
-        //visible:            _camera.thermalStreamInstance && _camera.thermalMode === MavlinkCameraControl.THERMAL_BLEND
-        onValueChanged:     {if (value == _zoomLvl){} else {_zoomLvl = _multiVehicleManager.siyiCameraZoomSet(value)}}
+        onValueChanged:     {if (value == _zoomLvl){} else {_zoomLvl = _siyiCameraInterface.zoomSet(value)}}
     }
-    // Rectangle{
-    //     color: Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
-    //     Layout.fillHeight: true
-    //     width: parent.width
-    // }
+
     Rectangle{
         color:  Qt.rgba(qgcPal.window.r, qgcPal.window.g, qgcPal.window.b, 0.5)
         height: parent.width
@@ -96,25 +75,22 @@ ColumnLayout{
 
         property bool isClicked: false
 
-        // Text{
-        //     anchors.fill: parent
-        //     text: parent.isClicked ? "+" : "-"
-        //     fontSizeMode: Text.VerticalFit
-        //     minimumPixelSize: 8
-        //     font.pixelSize: 72
-        // }
-
-
         QGCColoredImage {
             source:             "/InstrumentValueIcons/minus.svg"
             fillMode:           Image.PreserveAspectFit
             anchors.fill:       parent
             color:              "black"
-            // sourceSize.height:  size
         }
+
         MouseArea{
             anchors.fill: parent
-            onClicked: { _zoomLvl -= 1; _multiVehicleManager.siyiCameraZoomOut() }
+            onClicked: {
+                _zoomLvl -= 1;
+                _siyiCameraInterface.zoomOut();
+                if (_zoomLvl < zoomSlider.from){
+                    _zoomLvl = zoomSlider.from;
+                }
+            }
         }
     }
 }

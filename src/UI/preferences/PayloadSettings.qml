@@ -30,7 +30,7 @@ SettingsPage {
 
         LabelledFactComboBox {
             Layout.fillWidth:   true
-            label:              "Type"//qsTr("Type")
+            label:              qsTr("Type")
             fact:               _payloadSettings.type
             visible:            fact.visible
             indexModel:         false
@@ -38,7 +38,7 @@ SettingsPage {
 
         LabelledFactComboBox {
             Layout.fillWidth:   true
-            label:              "Camera model"//qsTr("Camera model")
+            label:              qsTr("Camera model")
             fact:               _payloadSettings.cameraType
             visible:            _isCamera
             indexModel:         false
@@ -52,20 +52,20 @@ SettingsPage {
         LabelledFactTextField {
             Layout.fillWidth:           true
             textFieldPreferredWidth:    _ipWithPortFieldWidth
-            label:                      "IP/PORT"//qsTr("IP/PORT")
+            label:                      qsTr("IP/PORT")
             fact:                       _payloadSettings.cameraIpPort
             visible:                    _isCamera
         }
 
         LabelledFactTextField {
             Layout.fillWidth:   true
-            label:              "Max Zoom"//qsTr("Max Zoom")
+            label:              qsTr("Max Zoom")
             fact:               _payloadSettings.cameraMaxZoom
             visible:            _isCamera
         }
 
         QGCCheckBox {
-            text:               "Gimbal Control"//qsTr("Gimbal Control")
+            text:               qsTr("Gimbal Control")
             visible:            _isCamera
             checked:            _payloadSettings.enableGimbalControl
             onClicked: {        _payloadSettings.enableGimbalControl.rawValue = checked }

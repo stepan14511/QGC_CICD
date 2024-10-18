@@ -14,8 +14,10 @@
 #include "QGCToolbox.h"
 #include "SettingsManager.h"
 
+SIYI_SDK::SIYI_SDK(int updateRateMsecs, const QString& metaDataFile, QObject* parent, bool ignoreCamelCase) : FactGroup(updateRateMsecs, metaDataFile, parent, ignoreCamelCase) {}
 
 SIYI_SDK::~SIYI_SDK() {}
+
 void SIYI_SDK::print_message() const {
     int len = msg.get_send_data_len();
     for(int i = 0; i < len; ++i) {
@@ -338,7 +340,28 @@ std::tuple<float, float, float> SIYI_SDK::get_gimbal_attitude_speed() const {
 //  CAMERA IMPLEMENTATION  //
 /////////////////////////////
 
-SIYIUnixCamera::SIYIUnixCamera() {
+const char* SIYIUnixCamera::_absoluteRollFactName =                 "UDPgimbalRoll";
+const char* SIYIUnixCamera::_absolutePitchFactName =                "UDPgimbalPitch";
+const char* SIYIUnixCamera::_bodyYawFactName =                      "UDPgimbalYaw";
+const char* SIYIUnixCamera::_absoluteYawFactName =                  "UDPgimbalAzimuth";
+
+SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/Vehicle/SiyiCameraInterfaceFact.json") {
+    // Init facts
+    _absoluteRollFact =     Fact(0, _absoluteRollFactName,  FactMetaData::valueTypeFloat);
+    _absolutePitchFact =    Fact(0, _absolutePitchFactName, FactMetaData::valueTypeFloat);
+    _bodyYawFact =          Fact(0, _bodyYawFactName,       FactMetaData::valueTypeFloat);
+    _absoluteYawFact =      Fact(0, _absoluteYawFactName,   FactMetaData::valueTypeFloat);
+    
+    _addFact(&_absoluteRollFact,    _absoluteRollFactName);
+    _addFact(&_absolutePitchFact,   _absolutePitchFactName);
+    _addFact(&_bodyYawFact,         _bodyYawFactName);
+    _addFact(&_absoluteYawFact,     _absoluteYawFactName);
+
+    _absoluteRollFact.setRawValue   (0.0f);
+    _absolutePitchFact.setRawValue  (0.0f);
+    _bodyYawFact.setRawValue        (0.0f);
+    _absoluteYawFact.setRawValue    (0.0f);
+
     // Create a UDP socket_in
     socket_out = new QUdpSocket();
     socket_out->bind(QHostAddress::AnyIPv4, 0);
@@ -348,7 +371,7 @@ SIYIUnixCamera::SIYIUnixCamera() {
     gimbal_attitude_thread = std::thread([this] { gimbal_attitude_loop(live); });
     gimbal_info_thread = std::thread([this] { gimbal_info_loop(live); });
     
-    connect(socket_out, &QUdpSocket::readyRead, this, &SIYIUnixCamera::receive_message);
+    // connect(socket_out, &QUdpSocket::readyRead, this, &SIYIUnixCamera::receive_message);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     SIYI_SDK::request_hardware_id();
 }
@@ -396,7 +419,7 @@ void SIYIUnixCamera::receive_message(){
         if (buffer.size() >= MINIMUM_DATA_LENGTH + msg.get_data_len() ) {
             uint8_t cmd_id = msg.get_cmd_id();
             // Message parsing distribution in frequent use respective order
-            if (cmd_id == ACQUIRE_GIMBAL_ATTITUDE) SIYI_SDK::parse_gimbal_attitude_msg();
+            if (cmd_id == ACQUIRE_GIMBAL_ATTITUDE) {SIYI_SDK::parse_gimbal_attitude_msg(); /*parse_attitude_msg_to_facts();*/ }
             else if (cmd_id == ACQUIRE_GIMBAL_INFO) SIYI_SDK::parse_gimbal_info_msg();
             else if (cmd_id == MANUAL_ZOOM) SIYI_SDK::parse_manual_zoom_msg();
             else if (cmd_id == ACQUIRE_FIRMWARE_VERSION) SIYI_SDK::parse_firmware_version_msg();
@@ -413,22 +436,49 @@ void SIYIUnixCamera::receive_message(){
     }
 }
 
+void SIYIUnixCamera::parse_attitude_msg_to_facts(){
+    setAbsoluteRoll(gimbal_att_msg.roll);
+    setAbsolutePitch(gimbal_att_msg.pitch);
+
+    bool yaw_in_vehicle_frame = true;
+    if (yaw_in_vehicle_frame) {
+        float bodyYaw = gimbal_att_msg.yaw;
+        float absoluteYaw = bodyYaw + _active_vehicle->heading()->rawValue().toFloat();
+        if (absoluteYaw > 180.0f) {
+            absoluteYaw -= 360.0f;
+        }
+
+        setBodyYaw(bodyYaw);
+        setAbsoluteYaw(absoluteYaw);
+
+    } else {
+        float absoluteYaw = gimbal_att_msg.yaw;
+        float bodyYaw = absoluteYaw - _active_vehicle->heading()->rawValue().toFloat();
+        if (bodyYaw < 180.0f) {
+            bodyYaw += 360.0f;
+        }
+
+        setBodyYaw(bodyYaw);
+        setAbsoluteYaw(absoluteYaw);
+    }
+}
+
 void SIYIUnixCamera::gimbal_attitude_loop(bool &connected) {
     while (connected) {
         if (turnedOn) {
-            SIYIUnixCamera::request_gimbal_attitude();
+            // SIYIUnixCamera::request_gimbal_attitude();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));  // set frequency to 100 Hz
+        std::this_thread::sleep_for(std::chrono::milliseconds(/*100*/1000000));  // set frequency to 10 Hz
     }
 }
 
 void SIYIUnixCamera::gimbal_info_loop(bool &connected) {
     while (connected) {
         if (turnedOn) {
-            SIYIUnixCamera::request_firmware_version();
-            SIYIUnixCamera::request_gimbal_info();
+            // SIYIUnixCamera::request_firmware_version();
+            // SIYIUnixCamera::request_gimbal_info();
         }
-        std::this_thread::sleep_for(std::chrono::seconds(1));  // set frequency to 1 Hz
+        std::this_thread::sleep_for(std::chrono::seconds(/*1*/1000000));  // set frequency to 1 Hz
     }
 }
 
@@ -479,6 +529,10 @@ void SIYIUnixCamera::checkConnection(){
     else{
         qgcApp()->toolbox()->settingsManager()->payloadSettings()->isCameraResponding()->setRawValue(true);
     }preLastSuccResponse = lastSuccResponse;
+}
+
+void SIYIUnixCamera::activeVehicleChanged(Vehicle* activeVehicle){
+    _active_vehicle = activeVehicle;
 }
 
 const char* SIYIUnixCamera::getIpFromSettings(){

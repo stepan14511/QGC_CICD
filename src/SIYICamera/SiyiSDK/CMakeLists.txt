@@ -14,6 +14,8 @@ target_link_libraries(SiyiSDK
     PUBLIC
         gencrc
         QGC
+        Vehicle
+        FactSystem
     PRIVATE
         Settings
         Qt6::Network

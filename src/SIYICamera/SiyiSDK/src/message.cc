@@ -27,6 +27,10 @@ void SIYI_Message::increment_seq(int val) const {
 void SIYI_Message::decode_msg(const uint8_t *msg) {
     memcpy(&m_data_len,msg+3,sizeof(uint16_t));
 
+    // uint8_t* msg_cpy;
+    // msg_cpy = malloc(sizeof(uint8_t) * (8 + m_data_len + 2));;
+    // memcpy(&msg_cpy, msg, sizeof(uint8_t) * (8 + m_data_len + 2));
+
     uint16_t crc_xmodem = crc_red((uint8_t*)msg,m_data_len+8); //last 2 bytes are crc
     uint16_t crc_received;
     memcpy(&crc_received,msg+8+m_data_len,sizeof(uint16_t));

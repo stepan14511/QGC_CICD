@@ -12,6 +12,8 @@ target_link_libraries(SiyiCameraInterface
         Settings
         SiyiSDK
         Qt6::Network
+        Vehicle
+        FactSystem
 )
 
 target_include_directories(SiyiCameraInterface PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

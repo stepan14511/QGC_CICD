@@ -112,9 +112,11 @@ Item {
         property double radius:     20
         property var trackingROI:   null
         property var trackingStatus: trackingStatusComponent.createObject(flyViewVideoMouseArea, {})
+        property var isUDP:          QGroundControl.settingsManager.payloadSettings.type.rawValue === 0
+        property var  siyiCameraInterface:          QGroundControl.multiVehicleManager.siyiCameraInterface
 
         onClicked:       onScreenGimbalController.clickControl()
-        onDoubleClicked: QGroundControl.videoManager.fullScreen = !QGroundControl.videoManager.fullScreen
+        onDoubleClicked: siyiCameraInterface.resetGimbal()//QGroundControl.videoManager.fullScreen = !QGroundControl.videoManager.fullScreen
 
         onPressed:(mouse) => {
             onScreenGimbalController.pressControl()

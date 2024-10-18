@@ -38,7 +38,7 @@ int SiyiCameraInterface::zoomSet(int newValue){
     return currentZoom;
 }
 
-SiyiCameraInterface::SiyiCameraInterface() : SIYIUnixCamera(){
+SiyiCameraInterface::SiyiCameraInterface(){
     currentZoom = 1;
     set_absolute_zoom(1, 0);
     settingsChanged();
@@ -70,4 +70,75 @@ void SiyiCameraInterface::setMaxZoom(int newValue){
     }
 
     maxZoom = newValue;
+}
+
+void SiyiCameraInterface::sendPitchAbsoluteYaw(float pitch, float yaw) {
+    set_gimbal_angles(yaw, pitch);
+}
+
+void SiyiCameraInterface::sendPitchBodyYaw(float pitch, float yaw) {
+    set_gimbal_angles(yaw, pitch);
+}
+
+// TODO:
+// Pan and tilt comes as +-(0-1)
+void SiyiCameraInterface::gimbalOnScreenControl(float panPct, float tiltPct, bool clickAndPoint, bool clickAndDrag, bool rateControl, bool retract, bool neutral, bool yawlock)
+{
+    // TODO: click and point
+    // click and point, based on FOV
+    /*if (clickAndPoint) {
+        float hFov = qgcApp()->toolbox()->settingsManager()->gimbalControllerSettings()->CameraHFov()->rawValue().toFloat();
+        float vFov = qgcApp()->toolbox()->settingsManager()->gimbalControllerSettings()->CameraVFov()->rawValue().toFloat();
+
+        float panIncDesired =  panPct  * hFov * 0.5f;
+        float tiltIncDesired = tiltPct * vFov * 0.5f;
+
+        float panDesired = panIncDesired + _activeGimbal->bodyYaw()->rawValue().toFloat();
+        float tiltDesired = tiltIncDesired + _activeGimbal->absolutePitch()->rawValue().toFloat();
+
+        if (_activeGimbal->yawLock()) {
+            sendPitchAbsoluteYaw(tiltDesired, panDesired + _vehicle->heading()->rawValue().toFloat(), false);
+        } else {
+            sendPitchBodyYaw(tiltDesired, panDesired, false);
+        }
+
+    // click and drag, based on maximum speed
+    } else if (clickAndDrag) {
+        // Should send rate commands, but it seems for some reason it is not working on AP side.
+        // Pitch works ok but yaw doesn't stop, it keeps like inertia, like if it was buffering the messages.
+        // So we do a workaround with angle targets
+        float maxSpeed = qgcApp()->toolbox()->settingsManager()->gimbalControllerSettings()->CameraSlideSpeed()->rawValue().toFloat();
+
+        float panIncDesired  = panPct * maxSpeed  * 0.1f;
+        float tiltIncDesired = tiltPct * maxSpeed * 0.1f;
+
+        float panDesired = panIncDesired + bodyYaw()->rawValue().toFloat();
+        float tiltDesired = tiltIncDesired + absolutePitch()->rawValue().toFloat();
+
+        if (yawLock()) {
+            if (active_vehicle()){
+                sendPitchAbsoluteYaw(tiltDesired, panDesired + active_vehicle()->heading()->rawValue().toFloat());
+            }
+        } else {
+            sendPitchBodyYaw(tiltDesired, panDesired);
+        }
+    }*/
+    float maxSpeed = qgcApp()->toolbox()->settingsManager()->gimbalControllerSettings()->CameraSlideSpeed()->rawValue().toFloat();
+
+    float panIncDesired  = panPct * maxSpeed;//  * 0.1f;
+    float tiltIncDesired = tiltPct * maxSpeed;// * 0.1f;
+
+    set_gimbal_speed(panIncDesired, tiltIncDesired);
+
+    // if (yawLock()) {
+    //     if (active_vehicle()){
+    //         sendPitchAbsoluteYaw(tiltDesired, panDesired + active_vehicle()->heading()->rawValue().toFloat());
+    //     }
+    // } else {
+    //     sendPitchBodyYaw(tiltDesired, panDesired);
+    // }
+}
+
+void SiyiCameraInterface::resetGimbal() {
+    request_gimbal_center();
 }

@@ -45,6 +45,7 @@ public:
     Q_PROPERTY(bool                 activeVehicleAvailable          READ activeVehicleAvailable                                         NOTIFY activeVehicleAvailableChanged)
     Q_PROPERTY(bool                 parameterReadyVehicleAvailable  READ parameterReadyVehicleAvailable                                 NOTIFY parameterReadyVehicleAvailableChanged)
     Q_PROPERTY(Vehicle*             activeVehicle                   READ activeVehicle                  WRITE setActiveVehicle          NOTIFY activeVehicleChanged)
+    Q_PROPERTY(SiyiCameraInterface* siyiCameraInterface             READ siyiCameraInterface                                            CONSTANT)
     Q_PROPERTY(QmlObjectListModel*  vehicles                        READ vehicles                                                       CONSTANT)
     Q_PROPERTY(bool                 gcsHeartBeatEnabled             READ gcsHeartbeatEnabled            WRITE setGcsHeartbeatEnabled    NOTIFY gcsHeartBeatEnabledChanged)
     Q_PROPERTY(Vehicle*             offlineEditingVehicle           READ offlineEditingVehicle                                          CONSTANT)
@@ -55,9 +56,10 @@ public:
     Q_INVOKABLE Vehicle* getVehicleById(int vehicleId);
 
     // Siyi camera zoom implementation
-    Q_INVOKABLE void siyiCameraZoomIn();
-    Q_INVOKABLE void siyiCameraZoomOut();
-    Q_INVOKABLE int siyiCameraZoomSet(int newValue);
+    // Q_INVOKABLE void siyiCameraZoomIn();
+    // Q_INVOKABLE void siyiCameraZoomOut();
+    // Q_INVOKABLE int siyiCameraZoomSet(int newValue);
+    SiyiCameraInterface* siyiCameraInterface(void) { return _siyiCameraInterface; }
 
     // Property accessors
 
@@ -118,7 +120,7 @@ private:
     QmlObjectListModel  _vehicles;
 
     // Siyi camera zoom implementation
-    SiyiCameraInterface* siyiCameraInterface;
+    SiyiCameraInterface* _siyiCameraInterface;
 
     FirmwarePluginManager*      _firmwarePluginManager;
     JoystickManager*            _joystickManager;

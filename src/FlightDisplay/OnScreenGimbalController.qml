@@ -24,13 +24,17 @@ Item {
     property var screenXrateInitCoocked
     property var screenYrateInitCoocked
 
+    property var  isUDP:                        QGroundControl.settingsManager.payloadSettings.type.rawValue === 0
+     
+    property var  siyiCameraInterface:          QGroundControl.multiVehicleManager.siyiCameraInterface
     property var  activeVehicle:                QGroundControl.multiVehicleManager.activeVehicle
-    property var  gimbalController:             activeVehicle ? activeVehicle.gimbalController : undefined
-    property var  activeGimbal:                 gimbalController ? gimbalController.activeGimbal : undefined
+    property var  gimbalController_mavlink:     activeVehicle ? activeVehicle.gimbalController : undefined
+    property var  gimbalController:             isUDP ? siyiCameraInterface : gimbalController_mavlink
+    property var  activeGimbal:                 gimbalController_mavlink ? gimbalController_mavlink.activeGimbal : undefined
     property bool gimbalAvailable:              activeGimbal != undefined
     property var  gimbalControllerSettings:     QGroundControl.settingsManager.gimbalControllerSettings
     property bool cameraTrackingEnabled:        false // Used to ignore clicks when camera tracking operation is active, otherwise it would collide with these gimbal controls
-    property bool shouldProcessClicks:          gimbalControllerSettings.EnableOnScreenControl.value && activeGimbal && !cameraTrackingEnabled ? true : false
+    property bool shouldProcessClicks:          gimbalControllerSettings.EnableOnScreenControl.value && ((activeGimbal && !cameraTrackingEnabled) || isUDP) ? true : false
 
     function clickControl() {
         if (!shouldProcessClicks) {
@@ -79,6 +83,7 @@ Item {
             return
         }
         sendRateTimer.stop()
+        gimbalController.gimbalOnScreenControl(0, 0, false, true, true)
         screenXrateInitCoocked = null
         screenYrateInitCoocked = null
     }
@@ -88,7 +93,7 @@ Item {
         interval:       100
         repeat:         true
         onTriggered: {
-            if (rootItem.gimbalAvailable) {
+            if (rootItem.gimbalAvailable || isUDP) {
                 var xCoocked =  ( ( screenX / parent.width)  * 2) - 1
                 var yCoocked = -( ( screenY / parent.height) * 2) + 1
                 xCoocked -= screenXrateInitCoocked
