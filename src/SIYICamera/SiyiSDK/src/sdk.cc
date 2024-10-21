@@ -371,7 +371,7 @@ SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/Vehicle/SiyiCameraInter
     gimbal_attitude_thread = std::thread([this] { gimbal_attitude_loop(live); });
     gimbal_info_thread = std::thread([this] { gimbal_info_loop(live); });
     
-    // connect(socket_out, &QUdpSocket::readyRead, this, &SIYIUnixCamera::receive_message);
+    connect(socket_out, &QUdpSocket::readyRead, this, &SIYIUnixCamera::receive_message);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     SIYI_SDK::request_hardware_id();
 }
@@ -411,15 +411,15 @@ void SIYIUnixCamera::receive_message(){
         lastSuccResponse = QDateTime::currentMSecsSinceEpoch();
 
         // Go through the buffer
-        buffer.removeFirst();
-        buffer.removeFirst();
+        // buffer.removeFirst();
+        // buffer.removeFirst();
 
         msg.decode_msg(reinterpret_cast<const uint8_t *>(buffer.constData()));
         // Check if there is enough data (including payload)
         if (buffer.size() >= MINIMUM_DATA_LENGTH + msg.get_data_len() ) {
             uint8_t cmd_id = msg.get_cmd_id();
             // Message parsing distribution in frequent use respective order
-            if (cmd_id == ACQUIRE_GIMBAL_ATTITUDE) {SIYI_SDK::parse_gimbal_attitude_msg(); /*parse_attitude_msg_to_facts();*/ }
+            if (cmd_id == ACQUIRE_GIMBAL_ATTITUDE) {SIYI_SDK::parse_gimbal_attitude_msg(); parse_attitude_msg_to_facts(); }
             else if (cmd_id == ACQUIRE_GIMBAL_INFO) SIYI_SDK::parse_gimbal_info_msg();
             else if (cmd_id == MANUAL_ZOOM) SIYI_SDK::parse_manual_zoom_msg();
             else if (cmd_id == ACQUIRE_FIRMWARE_VERSION) SIYI_SDK::parse_firmware_version_msg();
@@ -437,6 +437,7 @@ void SIYIUnixCamera::receive_message(){
 }
 
 void SIYIUnixCamera::parse_attitude_msg_to_facts(){
+    if(!_active_vehicle){return;}
     setAbsoluteRoll(gimbal_att_msg.roll);
     setAbsolutePitch(gimbal_att_msg.pitch);
 
@@ -466,19 +467,19 @@ void SIYIUnixCamera::parse_attitude_msg_to_facts(){
 void SIYIUnixCamera::gimbal_attitude_loop(bool &connected) {
     while (connected) {
         if (turnedOn) {
-            // SIYIUnixCamera::request_gimbal_attitude();
+            SIYIUnixCamera::request_gimbal_attitude();
         }
-        std::this_thread::sleep_for(std::chrono::milliseconds(/*100*/1000000));  // set frequency to 10 Hz
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));  // set frequency to 10 Hz
     }
 }
 
 void SIYIUnixCamera::gimbal_info_loop(bool &connected) {
     while (connected) {
         if (turnedOn) {
-            // SIYIUnixCamera::request_firmware_version();
-            // SIYIUnixCamera::request_gimbal_info();
+            SIYIUnixCamera::request_firmware_version();
+            SIYIUnixCamera::request_gimbal_info();
         }
-        std::this_thread::sleep_for(std::chrono::seconds(/*1*/1000000));  // set frequency to 1 Hz
+        std::this_thread::sleep_for(std::chrono::seconds(1000));  // set frequency to 1 Hz
     }
 }
 
