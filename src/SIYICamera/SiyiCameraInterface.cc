@@ -38,6 +38,11 @@ int SiyiCameraInterface::zoomSet(int newValue){
     return currentZoom;
 }
 
+void SiyiCameraInterface::takePhoto(){
+    request_photo();
+    qDebug() << "SIYICameraInterface: Take Photo command invoked.";
+}
+
 SiyiCameraInterface::SiyiCameraInterface(){
     currentZoom = 1;
     set_absolute_zoom(1, 0);

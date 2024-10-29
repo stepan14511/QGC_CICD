@@ -41,6 +41,11 @@ Rectangle {
     property bool   _photoCaptureIntervalIdle:  _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE
     property bool   _photoCaptureIdle:          _photoCaptureSingleIdle || _photoCaptureIntervalIdle
 
+    // UDP
+    property var    _siyiCameraInterface:       QGroundControl.multiVehicleManager.siyiCameraInterface
+    property var    _payloadSettings:           QGroundControl.settingsManager.payloadSettings
+    property bool   _isUDP:                  _payloadSettings.type.rawValue === 0
+
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
     DeadMouseArea { anchors.fill: parent }
@@ -186,10 +191,16 @@ Rectangle {
 
                         function toggleShooting() {
                             if (_cameraInPhotoMode) {
-                                if (_camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IN_PROGRESS) {
-                                    _camera.stopTakePhoto()
-                                } else if (_camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IDLE || _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE) {
-                                    _camera.takePhoto()
+                                // TODO: here add udp SIYI photo taking.
+                                if (_isUDP) {
+                                    _siyiCameraInterface.takePhoto();
+                                }
+                                else {
+                                    if (_camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IN_PROGRESS) {
+                                        _camera.stopTakePhoto()
+                                    } else if (_camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_IDLE || _camera.photoCaptureStatus === MavlinkCameraControl.PHOTO_CAPTURE_INTERVAL_IDLE) {
+                                        _camera.takePhoto()
+                                    }
                                 }
                             } else {
                                 _camera.toggleVideoRecording()
