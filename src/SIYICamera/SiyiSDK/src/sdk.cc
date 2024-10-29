@@ -346,7 +346,7 @@ const char* SIYIUnixCamera::_bodyYawFactName =                      "UDPgimbalYa
 const char* SIYIUnixCamera::_absoluteYawFactName =                  "UDPgimbalAzimuth";
 const char* SIYIUnixCamera::_amountOfImagesFactName =               "UDPamountOfImages";
 
-SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/Vehicle/SiyiCameraInterfaceFact.json") {
+SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/SiyiCameraInterfaceFact.json") {
     // Init facts
     _absoluteRollFact =     Fact(0, _absoluteRollFactName,      FactMetaData::valueTypeFloat );
     _absolutePitchFact =    Fact(0, _absolutePitchFactName,     FactMetaData::valueTypeFloat );

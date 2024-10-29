@@ -44,6 +44,7 @@ void SiyiCameraInterface::takePhoto(){
 }
 
 SiyiCameraInterface::SiyiCameraInterface(){
+    _cameraAIController = new CameraAIController();
     currentZoom = 1;
     set_absolute_zoom(1, 0);
     settingsChanged();

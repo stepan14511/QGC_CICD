@@ -1,10 +1,14 @@
 #include <SiyiSDK.h>
+#include <CameraAIController.h>
 
 class SiyiCameraInterface : public SIYIUnixCamera{
     Q_OBJECT
 
 public:
     SiyiCameraInterface();
+
+    Q_PROPERTY(CameraAIController* cameraAIController READ cameraAIController CONSTANT)
+
     Q_INVOKABLE void zoomIn();
     Q_INVOKABLE void zoomOut();
     Q_INVOKABLE int zoomSet(int newValue); // return - actual new value (for cases not in legal bounds).
@@ -15,11 +19,15 @@ public:
     Q_INVOKABLE void sendPitchAbsoluteYaw   (float pitch, float yaw);
     Q_INVOKABLE void resetGimbal            ();
 
+    CameraAIController* cameraAIController(){ return _cameraAIController; }
+
 public slots:
     void settingsChanged();
 
 private:
     void setMaxZoom(int);
+
+    CameraAIController* _cameraAIController;
 
     int maxZoom = 30; // Change only using setMaxZoom(int);
     const int minZoom = 1;

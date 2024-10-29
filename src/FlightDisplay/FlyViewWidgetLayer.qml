@@ -22,6 +22,7 @@ import QGroundControl.Controls
 import QGroundControl.Controllers
 import QGroundControl.Controls
 import QGroundControl.FactSystem
+import QGroundControl.FactControls
 import QGroundControl.FlightDisplay
 import QGroundControl.FlightMap
 import QGroundControl.Palette
@@ -198,6 +199,38 @@ Item {
     Component {
         id: preFlightChecklistPopup
         FlyViewPreFlightChecklistPopup {
+        }
+    }
+
+    property var cameraAIController: QGroundControl.multiVehicleManager.siyiCameraInterface.cameraAIController
+
+    Component {
+        id: cameraAIDropPanel
+        ColumnLayout {
+            spacing:    _margins
+
+            // property string _overwriteText: qsTr("Plan overwrite")
+
+            // QGCSwitch {
+                // checked:    parent._fact ? parent._fact.value : false
+                // visible:    parent._isBool
+                // onClicked:  parent._fact.value = checked ? 1 : 0
+            // }
+
+            // SectionHeader {
+            //     id:                 createSection
+            //     Layout.fillWidth:   true
+            //     text:               qsTr("Create Plan")
+            //     showSpacer:         false
+            // }
+
+            LabelledFactComboBox {
+                Layout.fillWidth:   true
+                label:              qsTr("Type")
+                fact:               cameraAIController.aiType
+                visible:            true
+                indexModel:         false
+            }
         }
     }
 }
