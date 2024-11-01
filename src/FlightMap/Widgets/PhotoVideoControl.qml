@@ -44,7 +44,7 @@ Rectangle {
     // UDP
     property var    _siyiCameraInterface:       QGroundControl.multiVehicleManager.siyiCameraInterface
     property var    _payloadSettings:           QGroundControl.settingsManager.payloadSettings
-    property bool   _isUDP:                  _payloadSettings.type.rawValue === 0
+    property bool   _isUDP:                     _payloadSettings.type.rawValue === 0
 
     QGCPalette { id: qgcPal; colorGroupEnabled: enabled }
 
@@ -234,7 +234,7 @@ Rectangle {
                         anchors.leftMargin: _smallMargins
                         anchors.left:       parent.left
                         anchors.top:        parent.top
-                        text:               _activeVehicle ? ('00000' + _activeVehicle.cameraTriggerPoints.count).slice(-5) : "00000"
+                        text:               _isUDP ? ('00000' + _siyiCameraInterface.amountOfImages.rawValue).slice(-5) : (_activeVehicle ? ('00000' + _activeVehicle.cameraTriggerPoints.count).slice(-5) : "00000")
                         font.pointSize:     ScreenTools.largeFontPointSize
                         visible:            _cameraInPhotoMode
                     }

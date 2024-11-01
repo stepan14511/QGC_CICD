@@ -30,6 +30,12 @@
     "type":             "float",
     "decimalPlaces":    1,
     "units":            "deg"
+},
+{
+    "name":             "UDPamountOfImages",
+    "shortDesc":        "Amount of images, stored on the camera's SD card",
+    "type":             "uint32",
+    "default":          0
 }
 ]
 }

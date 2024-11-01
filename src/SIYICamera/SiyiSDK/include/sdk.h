@@ -2,6 +2,8 @@
 
 #include <QUdpSocket>
 #include <QString>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
 
 #include <FactGroup.h>
 #include "Vehicle.h"
@@ -235,6 +237,17 @@ protected:
     const int MINIMUM_DATA_LENGTH = 10;
     uint8_t m_msg_buffer[74];
     SIYI_Message msg;
+
+    // HTTP constants
+    const QString _httpServerPrefix =               QString("http://");
+    const QString _httpServerPort =                 QString("82");
+    const QString _httpServerSuffix =               QString("/cgi-bin/media.cgi");
+    const QString _httpServerGetDirectoriseSuffix = QString("/api/v1/getdirectories");
+    const QString _httpServerGetMediaCountSuffix =  QString("/api/v1/getmediacount");
+    const QString _httpServerGetMediaListSuffix =   QString("/api/v1/getmedialist");
+    const QString _httpMediaImageParam =            QString("?media_type=0");
+    const QString _httpMediaVideoParam =            QString("?media_type=1");
+    const QString _httpTempImageFolderPath =        QString("&path=101SIYI_IMG"); // TODO fix using getDirectoriesRequest
 };
 
 class SIYIUnixCamera : public SIYI_SDK {
@@ -251,12 +264,14 @@ public:
     Q_PROPERTY(Fact* bodyYaw                    READ bodyYaw                    CONSTANT)
     Q_PROPERTY(Fact* absoluteYaw                READ absoluteYaw                CONSTANT)
     Q_PROPERTY(bool  yawLock                    READ yawLock                    NOTIFY yawLockChanged)
+    Q_PROPERTY(Fact* amountOfImages             READ amountOfImages             CONSTANT)
 
     Fact* absoluteRoll()                  { return &_absoluteRollFact;  }
     Fact* absolutePitch()                 { return &_absolutePitchFact; }
     Fact* bodyYaw()                       { return &_bodyYawFact;       }
     Fact* absoluteYaw()                   { return &_absoluteYawFact;   }
     bool  yawLock() const                 { return _yawLock;            }
+    Fact* amountOfImages()                { return &_amountOfImagesFact;}
     Vehicle* active_vehicle()             { return _active_vehicle;     }
 
     void  setAbsoluteRoll(float absoluteRoll)   { _absoluteRollFact.setRawValue(absoluteRoll);                     }
@@ -269,27 +284,36 @@ public slots:
     void settingsChanged();
     void receive_message();
     void send_message_slot(const uint8_t *message, const int length);
+    void send_http_request_slot(QString url);
     void checkConnection();
     void activeVehicleChanged(Vehicle* activeVehicle);
+    void httpReplyImageAmountFinished(QNetworkReply* reply);
 
 signals:
     void send_message_signal(const uint8_t *message, const int length);
+    void send_http_request_signal(QString url);
+    void http_reply_ready_image_amount_signal(QNetworkReply* reply);
     void yawLockChanged();
 
 private:
     virtual bool send_message(const uint8_t *message, const int length) const override;
     void gimbal_attitude_loop(bool &connected);
-    bool request_gimbal_attitude();
     void gimbal_info_loop(bool &connected);
+    void camera_count_images_loop(bool &connected);
+    bool request_gimbal_attitude();
     bool request_firmware_version();
     bool request_gimbal_info();
     void parse_attitude_msg_to_facts();
+    QString getHttpURLBase(){ return _httpServerPrefix + camera_ip + QString(":") + _httpServerPort + QString("/") + _httpServerSuffix; }
+
 
     bool live = false;
     bool turnedOn = false;
     std::thread gimbal_attitude_thread;
     std::thread gimbal_info_thread;
+    std::thread http_image_count_thread;
     QUdpSocket* socket_out;
+    QNetworkAccessManager* httpNetworkManager;
     QString camera_ip;
     quint16 camera_port;
     time_t lastSuccResponse = 0;
@@ -301,6 +325,7 @@ private:
     Fact _absolutePitchFact;
     Fact _bodyYawFact;
     Fact _absoluteYawFact;
+    Fact _amountOfImagesFact;
     bool _yawLock = false;
 
     // Fact names
@@ -308,4 +333,5 @@ private:
     static const char* _absolutePitchFactName;
     static const char* _bodyYawFactName;
     static const char* _absoluteYawFactName;
+    static const char* _amountOfImagesFactName;
 };

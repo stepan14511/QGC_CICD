@@ -344,30 +344,39 @@ const char* SIYIUnixCamera::_absoluteRollFactName =                 "UDPgimbalRo
 const char* SIYIUnixCamera::_absolutePitchFactName =                "UDPgimbalPitch";
 const char* SIYIUnixCamera::_bodyYawFactName =                      "UDPgimbalYaw";
 const char* SIYIUnixCamera::_absoluteYawFactName =                  "UDPgimbalAzimuth";
+const char* SIYIUnixCamera::_amountOfImagesFactName =               "UDPamountOfImages";
 
 SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/Vehicle/SiyiCameraInterfaceFact.json") {
     // Init facts
-    _absoluteRollFact =     Fact(0, _absoluteRollFactName,  FactMetaData::valueTypeFloat);
-    _absolutePitchFact =    Fact(0, _absolutePitchFactName, FactMetaData::valueTypeFloat);
-    _bodyYawFact =          Fact(0, _bodyYawFactName,       FactMetaData::valueTypeFloat);
-    _absoluteYawFact =      Fact(0, _absoluteYawFactName,   FactMetaData::valueTypeFloat);
+    _absoluteRollFact =     Fact(0, _absoluteRollFactName,      FactMetaData::valueTypeFloat );
+    _absolutePitchFact =    Fact(0, _absolutePitchFactName,     FactMetaData::valueTypeFloat );
+    _bodyYawFact =          Fact(0, _bodyYawFactName,           FactMetaData::valueTypeFloat );
+    _absoluteYawFact =      Fact(0, _absoluteYawFactName,       FactMetaData::valueTypeFloat );
+    _amountOfImagesFact =   Fact(0, _amountOfImagesFactName,    FactMetaData::valueTypeUint32);
     
     _addFact(&_absoluteRollFact,    _absoluteRollFactName);
     _addFact(&_absolutePitchFact,   _absolutePitchFactName);
     _addFact(&_bodyYawFact,         _bodyYawFactName);
     _addFact(&_absoluteYawFact,     _absoluteYawFactName);
+    _addFact(&_amountOfImagesFact,  _amountOfImagesFactName);
 
     _absoluteRollFact.setRawValue   (0.0f);
     _absolutePitchFact.setRawValue  (0.0f);
     _bodyYawFact.setRawValue        (0.0f);
     _absoluteYawFact.setRawValue    (0.0f);
 
+    // Create an Http Manager
+    httpNetworkManager = new QNetworkAccessManager(this);
+    connect(this, &SIYIUnixCamera::http_reply_ready_image_amount_signal, this, &SIYIUnixCamera::httpReplyImageAmountFinished);
+    connect(this, &SIYIUnixCamera::send_http_request_signal, this, &SIYIUnixCamera::send_http_request_slot);
+    live = true;
+    http_image_count_thread = std::thread([this] { camera_count_images_loop(live); });
+
     // Create a UDP socket_in
     socket_out = new QUdpSocket();
     socket_out->bind(QHostAddress::AnyIPv4, 0);
 
     connect(this, &SIYIUnixCamera::send_message_signal, this, &SIYIUnixCamera::send_message_slot);
-    live = true;
     gimbal_attitude_thread = std::thread([this] { gimbal_attitude_loop(live); });
     gimbal_info_thread = std::thread([this] { gimbal_info_loop(live); });
     
@@ -382,6 +391,7 @@ SIYIUnixCamera::~SIYIUnixCamera() {
     live = false;
     gimbal_attitude_thread.join();
     gimbal_info_thread.join();
+    http_image_count_thread.join();
 }
 
 bool SIYIUnixCamera::send_message(const uint8_t *message, const int length) const {
@@ -483,6 +493,15 @@ void SIYIUnixCamera::gimbal_info_loop(bool &connected) {
     }
 }
 
+void SIYIUnixCamera::camera_count_images_loop(bool &connected) {
+    while (connected) {
+        if (turnedOn) {
+            emit send_http_request_signal(getHttpURLBase() + _httpServerGetMediaCountSuffix + _httpMediaImageParam + _httpTempImageFolderPath);
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // set frequency to 1 Hz
+    }
+}
+
 // This ones need to be overriden to make signals & slots work.
 // Signals & slots are needed for the threads sync.
 bool SIYIUnixCamera::request_gimbal_attitude() {
@@ -523,6 +542,22 @@ void SIYIUnixCamera::send_message_slot(const uint8_t *message, const int length)
     send_message(message, length);
 }
 
+void SIYIUnixCamera::send_http_request_slot(QString url){
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+
+    QNetworkReply *reply = httpNetworkManager->get(request);
+    connect(reply, &QNetworkReply::finished, this, [=](){
+        if (reply->error()) {
+            qDebug() << reply->error();
+            return;
+        }
+
+        emit http_reply_ready_image_amount_signal(reply);
+    });
+    // TODO тут надо возвращать объект реплай и уже коннектить что надо куда надо, чтобы парсером не смотреть что пришло
+}
+
 void SIYIUnixCamera::checkConnection(){
     if (lastSuccResponse == preLastSuccResponse){
         qgcApp()->toolbox()->settingsManager()->payloadSettings()->isCameraResponding()->setRawValue(false);
@@ -534,6 +569,16 @@ void SIYIUnixCamera::checkConnection(){
 
 void SIYIUnixCamera::activeVehicleChanged(Vehicle* activeVehicle){
     _active_vehicle = activeVehicle;
+}
+
+void SIYIUnixCamera::httpReplyImageAmountFinished(QNetworkReply *reply){
+    QString jsonAnswerString = QString(reply->readAll()).simplified().replace(" ", "");
+    int indexOfImageAmountValueStart = jsonAnswerString.indexOf("\"count\"") + 8;
+    int lengthOfImageAmountValue = jsonAnswerString.indexOf(",", indexOfImageAmountValueStart) - indexOfImageAmountValueStart;
+    QString amountOfImages = jsonAnswerString.sliced(indexOfImageAmountValueStart, lengthOfImageAmountValue);
+    // qDebug() << "HTTP reply: " << amountOfImages.toInt();
+    _amountOfImagesFact.setRawValue(amountOfImages.toInt());
+    reply->deleteLater();
 }
 
 const char* SIYIUnixCamera::getIpFromSettings(){
