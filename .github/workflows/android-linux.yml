@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - pda_qgc-master-*
+      - forest-project
 
 jobs:
   build:
