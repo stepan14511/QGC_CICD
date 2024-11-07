@@ -87,6 +87,7 @@ Rectangle {
                     setupIndicator:     false
                     autoExclusive:      true
                     text:               modelData.title
+                    visible:            (modelData.title != qsTr("SIYI Photos")) || (QGroundControl.settingsManager.payloadSettings.type.rawValue === 0)
 
                     onClicked: {
                         panelLoader.source  = modelData.url

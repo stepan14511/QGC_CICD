@@ -16,6 +16,7 @@ public:
     DEFINE_SETTINGFACT(cameraMaxZoom)
     DEFINE_SETTINGFACT(enableGimbalControl)
     DEFINE_SETTINGFACT(isCameraResponding)
+    DEFINE_SETTINGFACT(fireToken)
 
 signals:
     void payloadConfiguredChanged    ();

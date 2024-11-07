@@ -203,26 +203,12 @@ Item {
     }
 
     property var cameraAIController: QGroundControl.multiVehicleManager.siyiCameraInterface.cameraAIController
+    property var siyiCameraController: QGroundControl.multiVehicleManager.siyiCameraInterface
 
     Component {
         id: cameraAIDropPanel
         ColumnLayout {
             spacing:    _margins
-
-            // property string _overwriteText: qsTr("Plan overwrite")
-
-            // QGCSwitch {
-                // checked:    parent._fact ? parent._fact.value : false
-                // visible:    parent._isBool
-                // onClicked:  parent._fact.value = checked ? 1 : 0
-            // }
-
-            // SectionHeader {
-            //     id:                 createSection
-            //     Layout.fillWidth:   true
-            //     text:               qsTr("Create Plan")
-            //     showSpacer:         false
-            // }
 
             LabelledFactComboBox {
                 Layout.fillWidth:   true
@@ -230,6 +216,34 @@ Item {
                 fact:               cameraAIController.aiType
                 visible:            true
                 indexModel:         false
+            }
+
+            SectionHeader {
+                id:                 sendToServerSection
+                Layout.fillWidth:   true
+                text:               qsTr("Send to \"Лесохранитель\"")
+                showSpacer:         false
+            }
+
+            Image {
+                visible: false
+                id: downloadedImage
+                width: _margins * 192
+                height: _margins * 108
+                fillMode: Image.PreserveAspectFit
+                cache: false
+                asynchronous: true
+            }
+            
+            function updateImage(path) {
+                console.log("Image ready at:", path)
+                downloadedImage.source = "image://myprovider/downloaded_image"
+                downloadedImage.visible = true
+            }
+
+            Connections {
+                target: siyiCameraController
+                onImageReady: updateImage
             }
         }
     }

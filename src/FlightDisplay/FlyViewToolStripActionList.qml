@@ -59,6 +59,9 @@ ToolStripActionList {
         GuidedActionPause { },
         GuidedActionActionList { },
         GuidedActionGripper { },
-        GuidedActionCameraAI { dropPanelComponent: cameraAIDropPanel }
+        GuidedActionCameraAI {
+            visible:                QGroundControl.settingsManager.payloadSettings.type.rawValue === 0
+            dropPanelComponent:     cameraAIDropPanel
+        }
     ]
 }

@@ -5,6 +5,7 @@ on:
     branches:
       - master
       - pr-siyi-camera
+      - forest-project
       - 'Stable*'
     tags:
       - 'v*'

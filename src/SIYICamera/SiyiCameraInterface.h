@@ -18,11 +18,13 @@ public:
     Q_INVOKABLE void sendPitchBodyYaw       (float pitch, float yaw);
     Q_INVOKABLE void sendPitchAbsoluteYaw   (float pitch, float yaw);
     Q_INVOKABLE void resetGimbal            ();
+    Q_INVOKABLE void refreshImageList       ();
 
     CameraAIController* cameraAIController(){ return _cameraAIController; }
 
 public slots:
     void settingsChanged();
+    void firePhotoTakenHandler();
 
 private:
     void setMaxZoom(int);
@@ -32,4 +34,23 @@ private:
     int maxZoom = 30; // Change only using setMaxZoom(int);
     const int minZoom = 1;
     int currentZoom = 1;
+
+//-----------------------------------------------------------------------------
+//      TEMP SOLUTION FOR LESOHRANITEL
+//-----------------------------------------------------------------------------
+
+public slots:    
+    void onImageDownloaded(QNetworkReply *reply);
+    void http_send_telemetry_slot();
+
+signals:
+    void http_send_telemetry_signal();
+
+private:
+    void odom_sharing_loop(bool &connected);
+    void send_odom();
+
+    float odom_sharing_hz = 1;
+    std::thread odom_sharing_thread;
+    QString bearerToken;
 };

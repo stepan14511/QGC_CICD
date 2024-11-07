@@ -4,9 +4,12 @@
 #include <QString>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QVector>
+#include <QPair>
 
 #include <FactGroup.h>
 #include "Vehicle.h"
+#include "QmlObjectListModel.h"
 
 #include <thread>
 #include <ctime>
@@ -237,17 +240,6 @@ protected:
     const int MINIMUM_DATA_LENGTH = 10;
     uint8_t m_msg_buffer[74];
     SIYI_Message msg;
-
-    // HTTP constants
-    const QString _httpServerPrefix =               QString("http://");
-    const QString _httpServerPort =                 QString("82");
-    const QString _httpServerSuffix =               QString("/cgi-bin/media.cgi");
-    const QString _httpServerGetDirectoriseSuffix = QString("/api/v1/getdirectories");
-    const QString _httpServerGetMediaCountSuffix =  QString("/api/v1/getmediacount");
-    const QString _httpServerGetMediaListSuffix =   QString("/api/v1/getmedialist");
-    const QString _httpMediaImageParam =            QString("?media_type=0");
-    const QString _httpMediaVideoParam =            QString("?media_type=1");
-    const QString _httpTempImageFolderPath =        QString("&path=101SIYI_IMG"); // TODO fix using getDirectoriesRequest
 };
 
 class SIYIUnixCamera : public SIYI_SDK {
@@ -264,14 +256,12 @@ public:
     Q_PROPERTY(Fact* bodyYaw                    READ bodyYaw                    CONSTANT)
     Q_PROPERTY(Fact* absoluteYaw                READ absoluteYaw                CONSTANT)
     Q_PROPERTY(bool  yawLock                    READ yawLock                    NOTIFY yawLockChanged)
-    Q_PROPERTY(Fact* amountOfImages             READ amountOfImages             CONSTANT)
 
     Fact* absoluteRoll()                  { return &_absoluteRollFact;  }
     Fact* absolutePitch()                 { return &_absolutePitchFact; }
     Fact* bodyYaw()                       { return &_bodyYawFact;       }
     Fact* absoluteYaw()                   { return &_absoluteYawFact;   }
     bool  yawLock() const                 { return _yawLock;            }
-    Fact* amountOfImages()                { return &_amountOfImagesFact;}
     Vehicle* active_vehicle()             { return _active_vehicle;     }
 
     void  setAbsoluteRoll(float absoluteRoll)   { _absoluteRollFact.setRawValue(absoluteRoll);                     }
@@ -284,27 +274,21 @@ public slots:
     void settingsChanged();
     void receive_message();
     void send_message_slot(const uint8_t *message, const int length);
-    void send_http_request_slot(QString url);
     void checkConnection();
     void activeVehicleChanged(Vehicle* activeVehicle);
-    void httpReplyImageAmountFinished(QNetworkReply* reply);
 
 signals:
     void send_message_signal(const uint8_t *message, const int length);
-    void send_http_request_signal(QString url);
-    void http_reply_ready_image_amount_signal(QNetworkReply* reply);
     void yawLockChanged();
 
-private:
+protected:
     virtual bool send_message(const uint8_t *message, const int length) const override;
     void gimbal_attitude_loop(bool &connected);
     void gimbal_info_loop(bool &connected);
-    void camera_count_images_loop(bool &connected);
     bool request_gimbal_attitude();
     bool request_firmware_version();
     bool request_gimbal_info();
     void parse_attitude_msg_to_facts();
-    QString getHttpURLBase(){ return _httpServerPrefix + camera_ip + QString(":") + _httpServerPort + QString("/") + _httpServerSuffix; }
 
 
     bool live = false;
@@ -313,7 +297,6 @@ private:
     std::thread gimbal_info_thread;
     std::thread http_image_count_thread;
     QUdpSocket* socket_out;
-    QNetworkAccessManager* httpNetworkManager;
     QString camera_ip;
     quint16 camera_port;
     time_t lastSuccResponse = 0;
@@ -325,7 +308,6 @@ private:
     Fact _absolutePitchFact;
     Fact _bodyYawFact;
     Fact _absoluteYawFact;
-    Fact _amountOfImagesFact;
     bool _yawLock = false;
 
     // Fact names
@@ -333,5 +315,62 @@ private:
     static const char* _absolutePitchFactName;
     static const char* _bodyYawFactName;
     static const char* _absoluteYawFactName;
+
+
+//-----------------------------------------------------------------------------
+//      HTTP Image Server
+//-----------------------------------------------------------------------------
+
+public:
+    Q_PROPERTY(QmlObjectListModel* model        READ model              NOTIFY modelChanged)
+    Q_PROPERTY(Fact*            amountOfImages  READ amountOfImages     CONSTANT)
+
+    QmlObjectListModel* model()         { return &_imageEntriesModel; }
+    Fact* amountOfImages()              { return &_amountOfImagesFact;}
+
+    void setAmountOfImages(int amount){
+        _amountOfImagesFact.setRawValue(amount);
+        emit amountOfImagesChanged();
+    }
+
+    QVector< QPair<QString, QString> > httpGetListOfImages(); // Returns Vector of pairs: <PhotoName(including folder name), PhotoUrl>
+
+public slots:
+    void http_update_image_list_slot();
+
+signals:
+    void http_update_image_list_signal();
+    void modelChanged();
+    void amountOfImagesChanged();
+    void imageReady(const QString &path);
+    void onImageDownloadedSignal(QNetworkReply *reply);
+
+protected:
+    void camera_count_images_loop(bool &connected);
+    QString getHttpURLBase(){ return _httpServerPrefix + camera_ip + QString(":") + _httpServerPort + QString("/") + _httpServerSuffix; }
+    QNetworkReply* http_send_request(QString url);
+    QVector<QString> httpGetFoldersPaths();
+    void httpUpdateImageAmount(QVector<QString> folderPaths); // Updates total amount of images and _imageAmounts
+    void downloadImage(const QString& url);
+
+    QNetworkAccessManager*          httpNetworkManager;
+    QVector< QPair<QString, int> >  _imageAmounts;      // Amount of images + paths of folders on the SD card
+
+    // Q_PROPERTIES
+    Fact _amountOfImagesFact;
+    QmlObjectListModel  _imageEntriesModel;
+
+    // Fact names
     static const char* _amountOfImagesFactName;
+
+    // HTTP url parts
+    const QString _httpServerPrefix =               QString("http://");
+    const QString _httpServerPort =                 QString("82");
+    const QString _httpServerSuffix =               QString("/cgi-bin/media.cgi");
+    const QString _httpServerGetDirectoriseSuffix = QString("/api/v1/getdirectories");
+    const QString _httpServerGetMediaCountSuffix =  QString("/api/v1/getmediacount");
+    const QString _httpServerGetMediaListSuffix =   QString("/api/v1/getmedialist");
+    const QString _httpMediaImageParam =            QString("?media_type=0");
+    const QString _httpMediaVideoParam =            QString("?media_type=1");
+    const QString _httpImageFolderPathParam =       QString("&path=");
 };

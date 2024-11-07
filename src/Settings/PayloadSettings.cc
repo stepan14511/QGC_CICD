@@ -47,6 +47,14 @@ DECLARE_SETTINGSFACT_NO_FUNC(PayloadSettings, enableGimbalControl)
     }
     return _enableGimbalControlFact;
 }
+DECLARE_SETTINGSFACT_NO_FUNC(PayloadSettings, fireToken)
+{
+    if (!_fireTokenFact) {
+        _fireTokenFact = _createSettingsFact(fireTokenName);
+        connect(_fireTokenFact, &Fact::valueChanged, this, &PayloadSettings::_configChanged);
+    }
+    return _fireTokenFact;
+}
 DECLARE_SETTINGSFACT(PayloadSettings, isCameraResponding)
 
 void PayloadSettings::_configChanged(QVariant)

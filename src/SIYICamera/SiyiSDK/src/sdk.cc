@@ -2,6 +2,9 @@
 #include <QAbstractSocket>
 #include <QtCore/qstring.h>
 #include <QDateTime>
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonObject>
 
 #include <iomanip>
 #include <iostream>
@@ -367,8 +370,7 @@ SIYIUnixCamera::SIYIUnixCamera() : SIYI_SDK(100, ":/json/SiyiCameraInterfaceFact
 
     // Create an Http Manager
     httpNetworkManager = new QNetworkAccessManager(this);
-    connect(this, &SIYIUnixCamera::http_reply_ready_image_amount_signal, this, &SIYIUnixCamera::httpReplyImageAmountFinished);
-    connect(this, &SIYIUnixCamera::send_http_request_signal, this, &SIYIUnixCamera::send_http_request_slot);
+    connect(this, &SIYIUnixCamera::http_update_image_list_signal, this, &SIYIUnixCamera::http_update_image_list_slot);
     live = true;
     http_image_count_thread = std::thread([this] { camera_count_images_loop(live); });
 
@@ -493,15 +495,6 @@ void SIYIUnixCamera::gimbal_info_loop(bool &connected) {
     }
 }
 
-void SIYIUnixCamera::camera_count_images_loop(bool &connected) {
-    while (connected) {
-        if (turnedOn) {
-            emit send_http_request_signal(getHttpURLBase() + _httpServerGetMediaCountSuffix + _httpMediaImageParam + _httpTempImageFolderPath);
-        }
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));  // set frequency to 1 Hz
-    }
-}
-
 // This ones need to be overriden to make signals & slots work.
 // Signals & slots are needed for the threads sync.
 bool SIYIUnixCamera::request_gimbal_attitude() {
@@ -542,22 +535,6 @@ void SIYIUnixCamera::send_message_slot(const uint8_t *message, const int length)
     send_message(message, length);
 }
 
-void SIYIUnixCamera::send_http_request_slot(QString url){
-    QNetworkRequest request;
-    request.setUrl(QUrl(url));
-
-    QNetworkReply *reply = httpNetworkManager->get(request);
-    connect(reply, &QNetworkReply::finished, this, [=](){
-        if (reply->error()) {
-            qDebug() << reply->error();
-            return;
-        }
-
-        emit http_reply_ready_image_amount_signal(reply);
-    });
-    // TODO тут надо возвращать объект реплай и уже коннектить что надо куда надо, чтобы парсером не смотреть что пришло
-}
-
 void SIYIUnixCamera::checkConnection(){
     if (lastSuccResponse == preLastSuccResponse){
         qgcApp()->toolbox()->settingsManager()->payloadSettings()->isCameraResponding()->setRawValue(false);
@@ -569,16 +546,6 @@ void SIYIUnixCamera::checkConnection(){
 
 void SIYIUnixCamera::activeVehicleChanged(Vehicle* activeVehicle){
     _active_vehicle = activeVehicle;
-}
-
-void SIYIUnixCamera::httpReplyImageAmountFinished(QNetworkReply *reply){
-    QString jsonAnswerString = QString(reply->readAll()).simplified().replace(" ", "");
-    int indexOfImageAmountValueStart = jsonAnswerString.indexOf("\"count\"") + 8;
-    int lengthOfImageAmountValue = jsonAnswerString.indexOf(",", indexOfImageAmountValueStart) - indexOfImageAmountValueStart;
-    QString amountOfImages = jsonAnswerString.sliced(indexOfImageAmountValueStart, lengthOfImageAmountValue);
-    // qDebug() << "HTTP reply: " << amountOfImages.toInt();
-    _amountOfImagesFact.setRawValue(amountOfImages.toInt());
-    reply->deleteLater();
 }
 
 const char* SIYIUnixCamera::getIpFromSettings(){
@@ -604,4 +571,134 @@ int SIYIUnixCamera::getPortFromSettings(){
     }
     QString port = ipPort.right(int(ipPort.size()) - dividerIndex - 1);
     return port.toInt();
+}
+
+//-----------------------------------------------------------------------------
+//      HTTP Image Server
+//-----------------------------------------------------------------------------
+
+void SIYIUnixCamera::camera_count_images_loop(bool &connected) {
+    while (connected) {
+        if (turnedOn) {
+            emit http_update_image_list_signal();
+        }
+        std::this_thread::sleep_for(std::chrono::milliseconds(2000));  // set frequency to 0.5 Hz
+    }
+}
+
+void SIYIUnixCamera::http_update_image_list_slot(){
+    // Get image folders' names
+    QVector<QString> paths = httpGetFoldersPaths();
+
+    // Update image amount in each folder
+    httpUpdateImageAmount(paths);
+}
+
+QNetworkReply* SIYIUnixCamera::http_send_request(QString url){
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+
+    QNetworkReply *reply = httpNetworkManager->get(request);
+    return reply;
+}
+
+QVector<QString> SIYIUnixCamera::httpGetFoldersPaths(){
+    QVector<QString> paths;
+    QNetworkReply *reply = http_send_request(getHttpURLBase() + _httpServerGetDirectoriseSuffix + _httpMediaImageParam);
+    
+    // Waiting for the answer
+    QEventLoop loop;
+    QTimer timer; // Needed to limit waiting for 1 sec.
+    timer.setSingleShot(true);
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+    timer.start(1000);
+    loop.exec();
+
+    // Getting list of folders
+    if(timer.isActive()) {
+        timer.stop();
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(QString(reply->readAll()).toUtf8());
+        QJsonObject dataObj = jsonDoc.object()["data"].toObject();
+        QJsonArray directoriesArray = dataObj["directories"].toArray();
+        for (const QJsonValue &value : directoriesArray) {
+            QJsonObject obj = value.toObject();
+            QString path = obj["path"].toString();
+            paths.append(path);
+        }
+    }
+    reply->deleteLater();
+    return paths;
+}
+
+void SIYIUnixCamera::httpUpdateImageAmount(QVector<QString> folderPaths){
+    QVector< QPair<QString, int> > result;
+    int totalSum = 0;
+
+    for (const QString &path : folderPaths){
+        int count = 0;
+        QNetworkReply *reply = http_send_request(getHttpURLBase() + _httpServerGetMediaCountSuffix + _httpMediaImageParam + _httpImageFolderPathParam + path);
+    
+        // Waiting for the answer
+        QEventLoop loop;
+        QTimer timer; // Needed to limit waiting for 1 sec.
+        timer.setSingleShot(true);
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        timer.start(1000);
+        loop.exec();
+
+        if(timer.isActive()) {
+            timer.stop();
+            QJsonDocument jsonDoc = QJsonDocument::fromJson(QString(reply->readAll()).toUtf8());
+            QJsonObject dataObj = jsonDoc.object()["data"].toObject();
+            if (dataObj.contains("count") && dataObj["count"].isDouble()) {
+                count = dataObj["count"].toInt();
+            }
+        }
+        totalSum += count;
+        result.append(QPair<QString, int>(path, count));
+        reply->deleteLater();
+    }
+    setAmountOfImages(totalSum);
+    _imageAmounts = result;
+}
+
+void SIYIUnixCamera::downloadImage(const QString& url){
+    QNetworkReply *reply = http_send_request(url);
+    
+    connect(reply, &QNetworkReply::finished, this, [=](){
+        if(!reply->error()){
+            emit onImageDownloadedSignal(reply);
+        }
+    });
+}
+
+QVector< QPair<QString, QString> > SIYIUnixCamera::httpGetListOfImages(){
+    QVector< QPair<QString, QString> > result;
+    httpUpdateImageAmount(httpGetFoldersPaths());
+    QVector< QPair<QString, int> >  _localImageAmounts = _imageAmounts; // Save from update during exec of this function
+
+    if (_localImageAmounts.length() > 1){
+        qDebug() << "ALERT: SIYI CAMERA HAVE MORE THAN ONE IMAGE FOLDER. THE APP MIGHT WORK UNSTABLE.";
+    }
+    for (const QPair<QString, int> &imageAmount : _localImageAmounts){
+        QNetworkReply *reply = http_send_request(getHttpURLBase() + _httpServerGetMediaListSuffix + _httpMediaImageParam + _httpImageFolderPathParam + imageAmount.first + "&start=0&count=" + QString::number(imageAmount.second));
+    
+        // Waiting for the answer
+        QEventLoop loop;
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        loop.exec();
+
+        QJsonDocument jsonDoc = QJsonDocument::fromJson(QString(reply->readAll()).toUtf8());
+        QJsonObject dataObj = jsonDoc.object()["data"].toObject();
+        QJsonArray listArray = dataObj["list"].toArray();
+        for (const QJsonValue &value : listArray) {
+            QJsonObject obj = value.toObject();
+            QString name = imageAmount.first + "/" + obj["name"].toString();
+            QString url = obj["url"].toString();
+            result.append(QPair<QString, QString>(name, url));
+        }
+    }
+    return result;
 }

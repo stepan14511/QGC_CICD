@@ -72,4 +72,17 @@ SettingsPage {
             enabled:            false
         }
     }
+
+    SettingsGroupLayout {
+        Layout.fillWidth: true
+        visible: _isCamera
+
+        LabelledFactTextField {
+            Layout.fillWidth:           true
+            textFieldPreferredWidth:    _ipWithPortFieldWidth
+            label:                      qsTr("LH TOKEN")
+            fact:                       _payloadSettings.fireToken
+            visible:                    _isCamera
+        }
+    }
 }

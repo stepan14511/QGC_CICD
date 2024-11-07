@@ -50,6 +50,12 @@
     "longDesc":  "READ ONLY indicator if camera is responding to the requests.",
     "type":             "bool",
     "default":          false
+},
+{
+    "name":             "fireToken",
+    "shortDesc": "Token for authenfication for connection to lesohranitel.ru.",
+    "type":             "string",
+    "default":          ""
 }
 ]
 }
