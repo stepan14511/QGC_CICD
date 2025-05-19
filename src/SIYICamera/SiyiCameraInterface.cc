@@ -5,6 +5,7 @@
 #include "QGCApplication.h"
 #include "SettingsManager.h"
 
+
 void SiyiCameraInterface::zoomIn(){
     currentZoom++;
     if (currentZoom > maxZoom){
